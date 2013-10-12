@@ -14,6 +14,8 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		System.out.println("Launching mac2imgur");
+		
+		Updater.checkUpdates();
 
 		Tray.addSystemTray();
 
