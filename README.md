@@ -14,6 +14,8 @@ A simple and snappy way to automatically upload screenshots to imgur!
 
 #####Press **CMD + SHIFT + 4** to take a selection of the screen.#####
 
+#####Press **CMD + SHIFT + 4 + SPACE** to take screenshot a specific window, menu or dialog.#####
+
 #####Press **CMD + SHIFT + 3** to take a full-screen screenshot.#####
 
 After you've taken a screenshot, you'll notice that the icon in your system tray will turn either green or red.
