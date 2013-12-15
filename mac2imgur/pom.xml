@@ -3,8 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mac2imgur</groupId>
 	<artifactId>mac2imgur</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src</directory>
+				<excludes>
+					<exclude>net</exclude>
+					<exclude>res/mac2imgur.icns</exclude>
+					<exclude>res/JavaApplicationStub</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
@@ -14,6 +23,27 @@
 					<source />
 					<target />
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>osxappbundle-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<configuration>
+				<javaApplicationStub>${basedir}/src/res/JavaApplicationStub</javaApplicationStub>
+					<bundleName>mac2imgur</bundleName>
+					<mainClass>net.rauix.Main</mainClass>
+					<iconFile>${basedir}/src/res/mac2imgur.icns</iconFile>
+					<vmOptions>-Dapple.awt.UIElement=true</vmOptions>
+					<jvmVersion>1.6+</jvmVersion>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>bundle</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -55,9 +85,14 @@
 			<version>2.4</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jna</groupId>
+			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
-			<version>3.0.9</version>
+			<version>4.0.0</version>
 		</dependency>
 	</dependencies>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/rauix/mac2imgur/issues</url>
+	</issueManagement>
+	<version>0.0.1-SNAPSHOT</version>
 </project>

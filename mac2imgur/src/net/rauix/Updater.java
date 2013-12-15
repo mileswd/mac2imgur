@@ -1,4 +1,4 @@
-package com.github.rauix;
+package net.rauix;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,17 +11,17 @@ import javax.swing.JOptionPane;
 
 public class Updater {
 
-	final static String version = "v1.1";
+	final static double version = 1.2;
 
-	public static void checkUpdates() {
+	public static void checkUpdates(){
 		try {
 			URL url = new URL("https://github.com/rauix/mac2imgur/raw/master/version.txt");
 			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 			String parse;
-			while ((parse = in.readLine()) != null) {
-				if (!version.equals(parse)){
-					Object[] options = {"Sure!",
-					"Not right now"};
+			while ((parse = in.readLine()) != null){
+				// Don't bug people using future versions!
+				if (Double.parseDouble(parse.replace("v", "")) > version){
+					Object[] options = {"Sure!", "Not right now"};
 					int updatedialog = JOptionPane.showOptionDialog(
 							new JFrame(),
 							"There is an update available for mac2imgur.\n\nWould you like to update?",
@@ -37,13 +37,10 @@ public class Updater {
 				}
 			}
 			in.close();
-		} catch (MalformedURLException e) {
+		} catch (MalformedURLException e){
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e){
 			e.printStackTrace();
 		}
-
 	}
-
-
 }

@@ -1,4 +1,4 @@
-package com.github.rauix;
+package net.rauix;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +9,7 @@ import java.util.concurrent.Future;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +21,7 @@ import com.mashape.unirest.http.async.Callback;
 
 public class ImgurUploader {
 
-	public static void upload(final File f) {
+	public static void upload(final File f){
 
 		try {
 
@@ -31,16 +32,17 @@ public class ImgurUploader {
 			.field("type", "base64")
 			.field("title", f.getName().replace(".png", ""))
 			.field("description", "Uploaded by mac2imgur!")
-			.asJsonAsync(new Callback<JsonNode>() {
+			.asJsonAsync(new Callback<JsonNode>(){
 
-				public void failed(Exception e) {
-					Tray.uploadWasSuccessful(false);
-					f.delete();
+				public void failed(Exception e){
+					Notifier.uploadWasSuccessful(false);
+					tidyUp(f);
 				}
 
-				public void completed(HttpResponse<JsonNode> response) {
+				public void completed(HttpResponse<JsonNode> response){
+
 					try {
-						InputStream rawBody = response.getRawBody();
+						InputStream raw = response.getRawBody();
 						JSONObject output = response.getBody().getObject();
 						String link = "https://imgur.com/" + output.getJSONObject("data").getString("id");
 						String dlink = output.getJSONObject("data").getString("link");
@@ -50,7 +52,6 @@ public class ImgurUploader {
 						} else {
 							Utils.copyToClipboard(link);
 						}
-						Tray.uploadWasSuccessful(true);
 						if (PreferencesManager.getPreferences().getBoolean("openbrowser", false)){
 							if (PreferencesManager.getPreferences().getBoolean("directlink", true)){
 								Utils.openBrowser(dlink);
@@ -58,33 +59,24 @@ public class ImgurUploader {
 								Utils.openBrowser(link);
 							}
 						}
-						tidyUp(f);
-					} catch (JSONException e) {
+						Notifier.uploadWasSuccessful(true);
+						raw.close();
+					} catch (JSONException e){
+						Notifier.uploadWasSuccessful(false);
+					} catch (IOException e){
 						e.printStackTrace();
 					}
 				}
 
-				public void cancelled() {
-					Tray.uploadWasSuccessful(false);
-					f.delete();
+				public void cancelled(){
+					Notifier.uploadWasSuccessful(false);
 				}
 			});
-		} catch (Exception e) {
+		} catch (Exception e){
+			Notifier.uploadWasSuccessful(false);
 			e.printStackTrace();
 		}
-	}
-
-	public static void tidyUp(File f){
-		String desktop = System.getProperty("user.home") + File.separator + "Desktop";
-		if (PreferencesManager.getPreferences().get("post-upload", "delete").contains("move")){
-			System.out.println(PreferencesManager.getPreferences().get("folderpath", desktop));
-			if (PreferencesManager.getPreferences().get("folderpath", desktop) != desktop){
-				f.renameTo(new File(PreferencesManager.getPreferences().get("folderpath", desktop) + File.separator + f.getName()));
-				System.out.println("Moving screenshot to " + PreferencesManager.getPreferences().get("folderpath", desktop) + File.separator + f.getName());
-			}
-		} else {
-			f.delete();
-		}
+		tidyUp(f);
 	}
 
 	public static String getEncodedImage(File f) throws IOException {
@@ -93,5 +85,22 @@ public class ImgurUploader {
 		ImageIO.write(image, "png", baos);
 		byte[] byteimg = baos.toByteArray();
 		return new String(new Base64().encodeAsString(byteimg));
+	}
+
+	public static void tidyUp(File f){
+		String desktop = System.getProperty("user.home") + File.separator + "Desktop";
+		if (PreferencesManager.getPreferences().get("post-upload", "delete").contains("move")){
+			System.out.println(PreferencesManager.getPreferences().get("folderpath", desktop));
+			if (PreferencesManager.getPreferences().get("folderpath", desktop) != desktop){
+				try {
+					FileUtils.moveFileToDirectory(f, new File(PreferencesManager.getPreferences().get("folderpath", desktop)), false);
+					System.out.println("Moving screenshot to " + PreferencesManager.getPreferences().get("folderpath", desktop) + File.separator + f.getName());
+				} catch (IOException e){
+					e.printStackTrace();
+				}
+			}
+		} else {
+			FileUtils.deleteQuietly(f);
+		}
 	}
 }
