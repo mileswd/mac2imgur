@@ -12,8 +12,8 @@ public class Main {
 	public static final String dir = System.getProperty("user.home") + File.separator + "Desktop";
 
 	public static void main(String[] args) throws Exception {
-
-		System.out.println("Launching mac2imgur - v" + Updater.version);
+		
+		Utils.setupLogger();
 
 		Updater.checkUpdates();
 
@@ -21,7 +21,7 @@ public class Main {
 
 		Tray.addSystemTray();
 
-		final long interval = PreferencesManager.getPreferences().getInt("interval", 2) * 1000;
+		final long interval = PreferencesHandler.prefs.getInt("interval", 2) * 1000;
 		// Check the desktop for screenshots every X amount of seconds
 
 		File folder = new File(dir);
@@ -43,7 +43,7 @@ public class Main {
 						&& (f.getName().contains("Screen Shot"))
 						// Extra check to prevent double uploads when the file is moved
 						&& (new File(dir + File.separator + f.getName()).exists())){
-					System.out.println("Screen shot found! Proceeding to upload!");
+					Utils.logger.info("Screen shot found! Proceeding to upload!");
 					ImgurUploader.upload(f);
 				}
 			}

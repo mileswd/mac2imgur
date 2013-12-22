@@ -20,7 +20,9 @@ public class Updater {
 			String parse;
 			while ((parse = in.readLine()) != null){
 				// Don't bug people using future versions!
-				if (Double.parseDouble(parse.replace("v", "")) > version){
+				double latest = Double.parseDouble(parse.replace("v", ""));
+				if (latest > version){
+					Utils.logger.info("Update found, version: " + version + " and latest version: " + latest);
 					Object[] options = {"Sure!", "Not right now"};
 					int updatedialog = JOptionPane.showOptionDialog(
 							new JFrame(),

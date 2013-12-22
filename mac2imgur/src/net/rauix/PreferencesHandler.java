@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.prefs.Preferences;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -23,17 +24,20 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JRadioButton;
 
-public class PreferencesGUI {
+public class PreferencesHandler {
+
+	public static Preferences prefs = Preferences.userRoot().node(PreferencesHandler.class.getClass().getName());
 
 	private JFrame frame;
 	JRadioButton deleteAfterBtn;
 	JRadioButton moveAfterBtn;
+	JRadioButton doNothingAfterBtn;
 
 	public static void LaunchGUI(){
 		EventQueue.invokeLater(new Runnable(){
 			public void run(){
 				try {
-					PreferencesGUI window = new PreferencesGUI();
+					PreferencesHandler window = new PreferencesHandler();
 					window.frame.setVisible(true);
 					window.frame.setVisible(true);
 					window.frame.setAlwaysOnTop(true);
@@ -45,7 +49,7 @@ public class PreferencesGUI {
 		});
 	}
 
-	public PreferencesGUI(){
+	public PreferencesHandler(){
 		initialize();
 	}
 
@@ -61,20 +65,20 @@ public class PreferencesGUI {
 		tabbedPane.addTab("Preferences", null, preferencesPanel, null);
 		GridBagLayout gbl_preferencesPanel = new GridBagLayout();
 		gbl_preferencesPanel.columnWidths = new int[]{0, 0};
-		gbl_preferencesPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_preferencesPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_preferencesPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_preferencesPanel.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_preferencesPanel.rowWeights = new double[]{0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		preferencesPanel.setLayout(gbl_preferencesPanel);
 		preferencesPanel.setOpaque(false);
 
 		final JCheckBox directLinkChk = new JCheckBox("Use direct link (i.imgur.com)");
-		directLinkChk.setSelected(PreferencesManager.getPreferences().getBoolean("directlink", true));
+		directLinkChk.setSelected(PreferencesHandler.prefs.getBoolean("directlink", true));
 		directLinkChk.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (directLinkChk.isSelected()){
-					PreferencesManager.getPreferences().putBoolean("directlink", true);
+					PreferencesHandler.prefs.putBoolean("directlink", true);
 				} else {
-					PreferencesManager.getPreferences().putBoolean("directlink", false);
+					PreferencesHandler.prefs.putBoolean("directlink", false);
 				}
 			}
 		});
@@ -99,13 +103,13 @@ public class PreferencesGUI {
 		};
 
 		final JCheckBox openBrowserChk = new JCheckBox("Open images in browser ");
-		openBrowserChk.setSelected(PreferencesManager.getPreferences().getBoolean("openbrowser", false));
+		openBrowserChk.setSelected(PreferencesHandler.prefs.getBoolean("openbrowser", false));
 		openBrowserChk.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (openBrowserChk.isSelected()){
-					PreferencesManager.getPreferences().putBoolean("openbrowser", true);
+					PreferencesHandler.prefs.putBoolean("openbrowser", true);
 				} else {
-					PreferencesManager.getPreferences().putBoolean("openbrowser", false);
+					PreferencesHandler.prefs.putBoolean("openbrowser", false);
 				}
 			}
 		});
@@ -125,58 +129,77 @@ public class PreferencesGUI {
 		preferencesPanel.add(separator_1, gbc_separator_1);
 
 		final JButton chooseFolderBtn = new JButton("Choose folder");
-		chooseFolderBtn.setEnabled(PreferencesManager.getPreferences().get("post-upload", "delete").contains("move"));
+		chooseFolderBtn.setEnabled(PreferencesHandler.prefs.get("post-upload", "delete").contains("move"));
 		chooseFolderBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (e.getSource() == chooseFolderBtn){
 					int returnVal = folderChooser.showOpenDialog(chooseFolderBtn);
 					if (returnVal == JFileChooser.APPROVE_OPTION){
 						File file = folderChooser.getSelectedFile();
-						PreferencesManager.getPreferences().put("folderpath", file.getAbsolutePath());
+						PreferencesHandler.prefs.put("folderpath", file.getAbsolutePath());
 					} else {
-						PreferencesManager.getPreferences().put("post-upload", "delete");
+						PreferencesHandler.prefs.put("post-upload", "delete");
 					}
 				}
 			}
 		});
 
 		deleteAfterBtn = new JRadioButton("Delete after upload");
-		deleteAfterBtn.setSelected(PreferencesManager.getPreferences().get("post-upload", "delete").contains("delete"));
+		deleteAfterBtn.setSelected(PreferencesHandler.prefs.get("post-upload", "delete").contains("delete"));
 		deleteAfterBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (deleteAfterBtn.isSelected()){
 					moveAfterBtn.setSelected(false);
+					doNothingAfterBtn.setSelected(false);
 					chooseFolderBtn.setEnabled(false);
-					PreferencesManager.getPreferences().put("post-upload", "delete");
+					PreferencesHandler.prefs.put("post-upload", "delete");
 				}
 			}
 		});
+
+		doNothingAfterBtn = new JRadioButton("Do nothing after upload");
+		doNothingAfterBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				if (doNothingAfterBtn.isSelected()){
+					moveAfterBtn.setSelected(false);
+					deleteAfterBtn.setSelected(false);
+					chooseFolderBtn.setEnabled(false);
+					PreferencesHandler.prefs.put("post-upload", "nothing");
+				}
+			}
+		});
+		GridBagConstraints gbc_doNothingAfterBtn = new GridBagConstraints();
+		gbc_doNothingAfterBtn.insets = new Insets(0, 0, 5, 0);
+		gbc_doNothingAfterBtn.gridx = 0;
+		gbc_doNothingAfterBtn.gridy = 3;
+		preferencesPanel.add(doNothingAfterBtn, gbc_doNothingAfterBtn);
 		GridBagConstraints gbc_deleteAfterBtn = new GridBagConstraints();
 		gbc_deleteAfterBtn.insets = new Insets(0, 0, 5, 0);
 		gbc_deleteAfterBtn.gridx = 0;
-		gbc_deleteAfterBtn.gridy = 3;
+		gbc_deleteAfterBtn.gridy = 4;
 		preferencesPanel.add(deleteAfterBtn, gbc_deleteAfterBtn);
 
 		moveAfterBtn = new JRadioButton("Move after upload");
-		moveAfterBtn.setSelected(PreferencesManager.getPreferences().get("post-upload", "delete").contains("move"));
+		moveAfterBtn.setSelected(PreferencesHandler.prefs.get("post-upload", "delete").contains("move"));
 		moveAfterBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				deleteAfterBtn.setSelected(false);
+				doNothingAfterBtn.setSelected(false);
 				chooseFolderBtn.setEnabled(true);
-				PreferencesManager.getPreferences().put("post-upload", "move");
+				PreferencesHandler.prefs.put("post-upload", "move");
 			}
 		});
 		GridBagConstraints gbc_moveAfterBtn = new GridBagConstraints();
 		gbc_moveAfterBtn.insets = new Insets(0, 0, 5, 0);
 		gbc_moveAfterBtn.gridx = 0;
-		gbc_moveAfterBtn.gridy = 4;
+		gbc_moveAfterBtn.gridy = 5;
 		preferencesPanel.add(moveAfterBtn, gbc_moveAfterBtn);
 
 
 		GridBagConstraints gbc_chooseFolderBtn = new GridBagConstraints();
 		gbc_chooseFolderBtn.insets = new Insets(0, 0, 5, 0);
 		gbc_chooseFolderBtn.gridx = 0;
-		gbc_chooseFolderBtn.gridy = 5;
+		gbc_chooseFolderBtn.gridy = 6;
 		preferencesPanel.add(chooseFolderBtn, gbc_chooseFolderBtn);
 
 		JSeparator separator = new JSeparator();
@@ -185,7 +208,7 @@ public class PreferencesGUI {
 		gbc_separator.fill = GridBagConstraints.HORIZONTAL;
 		gbc_separator.insets = new Insets(0, 0, 5, 0);
 		gbc_separator.gridx = 0;
-		gbc_separator.gridy = 6;
+		gbc_separator.gridy = 7;
 		preferencesPanel.add(separator, gbc_separator);
 
 
@@ -193,14 +216,14 @@ public class PreferencesGUI {
 		GridBagConstraints gbc_checkIntervalLbl = new GridBagConstraints();
 		gbc_checkIntervalLbl.insets = new Insets(0, 0, 5, 0);
 		gbc_checkIntervalLbl.gridx = 0;
-		gbc_checkIntervalLbl.gridy = 7;
+		gbc_checkIntervalLbl.gridy = 8;
 		preferencesPanel.add(checkIntervalLbl, gbc_checkIntervalLbl);
 
 		final JSlider intervalSlider = new JSlider();
-		intervalSlider.setValue(PreferencesManager.getPreferences().getInt("interval", 2));
+		intervalSlider.setValue(PreferencesHandler.prefs.getInt("interval", 2));
 		intervalSlider.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				PreferencesManager.getPreferences().putInt("interval", intervalSlider.getValue());
+				PreferencesHandler.prefs.putInt("interval", intervalSlider.getValue());
 				if (Integer.valueOf(intervalSlider.getValue()).equals(1)){
 					checkIntervalLbl.setText("Check for screenshots every second");
 				} else {
@@ -211,12 +234,12 @@ public class PreferencesGUI {
 
 		intervalSlider.setMinimum(1);
 		intervalSlider.setMaximum(10);
-		intervalSlider.setValue(PreferencesManager.getPreferences().getInt("interval", 2));
+		intervalSlider.setValue(PreferencesHandler.prefs.getInt("interval", 2));
 		intervalSlider.setSnapToTicks(true);
 		GridBagConstraints gbc_intervalSlider = new GridBagConstraints();
 		gbc_intervalSlider.insets = new Insets(0, 0, 5, 0);
 		gbc_intervalSlider.gridx = 0;
-		gbc_intervalSlider.gridy = 8;
+		gbc_intervalSlider.gridy = 9;
 		preferencesPanel.add(intervalSlider, gbc_intervalSlider);
 
 		JSeparator separator_2 = new JSeparator();
@@ -224,41 +247,41 @@ public class PreferencesGUI {
 		gbc_separator_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_separator_2.insets = new Insets(0, 0, 5, 0);
 		gbc_separator_2.gridx = 0;
-		gbc_separator_2.gridy = 9;
+		gbc_separator_2.gridy = 10;
 		preferencesPanel.add(separator_2, gbc_separator_2);
 
 		final JCheckBox trayIconChk = new JCheckBox("Tray icon notification");
-		trayIconChk.setSelected(PreferencesManager.getPreferences().getBoolean("tray-notify", false));
+		trayIconChk.setSelected(PreferencesHandler.prefs.getBoolean("tray-notify", false));
 		trayIconChk.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (trayIconChk.isSelected()){
-					PreferencesManager.getPreferences().putBoolean("tray-notify", true);
+					PreferencesHandler.prefs.putBoolean("tray-notify", true);
 				} else {
-					PreferencesManager.getPreferences().putBoolean("tray-notify", false);	
+					PreferencesHandler.prefs.putBoolean("tray-notify", false);	
 				}
 			}
 		});
 		GridBagConstraints gbc_trayIconChk = new GridBagConstraints();
 		gbc_trayIconChk.insets = new Insets(0, 0, 5, 0);
 		gbc_trayIconChk.gridx = 0;
-		gbc_trayIconChk.gridy = 10;
+		gbc_trayIconChk.gridy = 11;
 		preferencesPanel.add(trayIconChk, gbc_trayIconChk);
 
 		final JCheckBox notificationCenterChk = new JCheckBox("Notification center (10.8+)");
-		notificationCenterChk.setSelected(PreferencesManager.getPreferences().getBoolean("center-notify", true));
+		notificationCenterChk.setSelected(PreferencesHandler.prefs.getBoolean("center-notify", true));
 		notificationCenterChk.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if (notificationCenterChk.isSelected()){
-					PreferencesManager.getPreferences().putBoolean("center-notify", true);
+					PreferencesHandler.prefs.putBoolean("center-notify", true);
 				} else {
-					PreferencesManager.getPreferences().putBoolean("center-notify", false);
+					PreferencesHandler.prefs.putBoolean("center-notify", false);
 				}
 			}
 		});
 		GridBagConstraints gbc_notificationCenterChk = new GridBagConstraints();
 		gbc_notificationCenterChk.insets = new Insets(0, 0, 5, 0);
 		gbc_notificationCenterChk.gridx = 0;
-		gbc_notificationCenterChk.gridy = 11;
+		gbc_notificationCenterChk.gridy = 12;
 		preferencesPanel.add(notificationCenterChk, gbc_notificationCenterChk);
 
 		folderChooser.setFileFilter(folderFilter);

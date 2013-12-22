@@ -47,13 +47,13 @@ public class ImgurUploader {
 						String link = "https://imgur.com/" + output.getJSONObject("data").getString("id");
 						String dlink = output.getJSONObject("data").getString("link");
 
-						if (PreferencesManager.getPreferences().getBoolean("directlink", true)){
+						if (PreferencesHandler.prefs.getBoolean("directlink", true)){
 							Utils.copyToClipboard(dlink);
 						} else {
 							Utils.copyToClipboard(link);
 						}
-						if (PreferencesManager.getPreferences().getBoolean("openbrowser", false)){
-							if (PreferencesManager.getPreferences().getBoolean("directlink", true)){
+						if (PreferencesHandler.prefs.getBoolean("openbrowser", false)){
+							if (PreferencesHandler.prefs.getBoolean("directlink", true)){
 								Utils.openBrowser(dlink);
 							} else {
 								Utils.openBrowser(link);
@@ -89,17 +89,17 @@ public class ImgurUploader {
 
 	public static void tidyUp(File f){
 		String desktop = System.getProperty("user.home") + File.separator + "Desktop";
-		if (PreferencesManager.getPreferences().get("post-upload", "delete").contains("move")){
-			System.out.println(PreferencesManager.getPreferences().get("folderpath", desktop));
-			if (PreferencesManager.getPreferences().get("folderpath", desktop) != desktop){
+		if (PreferencesHandler.prefs.get("post-upload", "delete").equals("move")){
+			System.out.println(PreferencesHandler.prefs.get("folderpath", desktop));
+			if (PreferencesHandler.prefs.get("folderpath", desktop) != desktop){
 				try {
-					FileUtils.moveFileToDirectory(f, new File(PreferencesManager.getPreferences().get("folderpath", desktop)), false);
-					System.out.println("Moving screenshot to " + PreferencesManager.getPreferences().get("folderpath", desktop) + File.separator + f.getName());
+					FileUtils.moveFileToDirectory(f, new File(PreferencesHandler.prefs.get("folderpath", desktop)), false);
+					Utils.logger.info("Moving screenshot to " + PreferencesHandler.prefs.get("folderpath", desktop) + File.separator + f.getName());
 				} catch (IOException e){
 					e.printStackTrace();
 				}
 			}
-		} else {
+		} else if (PreferencesHandler.prefs.get("post-upload", "delete").equals("delete")) {
 			FileUtils.deleteQuietly(f);
 		}
 	}

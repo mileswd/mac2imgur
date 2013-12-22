@@ -43,7 +43,7 @@ public class Tray {
 		MenuItem options = new MenuItem("Options");
 		ActionListener launchOptions = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				PreferencesGUI.LaunchGUI();
+				PreferencesHandler.LaunchGUI();
 			}
 		};
 		options.addActionListener(launchOptions);
