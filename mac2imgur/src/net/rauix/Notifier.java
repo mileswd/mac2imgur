@@ -11,7 +11,7 @@ interface NotificationsBridge extends Library {
 
 	String path = FileUtils.getTempDirectoryPath() + File.separator + "NotificationsBridge.dylib";
 	NotificationsBridge instance = (NotificationsBridge)
-			Native.loadLibrary(path, NotificationsBridge.class);
+			Native.loadLibrary(path, Notifier.class);
 
 	public int sendNotification(String title, String subtitle, String text, int timeoffset);
 }
