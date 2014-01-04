@@ -1,4 +1,4 @@
-#mac2imgur [![Build Status](https://travis-ci.org/rauix/mac2imgur.png?branch=master)](https://travis-ci.org/rauix/mac2imgur)#
+#mac2imgur [![Build Status](http://ci.rauix.net/buildStatus/icon?job=mac2imgur)](http://ci.rauix.net/job/mac2imgur/)#
 
 A simple and snappy way to automatically upload screenshots to imgur!
 
