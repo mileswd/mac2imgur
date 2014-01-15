@@ -1,4 +1,4 @@
-package net.rauix;
+package net.rauix.mac2imgur;
 
 import java.awt.Desktop;
 import java.awt.Toolkit;
@@ -46,6 +46,16 @@ public class Utils {
 				"An error occured:\n\n" + msg,
 				"mac2imgur",
 				JOptionPane.ERROR_MESSAGE);
+		logger.warning(msg);
+	}
+
+	public static void fatalError(String msg){
+		JOptionPane.showMessageDialog(null,
+				"An fatal error occured:\n\n" + msg + "\n\nmac2imgur will now close",
+				"mac2imgur",
+				JOptionPane.ERROR_MESSAGE);
+		logger.severe(msg);
+		System.exit(1);
 	}
 
 	public static String getDefaultDirectory() {
@@ -67,8 +77,8 @@ public class Utils {
 		logger.setLevel(Level.FINE);
 		try {
 			String logfile = getDefaultDirectory() + "mac2imgur.log";
-			Handler fileHandler = new FileHandler(logfile);
-			logger.addHandler(fileHandler);
+			Handler handler = new FileHandler(logfile);
+			logger.addHandler(handler);
 		} catch (SecurityException e1){
 			Logger.getLogger("mac2imgur").log(Level.SEVERE, "Well, that escalated quickly", e1);
 		} catch (IOException e2){

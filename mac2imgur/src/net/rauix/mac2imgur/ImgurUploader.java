@@ -1,4 +1,4 @@
-package net.rauix;
+package net.rauix.mac2imgur;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,6 +36,7 @@ public class ImgurUploader {
 
 				public void failed(Exception e){
 					Notifier.uploadWasSuccessful(false);
+					Utils.logger.warning("Error while uploading screenshot: " + e.getMessage());
 					tidyUp(f);
 				}
 
@@ -63,7 +64,11 @@ public class ImgurUploader {
 						raw.close();
 					} catch (JSONException e){
 						Notifier.uploadWasSuccessful(false);
+						Utils.logger.warning("Error while uploading screenshot: " + e.getMessage());
+						e.printStackTrace();
 					} catch (IOException e){
+						Notifier.uploadWasSuccessful(false);
+						Utils.logger.warning("Error while uploading screenshot: " + e.getMessage());
 						e.printStackTrace();
 					}
 				}
@@ -74,6 +79,7 @@ public class ImgurUploader {
 			});
 		} catch (Exception e){
 			Notifier.uploadWasSuccessful(false);
+			Utils.logger.warning("Error while uploading screenshot: " + e.getMessage());
 			e.printStackTrace();
 		}
 		tidyUp(f);
@@ -96,6 +102,7 @@ public class ImgurUploader {
 					FileUtils.moveFileToDirectory(f, new File(PreferencesHandler.prefs.get("folderpath", desktop)), false);
 					Utils.logger.info("Moving screenshot to " + PreferencesHandler.prefs.get("folderpath", desktop) + File.separator + f.getName());
 				} catch (IOException e){
+					Utils.logger.warning("Error whilst moving screenshot: " + e.getMessage());
 					e.printStackTrace();
 				}
 			}

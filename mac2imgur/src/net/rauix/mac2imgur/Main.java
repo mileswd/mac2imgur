@@ -1,4 +1,4 @@
-package net.rauix;
+package net.rauix.mac2imgur;
 
 import java.io.File;
 
@@ -21,15 +21,15 @@ public class Main {
 
 		Tray.addSystemTray();
 
-		final long interval = PreferencesHandler.prefs.getInt("interval", 2) * 1000;
 		// Check the desktop for screenshots every X amount of seconds
+		final long interval = PreferencesHandler.prefs.getInt("interval", 1) * 1000;
 
 		File folder = new File(dir);
 
 
 		if (!folder.exists()){
-			throw new RuntimeException("Desktop folder does not exist (" + dir + ")");
-			// It should exist, as it's a system folder; but always assume the input is wrong
+			// It should exist, as it's a system folder
+			Utils.fatalError("Desktop folder does not exist (" + dir + ")");
 		}
 
 		// Not using NIO, as the default Java on Macs is Java 6

@@ -1,4 +1,4 @@
-package net.rauix;
+package net.rauix.mac2imgur;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -234,7 +234,7 @@ public class PreferencesHandler {
 
 		intervalSlider.setMinimum(1);
 		intervalSlider.setMaximum(10);
-		intervalSlider.setValue(prefs.getInt("interval", 2));
+		intervalSlider.setValue(prefs.getInt("interval", 1));
 		intervalSlider.setSnapToTicks(true);
 		GridBagConstraints gbc_intervalSlider = new GridBagConstraints();
 		gbc_intervalSlider.insets = new Insets(0, 0, 5, 0);

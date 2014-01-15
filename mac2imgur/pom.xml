@@ -31,7 +31,8 @@
 				<configuration>
 				<javaApplicationStub>${basedir}/src/res/JavaApplicationStub</javaApplicationStub>
 					<bundleName>mac2imgur</bundleName>
-					<mainClass>net.rauix.Main</mainClass>
+					<mainClass>net.rauix.mac2imgur.Main</mainClass>
+					<dictionaryFile>${basedir}/src/res/Info.plist</dictionaryFile>
 					<iconFile>${basedir}/src/res/mac2imgur.icns</iconFile>
 					<vmOptions>-Dapple.awt.UIElement=true</vmOptions>
 					<jvmVersion>1.6+</jvmVersion>

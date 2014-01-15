@@ -1,4 +1,4 @@
-package net.rauix;
+package net.rauix.mac2imgur;
 
 import java.awt.MenuItem;
 import java.awt.PopupMenu;

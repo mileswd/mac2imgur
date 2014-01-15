@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="1.0">
+  <dict>
+    <key>CFBundleName</key>
+    <string>mac2imgur</string>
+    <key>CFBundleIdentifier</key>
+    <string>net.rauix.mac2imgur.app</string>
+    <key>CFBundleVersion</key>
+    <string>0.0.1-SNAPSHOT</string>
+    <key>CFBundleAllowMixedLocalizations</key>
+    <string>true</string>
+    <key>CFBundleExecutable</key>
+    <string>JavaApplicationStub</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>English</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleIconFile</key>
+    <string>mac2imgur.icns</string>
+    <key>Java</key>
+    <dict>
+      <key>MainClass</key>
+      <string>net.rauix.mac2imgur.Main</string>
+      <key>JVMVersion</key>
+      <string>1.6+</string>
+      <key>ClassPath</key>
+      <array><string>$JAVAROOT/repo/mac2imgur/mac2imgur/0.0.1-SNAPSHOT/mac2imgur-0.0.1-SNAPSHOT.jar</string><string>$JAVAROOT/repo/com/mashape/unirest/unirest-java/1.2.4/unirest-java-1.2.4.jar</string><string>$JAVAROOT/repo/org/apache/httpcomponents/httpclient/4.3/httpclient-4.3.jar</string><string>$JAVAROOT/repo/org/apache/httpcomponents/httpcore/4.3/httpcore-4.3.jar</string><string>$JAVAROOT/repo/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar</string><string>$JAVAROOT/repo/commons-codec/commons-codec/1.6/commons-codec-1.6.jar</string><string>$JAVAROOT/repo/org/apache/httpcomponents/httpasyncclient/4.0-beta4/httpasyncclient-4.0-beta4.jar</string><string>$JAVAROOT/repo/org/apache/httpcomponents/httpcore-nio/4.3-beta2/httpcore-nio-4.3-beta2.jar</string><string>$JAVAROOT/repo/org/apache/httpcomponents/httpmime/4.3/httpmime-4.3.jar</string><string>$JAVAROOT/repo/org/json/json/20090211/json-20090211.jar</string><string>$JAVAROOT/repo/commons-io/commons-io/2.4/commons-io-2.4.jar</string><string>$JAVAROOT/repo/net/java/dev/jna/jna/4.0.0/jna-4.0.0.jar</string></array>
+            <key>VMOptions</key>
+      <string>-Dapple.awt.UIElement=true</string>
+          </dict>
+  </dict>
+</plist>

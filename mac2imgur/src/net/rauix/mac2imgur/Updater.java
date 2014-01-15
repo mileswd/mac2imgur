@@ -1,4 +1,4 @@
-package net.rauix;
+package net.rauix.mac2imgur;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 public class Updater {
 
-	final static double version = 1.2;
+	final static double version = 1.5;
 
 	public static void checkUpdates(){
 		try {
@@ -40,8 +40,10 @@ public class Updater {
 			}
 			in.close();
 		} catch (MalformedURLException e){
+			Utils.logger.warning("Error whilst checking for updates: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e){
+			Utils.logger.warning("Error whilst checking for updates: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
