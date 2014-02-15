@@ -6,7 +6,8 @@
 
 [Download](https://github.com/rauix/mac2imgur/releases) a release, then simply drop it into your 'Applications' folder.
 
-After opening it, you'll notice a small system tray icon 
+After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
+
 ![alt text](http://i.imgur.com/7bnd5pz.png "mac2imgur system tray icon")
 
 ---
@@ -24,7 +25,6 @@ After you've taken a screenshot, you'll receive a notification via the Mac OS X 
 If the upload was successful, then your screenshot has been uploaded and the link has been copied to your clipboard.
 
 ![alt text](http://i.imgur.com/D7PAsRP.png "mac2imgur upload notification")
-
 ---
 
 ###Options###
@@ -42,4 +42,4 @@ There are a few options that you can change, via the options dialog (accessible 
 
 If something isn't working as expected, feel free to [submit an issue](https://github.com/rauix/mac2imgur/issues).
 
-On the same note, pull requests to fix issues or add features are greatly appreciated - fork away! ;D
+On the same note, pull requests to fix issues add features or simply to improve the codebase are greatly appreciated - fork away! ;D
