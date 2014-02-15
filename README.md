@@ -1,6 +1,5 @@
 #mac2imgur [![Build Status](http://ci.rauix.net/buildStatus/icon?job=mac2imgur)](http://ci.rauix.net/job/mac2imgur/)#
 
----
 
 ###Installation Instructions###
 
@@ -35,7 +34,9 @@ There are a few options that you can change, via the options dialog (accessible 
 * Whether the direct link or gallery link is used
 * If the screenshot should be opened in the browser after upload
 * The directory monitored for new screenshots
+
 ![alt text](http://i.imgur.com/ayY42ur.png "mac2imgur options menu")
+
 ---
 
 ###Issues & Pull Requests###
