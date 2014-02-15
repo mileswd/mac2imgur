@@ -8,7 +8,6 @@
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
 ![alt text](http://i.imgur.com/7bnd5pz.png "mac2imgur system tray icon")
-
 ---
 
 ###Usage###
@@ -36,7 +35,6 @@ There are a few options that you can change, via the options dialog (accessible 
 * The directory monitored for new screenshots
 
 ![alt text](http://i.imgur.com/ayY42ur.png "mac2imgur options menu")
-
 ---
 
 ###Issues & Pull Requests###
