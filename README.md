@@ -1,7 +1,5 @@
 #mac2imgur [![Build Status](http://ci.rauix.net/buildStatus/icon?job=mac2imgur)](http://ci.rauix.net/job/mac2imgur/)#
 
-A simple and snappy way to automatically upload screenshots to imgur!
-
 ---
 
 ###Installation Instructions###
@@ -18,16 +16,25 @@ A simple and snappy way to automatically upload screenshots to imgur!
 
 #####Press **CMD + SHIFT + 3** to take a full-screen screenshot.#####
 
-After you've taken a screenshot, you'll notice that the icon in your system tray will turn either green or red.
+After you've taken a screenshot, you'll receive a notification via the Mac OS X Notification Center, telling you whether the upload was successful or not.
 
-If it turns green, then your screenshot has successfully been uploaded and the link has been copied to your clipboard.
+If the upload was successful, then your screenshot has been uploaded and the link has been copied to your clipboard.
 
-If it turns red, for whatever reason, that means the screenshot upload failed - try taking it again!
+---
+
+###Options###
+
+There are a few options that you can change, via the options dialog - these include:
+
+* What happens to the screenshot after it is uploaded (it can be moved, deleted, or simply left as it is)
+* Whether the direct link or gallery link is used
+* If the screenshot should be opened in the browser after upload
+* The directory monitored for new screenshots
 
 ---
 
 ###Issues & Pull Requests###
 
-If something isn't working as expected, feel free to [sumbit an issue](https://github.com/rauix/mac2imgur/issues).
+If something isn't working as expected, feel free to [submit an issue](https://github.com/rauix/mac2imgur/issues).
 
 On the same note, pull requests to fix issues or add features are greatly appreciated - fork away! ;D
