@@ -29,8 +29,6 @@ public class ImgurUploader {
         // Set tray icon to active to show that some activity is taking place!
         setTrayIcon(Status.ACTIVE);
 
-        final long startTime = System.currentTimeMillis();
-
         Unirest.post("https://api.imgur.com/3/upload")
                 .header("Authorization", "Client-ID 5867856c9027819")
                 .field("image", getEncodedImage(f))
@@ -53,6 +51,7 @@ public class ImgurUploader {
                             try {
                                 JSONObject json = response.getBody().getObject();
                                 logger.debug(response.getBody().toString());
+
                                 // Check whether the user wants the gallery or direct link
                                 String url = prefs.getBoolean("DIRECT-LINK", true) ? json.getJSONObject("data").getString("link") : "https://imgur.com/" + json.getJSONObject("data").getString("id");
 
@@ -66,9 +65,6 @@ public class ImgurUploader {
 
                                 // Notify user
                                 sendNotification(Notification.SUCCESS);
-                                long stopTime = System.currentTimeMillis();
-                                long elapsedTime = stopTime - startTime;
-                                System.out.println(elapsedTime);
 
                             } catch (JSONException e) {
                                 sendNotification(Notification.FAILURE);

@@ -24,7 +24,7 @@ public final class Utils {
 
 		/*
          * SKIP = Do nothing
-		 * MOVE = Move to DIRectory
+		 * MOVE = Move to Directory
 		 * DELETE = Delete screenshot
 		 */
         String moveDir = prefs.get("MOVE-DIR", DIR);
