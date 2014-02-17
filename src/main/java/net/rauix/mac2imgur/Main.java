@@ -27,6 +27,8 @@ public class Main {
         logger = new Logger(prefs.getBoolean("DEBUG", false) ? Detail.DEBUG : Detail.SEVERE, new File(Utils.getDataDirectory() + "mac2imgur.log"));
 
         logger.debug("Launching mac2imgur v" + VERSION);
+        logger.debug(System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ") on " + System.getProperty("os.name")
+                + " - " + System.getProperty("os.version") + " (" + System.getProperty("os.arch") + ")");
         logger.debug("Monitoring Directory: " + DIR);
 
         // Check for updates
