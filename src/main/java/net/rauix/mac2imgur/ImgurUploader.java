@@ -50,7 +50,6 @@ public class ImgurUploader {
                         if (response.getCode() == 200) {
                             try {
                                 JSONObject json = response.getBody().getObject();
-                                logger.debug(response.getBody().toString());
 
                                 // Check whether the user wants the gallery or direct link
                                 String url = prefs.getBoolean("DIRECT-LINK", true) ? json.getJSONObject("data").getString("link") : "https://imgur.com/" + json.getJSONObject("data").getString("id");
@@ -75,10 +74,10 @@ public class ImgurUploader {
                                 setTrayIcon(Status.INACTIVE);
                             }
                         } else {
-                            logger.debug(response.getBody().toString());
                             setTrayIcon(Status.INACTIVE);
                             sendNotification(Notification.FAILURE);
                         }
+                        logger.debug(response.getBody().toString());
                     }
 
                 });

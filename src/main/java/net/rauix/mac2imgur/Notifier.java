@@ -22,6 +22,8 @@ public final class Notifier {
 
     private Notifier() {/* Block unnecessary instantiation */}
 
+    enum Notification {SUCCESS, FAILURE}
+
     static void sendNotification(Notification n) {
         if (n.equals(Notification.SUCCESS)) {
             NotificationBridge.instance.sendNotification("mac2imgur", "", "Screenshot uploaded successfully!", 0);
@@ -32,13 +34,14 @@ public final class Notifier {
 
     static void setupDylib() {
         try {
-            FileUtils.copyInputStreamToFile(Notifier.class.getClassLoader().getResourceAsStream("resources/NotificationBridge.dylib"), new File(FileUtils.getTempDirectoryPath() + "/NotificationBridge.dylib"));
+            File dylib = new File(FileUtils.getTempDirectoryPath() + "/NotificationBridge.dylib");
+            FileUtils.copyInputStreamToFile(Notifier.class.getClassLoader().getResourceAsStream("resources/NotificationBridge.dylib"), dylib);
+            // Remove the dylib once we're done with it
+            dylib.deleteOnExit();
             logger.debug("Dylib dir: " + FileUtils.getTempDirectoryPath());
         } catch (IOException e) {
             Utils.displayPopup("Notification Center integration could not be setup. No notifications will be displayed.", JOptionPane.WARNING_MESSAGE);
             logger.severe(e);
         }
     }
-
-    enum Notification {SUCCESS, FAILURE}
 }

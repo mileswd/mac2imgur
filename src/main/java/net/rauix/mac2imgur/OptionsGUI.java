@@ -84,8 +84,6 @@ public class OptionsGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (doNothingAfterUploadRadioButton.isSelected()) {
-                    moveAfterUploadRadioButton.setSelected(false);
-                    deleteAfterUploadRadioButton.setSelected(false);
                     chooseDirectoryButton.setEnabled(false);
                     Main.prefs.put("TIDY", "IGNORE");
                 }
@@ -95,8 +93,6 @@ public class OptionsGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (deleteAfterUploadRadioButton.isSelected()) {
-                    moveAfterUploadRadioButton.setSelected(false);
-                    doNothingAfterUploadRadioButton.setSelected(false);
                     chooseDirectoryButton.setEnabled(false);
                     Main.prefs.put("TIDY", "DELETE");
                 }
@@ -106,8 +102,6 @@ public class OptionsGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (moveAfterUploadRadioButton.isSelected()) {
-                    doNothingAfterUploadRadioButton.setSelected(false);
-                    deleteAfterUploadRadioButton.setSelected(false);
                     chooseDirectoryButton.setEnabled(true);
                     Main.prefs.put("TIDY", "MOVE");
                 }
@@ -214,8 +208,6 @@ public class OptionsGUI extends JDialog {
         advancedPanel.add(debugLoggingCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
         advancedPanel.add(spacer3, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        advancedPanel.add(spacer4, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JSeparator separator2 = new JSeparator();
         advancedPanel.add(separator2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         chooseDirectoryButton1 = new JButton();
@@ -227,6 +219,13 @@ public class OptionsGUI extends JDialog {
         resetToDefaultDirectoryButton = new JButton();
         resetToDefaultDirectoryButton.setText("Reset to default directory");
         advancedPanel.add(resetToDefaultDirectoryButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        advancedPanel.add(spacer4, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        ButtonGroup buttonGroup;
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(doNothingAfterUploadRadioButton);
+        buttonGroup.add(deleteAfterUploadRadioButton);
+        buttonGroup.add(moveAfterUploadRadioButton);
     }
 
     /**

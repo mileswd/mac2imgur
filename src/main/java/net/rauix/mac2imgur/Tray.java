@@ -75,6 +75,7 @@ public class Tray {
 
             // Scale the image according (fixes blurriness on retina displays)
             TrayIcon temp = new TrayIcon(i);
+            // This is different to trayIcon.setImageAutoSize(true);
             trayIcon.setImage(i.getScaledInstance(temp.getSize().width, temp.getSize().height, Image.SCALE_SMOOTH));
 
         } catch (IOException e) {
