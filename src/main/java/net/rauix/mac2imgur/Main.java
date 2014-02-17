@@ -1,15 +1,15 @@
 package net.rauix.mac2imgur;
 
+import com.barbarysoftware.watchservice.*;
 import net.rauix.teensy.Detail;
 import net.rauix.teensy.Logger;
-import org.apache.commons.io.monitor.FileAlterationListener;
-import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
-import org.apache.commons.io.monitor.FileAlterationMonitor;
-import org.apache.commons.io.monitor.FileAlterationObserver;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.prefs.Preferences;
+
+import static com.barbarysoftware.watchservice.StandardWatchEventKind.OVERFLOW;
 
 public class Main {
 
@@ -27,7 +27,7 @@ public class Main {
         logger = new Logger(prefs.getBoolean("DEBUG", false) ? Detail.DEBUG : Detail.SEVERE, new File(Utils.getDataDirectory() + "mac2imgur.log"));
 
         logger.debug("Launching mac2imgur v" + VERSION);
-        logger.debug("Monitoring DIRectory: " + DIR);
+        logger.debug("Monitoring Directory: " + DIR);
 
         // Check for updates
         Utils.checkUpdates();
@@ -43,33 +43,63 @@ public class Main {
         if (!monitorDir.exists()) {
             // It should exist, as it's a system folder
             Utils.displayPopup("The Desktop folder (" + DIR + ") does not exist.\n\nmac2imgur will now close.", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+            System.exit(1);
         }
 
-        // Not using NIO, as the default Java on Macs is Java 6
-        FileAlterationObserver observer = new FileAlterationObserver(monitorDir);
-        FileAlterationMonitor monitor = new FileAlterationMonitor(1000);
-        FileAlterationListener listener = new FileAlterationListenerAdaptor() {
-            @Override
-            public void onFileCreate(File f) {
-                // Make sure the file is a screenshot, don't want to upload anything else!
-                // Also check that the file exists, to prevent double uploads when the file is tidied
-                if (f.getName().startsWith("Screen Shot") && f.getName().endsWith(".png") && new File(DIR + f.getName()).exists()) {
-                    logger.debug("Found " + f.getName() + ", uploading!");
-                    ImgurUploader.upload(f);
+        final WatchService watch = WatchService.newWatchService();
+        final WatchableFile watchableFile = new WatchableFile(monitorDir);
+        try {
+            watchableFile.register(watch, StandardWatchEventKind.ENTRY_CREATE);
+        } catch (IOException e) {
+            logger.severe(e);
+            Utils.displayPopup("Could not start folder watcher.\n\nmac2imgur will now close.", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+
+        Runnable runnable = createRunnable(watch);
+        final Thread consumer = new Thread(runnable);
+        consumer.start();
+
+    }
+
+    private static Runnable createRunnable(final WatchService watcher) {
+        return new Runnable() {
+            public void run() {
+                for (; ; ) {
+
+                    WatchKey key;
+
+                    try {
+                        key = watcher.take();
+                    } catch (InterruptedException e) {
+                        return;
+                    }
+
+                    for (WatchEvent<?> event : key.pollEvents()) {
+                        WatchEvent.Kind<?> kind = event.kind();
+
+                        if (kind == OVERFLOW) {
+                            continue;
+                        }
+
+                        @SuppressWarnings({"unchecked"})
+                        WatchEvent<File> e = (WatchEvent<File>) event;
+                        File sc = new File(String.valueOf(e.context()));
+                        String name = sc.getName();
+
+                        // Check the file is a screenshot
+                        if (name.startsWith("Screen Shot") && name.endsWith(".png")) {
+                            logger.debug(e.context() + " found, now uploading.");
+                            ImgurUploader.upload(sc);
+                        }
+                    }
+
+                    boolean valid = key.reset();
+                    if (!valid) {
+                        break;
+                    }
                 }
             }
         };
-
-        observer.addListener(listener);
-        monitor.addObserver(observer);
-        try {
-            monitor.start();
-        } catch (Exception e) {
-            Utils.displayPopup("The folder monitor could not start.\n\nmac2imgur will now close.", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
-            logger.severe(e);
-        }
     }
-
 }

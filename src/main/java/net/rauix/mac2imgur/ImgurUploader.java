@@ -41,6 +41,7 @@ public class ImgurUploader {
 
                     public void failed(UnirestException e) {
                         sendNotification(Notification.FAILURE);
+                        setTrayIcon(Status.INACTIVE);
                         logger.warning(e);
                     }
 

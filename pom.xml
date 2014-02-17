@@ -121,12 +121,17 @@
             <artifactId>osxappbundle-fork</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.barbarysoftware</groupId>
+            <artifactId>barbarywatchservice</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <issueManagement>
         <system>GitHub Issues</system>
         <url>https://github.com/rauix/mac2imgur/issues</url>
     </issueManagement>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0</version>
     <ciManagement>
         <url>http://ci.rauix.net</url>
         <system>Jenkins</system>
