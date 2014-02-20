@@ -90,7 +90,7 @@ public class Main {
                         String name = sc.getName();
 
                         // Check the file is a screenshot in the right place
-                        if (name.startsWith("Screen Shot") && name.endsWith(".png") && new File(DIR + name).exists()) {
+                        if (name.endsWith(".png") && new File(DIR + name).exists()) {
                             logger.debug(e.context() + " found, now uploading.");
                             ImgurUploader.upload(sc);
                         }
