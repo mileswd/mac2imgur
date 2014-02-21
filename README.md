@@ -5,6 +5,8 @@
 
 [Download](https://github.com/rauix/mac2imgur/releases) a release, then simply drop it into your 'Applications' folder.
 
+**Note:** If you are running OS X 10.8 or later, you will most likely have a feature called GateKeeper enabled, to open the application, you may have to right-click it, and click "Open". If that fails, you can [try additional steps listed here](http://support.apple.com/kb/ht5290).
+
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
 ![alt text](http://i.imgur.com/7bnd5pz.png "mac2imgur system tray icon")
