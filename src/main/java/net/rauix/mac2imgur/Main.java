@@ -18,7 +18,7 @@ public class Main {
     static Logger logger;
 
     // Constants
-    static final double VERSION = 2.2;
+    static final double VERSION = 2.3;
 
     static final String DIR = prefs.get("MONITOR-DIR", System.getProperty("user.home") + "/Desktop/");
 
