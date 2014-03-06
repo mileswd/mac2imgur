@@ -80,6 +80,16 @@ public class OptionsGUI extends JDialog {
                 }
             }
         });
+        openImagesInBrowserCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (openImagesInBrowserCheckBox.isSelected()) {
+                    Main.prefs.putBoolean("OPEN-IMAGE", true);
+                } else {
+                    Main.prefs.putBoolean("OPEN-IMAGE", false);
+                }
+            }
+        });
         doNothingAfterUploadRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

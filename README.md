@@ -5,7 +5,7 @@
 
 [Download](https://github.com/rauix/mac2imgur/releases) a release, then simply drop it into your 'Applications' folder.
 
-**Note:** If you are running OS X 10.8 or later, you will most likely have a feature called GateKeeper enabled, to open the application, you may have to right-click it, and click "Open". If that fails, you can [try additional steps listed here](http://support.apple.com/kb/ht5290).
+**Note:** If you are running OS X 10.8 or later, you will most likely have a feature called Gatekeeper enabled - to open the application, you may have to right-click it, and click 'Open'. If that fails, you can [try additional steps listed here](http://support.apple.com/kb/ht5290).
 
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
@@ -43,4 +43,4 @@ There are a few options that you can change, via the options dialog (accessible 
 
 If something isn't working as expected, feel free to [submit an issue](https://github.com/rauix/mac2imgur/issues).
 
-On the same note, pull requests to fix issues add features or simply to improve the codebase are greatly appreciated - fork away! ;D
+On the same note, pull requests to fix issues add features or simply to improve the codebase are greatly appreciated - [fork](https://github.com/rauix/mac2imgur/fork) away! ;D
