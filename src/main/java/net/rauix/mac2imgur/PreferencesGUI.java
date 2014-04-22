@@ -2,8 +2,6 @@ package net.rauix.mac2imgur;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
-import net.rauix.teensy.Detail;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -12,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class OptionsGUI extends JDialog {
+public class PreferencesGUI extends JDialog {
     private JPanel contentPane;
     private JTabbedPane tabbedPane;
     private JCheckBox useDirectLinkICheckBox;
@@ -26,22 +24,41 @@ public class OptionsGUI extends JDialog {
     private JCheckBox openImagesInBrowserCheckBox;
     private JPanel optionsPanel;
     private JPanel advancedPanel;
+    private JCheckBox JPEGJPGCheckBox;
+    private JCheckBox GIFCheckBox;
+    private JCheckBox PNGCheckBox;
+    private JCheckBox APNGCheckBox;
+    private JCheckBox TIFFCheckBox;
+    private JCheckBox BMPCheckBox;
+    private JCheckBox PDFCheckBox;
+    private JCheckBox XCFCheckBox;
+    private JPanel formatsPanel;
 
-    public OptionsGUI() {
+    public PreferencesGUI() {
         setContentPane(contentPane);
         setModal(true);
         setTitle("mac2imgur");
         setAlwaysOnTop(true);
         optionsPanel.setOpaque(false);
+        formatsPanel.setOpaque(false);
         advancedPanel.setOpaque(false);
 
-        useDirectLinkICheckBox.setSelected(Main.prefs.getBoolean("DIRECT-LINK", true));
-        openImagesInBrowserCheckBox.setSelected(Main.prefs.getBoolean("OPEN-IMAGE", false));
-        doNothingAfterUploadRadioButton.setSelected(Main.prefs.get("TIDY", "IGNORE").equals("IGNORE"));
-        deleteAfterUploadRadioButton.setSelected(Main.prefs.get("TIDY", "IGNORE").equals("DELETE"));
-        moveAfterUploadRadioButton.setSelected(Main.prefs.get("TIDY", "IGNORE").equals("MOVE"));
-        chooseDirectoryButton.setEnabled(Main.prefs.get("TIDY", "IGNORE").equals("MOVE"));
-        debugLoggingCheckBox.setSelected(Main.logger.getLogDetail().equals(Detail.DEBUG));
+        useDirectLinkICheckBox.setSelected(Utils.getPrefs().getBoolean("DIRECT-LINK", true));
+        openImagesInBrowserCheckBox.setSelected(Utils.getPrefs().getBoolean("OPEN-IMAGE", false));
+        doNothingAfterUploadRadioButton.setSelected(Utils.getPrefs().get("TIDY", "IGNORE").equals("IGNORE"));
+        deleteAfterUploadRadioButton.setSelected(Utils.getPrefs().get("TIDY", "IGNORE").equals("DELETE"));
+        moveAfterUploadRadioButton.setSelected(Utils.getPrefs().get("TIDY", "IGNORE").equals("MOVE"));
+        chooseDirectoryButton.setEnabled(Utils.getPrefs().get("TIDY", "IGNORE").equals("MOVE"));
+        debugLoggingCheckBox.setSelected(Utils.getLogger().getLogLevel().equals(Level.DEBUG));
+        JPEGJPGCheckBox.setSelected(Utils.getPrefs().getBoolean("JPG", false));
+        GIFCheckBox.setSelected(Utils.getPrefs().getBoolean("GIF", false));
+        PNGCheckBox.setSelected(Utils.getPrefs().getBoolean("PNG", true));
+        APNGCheckBox.setSelected(Utils.getPrefs().getBoolean("APNG", false));
+        TIFFCheckBox.setSelected(Utils.getPrefs().getBoolean("TIFF", false));
+        BMPCheckBox.setSelected(Utils.getPrefs().getBoolean("BMP", false));
+        PDFCheckBox.setSelected(Utils.getPrefs().getBoolean("PDF", false));
+        XCFCheckBox.setSelected(Utils.getPrefs().getBoolean("XCF", false));
+
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -62,11 +79,11 @@ public class OptionsGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (debugLoggingCheckBox.isSelected()) {
-                    Main.logger.setLogDetail(Detail.DEBUG);
-                    Main.prefs.putBoolean("DEBUG", true);
+                    Utils.getLogger().setLogLevel(Level.DEBUG);
+                    Utils.getPrefs().putBoolean("DEBUG", true);
                 } else {
-                    Main.logger.setLogDetail(Detail.SEVERE);
-                    Main.prefs.putBoolean("DEBUG", false);
+                    Utils.getLogger().setLogLevel(Level.SEVERE);
+                    Utils.getPrefs().putBoolean("DEBUG", false);
                 }
             }
         });
@@ -74,9 +91,9 @@ public class OptionsGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (useDirectLinkICheckBox.isSelected()) {
-                    Main.prefs.putBoolean("DIRECT-LINK", true);
+                    Utils.getPrefs().putBoolean("DIRECT-LINK", true);
                 } else {
-                    Main.prefs.putBoolean("DIRECT-LINK", false);
+                    Utils.getPrefs().putBoolean("DIRECT-LINK", false);
                 }
             }
         });
@@ -84,9 +101,9 @@ public class OptionsGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (openImagesInBrowserCheckBox.isSelected()) {
-                    Main.prefs.putBoolean("OPEN-IMAGE", true);
+                    Utils.getPrefs().putBoolean("OPEN-IMAGE", true);
                 } else {
-                    Main.prefs.putBoolean("OPEN-IMAGE", false);
+                    Utils.getPrefs().putBoolean("OPEN-IMAGE", false);
                 }
             }
         });
@@ -95,7 +112,7 @@ public class OptionsGUI extends JDialog {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (doNothingAfterUploadRadioButton.isSelected()) {
                     chooseDirectoryButton.setEnabled(false);
-                    Main.prefs.put("TIDY", "IGNORE");
+                    Utils.getPrefs().put("TIDY", "IGNORE");
                 }
             }
         });
@@ -104,7 +121,7 @@ public class OptionsGUI extends JDialog {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (deleteAfterUploadRadioButton.isSelected()) {
                     chooseDirectoryButton.setEnabled(false);
-                    Main.prefs.put("TIDY", "DELETE");
+                    Utils.getPrefs().put("TIDY", "DELETE");
                 }
             }
         });
@@ -113,7 +130,7 @@ public class OptionsGUI extends JDialog {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (moveAfterUploadRadioButton.isSelected()) {
                     chooseDirectoryButton.setEnabled(true);
-                    Main.prefs.put("TIDY", "MOVE");
+                    Utils.getPrefs().put("TIDY", "MOVE");
                 }
             }
         });
@@ -122,9 +139,9 @@ public class OptionsGUI extends JDialog {
                 if (e.getSource() == chooseDirectoryButton) {
                     if (fileChooser.showOpenDialog(chooseDirectoryButton) == JFileChooser.APPROVE_OPTION) {
                         File file = fileChooser.getSelectedFile();
-                        Main.prefs.put("MOVE-DIR", file.getAbsolutePath() + "/");
+                        Utils.getPrefs().put("MOVE-DIR", file.getAbsolutePath() + "/");
                     } else {
-                        Main.prefs.put("TIDY", "IGNORE");
+                        Utils.getPrefs().put("TIDY", "IGNORE");
                     }
                 }
             }
@@ -132,9 +149,11 @@ public class OptionsGUI extends JDialog {
         debugLoggingCheckBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (debugLoggingCheckBox.isSelected()) {
-                    Main.logger.setLogDetail(Detail.DEBUG);
+                    Utils.getLogger().setLogLevel(Level.DEBUG);
+                    Utils.getPrefs().putBoolean("DEBUG-LOGGING", true);
                 } else {
-                    Main.logger.setLogDetail(Detail.SEVERE);
+                    Utils.getLogger().setLogLevel(Level.SEVERE);
+                    Utils.getPrefs().putBoolean("DEBUG-LOGGING", false);
                 }
             }
         });
@@ -142,23 +161,72 @@ public class OptionsGUI extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 if (fileChooser.showOpenDialog(chooseDirectoryButton1) == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
-                    Main.prefs.put("MONITOR-DIR", file.getAbsolutePath() + "/");
-                    Main.logger.debug("Will monitor: " + file.getAbsolutePath() + "/");
-                    Utils.displayPopup("You must restart mac2imgur to apply this change!", JOptionPane.INFORMATION_MESSAGE);
+                    Utils.getPrefs().put("MONITOR-DIR", file.getAbsolutePath() + "/");
+                    Utils.getLogger().debug("Will monitor: " + file.getAbsolutePath() + "/");
+                    new PopupDialog("You must restart mac2imgur to apply this change!", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
         resetToDefaultDirectoryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Main.prefs.put("MONITOR-DIR", System.getProperty("user.home") + "/Desktop/");
-                Main.logger.debug("Will monitor: " + System.getProperty("user.home") + "/Desktop/");
+                Utils.getPrefs().put("MONITOR-DIR", System.getProperty("user.home") + "/Desktop/");
+                Utils.getLogger().debug("Will monitor: " + System.getProperty("user.home") + "/Desktop/");
             }
 
+        });
+
+        JPEGJPGCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("JPG", JPEGJPGCheckBox.isSelected());
+            }
+        });
+        GIFCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("GIF", GIFCheckBox.isSelected());
+            }
+        });
+        PNGCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("png", PNGCheckBox.isSelected());
+            }
+        });
+        APNGCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("APNG", APNGCheckBox.isSelected());
+            }
+        });
+        TIFFCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("TIFF", TIFFCheckBox.isSelected());
+            }
+        });
+        BMPCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("BMP", BMPCheckBox.isSelected());
+            }
+        });
+        PDFCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("PDF", PDFCheckBox.isSelected());
+            }
+        });
+        XCFCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Utils.getPrefs().putBoolean("XCF", XCFCheckBox.isSelected());
+            }
         });
     }
 
     public static void open() {
-        OptionsGUI dialog = new OptionsGUI();
+        PreferencesGUI dialog = new PreferencesGUI();
         dialog.pack();
         dialog.setVisible(true);
     }
@@ -183,20 +251,16 @@ public class OptionsGUI extends JDialog {
         tabbedPane = new JTabbedPane();
         contentPane.add(tabbedPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
         optionsPanel = new JPanel();
-        optionsPanel.setLayout(new GridLayoutManager(8, 2, new Insets(0, 0, 0, 0), -1, -1));
+        optionsPanel.setLayout(new GridLayoutManager(7, 1, new Insets(0, 0, 0, 0), -1, -1));
         tabbedPane.addTab("Options", optionsPanel);
         useDirectLinkICheckBox = new JCheckBox();
         useDirectLinkICheckBox.setText("Use direct link (i.imgur.com)");
         optionsPanel.add(useDirectLinkICheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer1 = new Spacer();
-        optionsPanel.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        optionsPanel.add(spacer2, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         openImagesInBrowserCheckBox = new JCheckBox();
         openImagesInBrowserCheckBox.setText("Open images in browser");
         optionsPanel.add(openImagesInBrowserCheckBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JSeparator separator1 = new JSeparator();
-        optionsPanel.add(separator1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        optionsPanel.add(separator1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         doNothingAfterUploadRadioButton = new JRadioButton();
         doNothingAfterUploadRadioButton.setText("Do nothing after upload");
         optionsPanel.add(doNothingAfterUploadRadioButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -210,14 +274,39 @@ public class OptionsGUI extends JDialog {
         chooseDirectoryButton.setEnabled(true);
         chooseDirectoryButton.setText("Choose directory");
         optionsPanel.add(chooseDirectoryButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        formatsPanel = new JPanel();
+        formatsPanel.setLayout(new GridLayoutManager(8, 1, new Insets(0, 0, 0, 0), -1, -1));
+        tabbedPane.addTab("Formats", formatsPanel);
+        JPEGJPGCheckBox = new JCheckBox();
+        JPEGJPGCheckBox.setText("JPEG / JPG");
+        formatsPanel.add(JPEGJPGCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        GIFCheckBox = new JCheckBox();
+        GIFCheckBox.setText("GIF");
+        formatsPanel.add(GIFCheckBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        PNGCheckBox = new JCheckBox();
+        PNGCheckBox.setText("PNG");
+        formatsPanel.add(PNGCheckBox, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        APNGCheckBox = new JCheckBox();
+        APNGCheckBox.setText("APNG");
+        formatsPanel.add(APNGCheckBox, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        TIFFCheckBox = new JCheckBox();
+        TIFFCheckBox.setText("TIFF");
+        formatsPanel.add(TIFFCheckBox, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        BMPCheckBox = new JCheckBox();
+        BMPCheckBox.setText("BMP");
+        formatsPanel.add(BMPCheckBox, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        PDFCheckBox = new JCheckBox();
+        PDFCheckBox.setText("PDF");
+        formatsPanel.add(PDFCheckBox, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        XCFCheckBox = new JCheckBox();
+        XCFCheckBox.setText("XCF");
+        formatsPanel.add(XCFCheckBox, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         advancedPanel = new JPanel();
-        advancedPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), -1, -1));
+        advancedPanel.setLayout(new GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
         tabbedPane.addTab("Advanced", advancedPanel);
         debugLoggingCheckBox = new JCheckBox();
         debugLoggingCheckBox.setText("Debug logging");
         advancedPanel.add(debugLoggingCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer3 = new Spacer();
-        advancedPanel.add(spacer3, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JSeparator separator2 = new JSeparator();
         advancedPanel.add(separator2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         chooseDirectoryButton1 = new JButton();
@@ -229,8 +318,6 @@ public class OptionsGUI extends JDialog {
         resetToDefaultDirectoryButton = new JButton();
         resetToDefaultDirectoryButton.setText("Reset to default directory");
         advancedPanel.add(resetToDefaultDirectoryButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        advancedPanel.add(spacer4, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(doNothingAfterUploadRadioButton);

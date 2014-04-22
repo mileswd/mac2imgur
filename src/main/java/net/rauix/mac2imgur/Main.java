@@ -1,50 +1,57 @@
 package net.rauix.mac2imgur;
 
 import com.barbarysoftware.watchservice.*;
-import net.rauix.teensy.Detail;
-import net.rauix.teensy.Logger;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.commons.io.FilenameUtils;
+import org.json.JSONObject;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.prefs.Preferences;
-
-import static com.barbarysoftware.watchservice.StandardWatchEventKind.OVERFLOW;
 
 public class Main {
 
-    static Preferences prefs = Preferences.userRoot().node("net.rauix.mac2imgur");
+    public static final double VERSION = 2.3;
 
-    static Logger logger;
+    static final String DIR = Utils.getPrefs().get("MONITOR-DIR", System.getProperty("user.home") + "/Desktop/");
 
-    // Constants
-    static final double VERSION = 2.3;
-
-    static final String DIR = prefs.get("MONITOR-DIR", System.getProperty("user.home") + "/Desktop/");
+    static Tray tray;
 
     public static void main(String[] args) {
 
-        logger = new Logger(prefs.getBoolean("DEBUG", false) ? Detail.DEBUG : Detail.SEVERE, new File(Utils.getDataDirectory() + "mac2imgur.log"));
-
-        logger.debug("Launching mac2imgur v" + VERSION);
-        logger.debug(System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ") on " + System.getProperty("os.name")
+        // Log system information for debugging purposes
+        Utils.getLogger().debug("Launching mac2imgur v" + VERSION);
+        Utils.getLogger().debug(System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ") on " + System.getProperty("os.name")
                 + " - " + System.getProperty("os.version") + " (" + System.getProperty("os.arch") + ")");
-        logger.debug("Monitoring Directory: " + DIR);
+        Utils.getLogger().debug("Monitoring Directory: " + DIR);
 
         // Check for updates
-        Utils.checkUpdates();
+        Updater updater = new Updater();
+        try {
+            updater.checkUpdates();
 
-        // Add system tray icon
-        Tray.addSystemTray();
+            if (updater.updatesAvailable()) {
+                updater.offerUpdate();
+            }
 
-        // Set up notification bridge
-        Notifier.setupDylib();
+        } catch (IOException e) {
+            Utils.getLogger().debug(e);
+        }
+
+        try {
+            tray = new Tray();
+        } catch (IOException e) {
+            Utils.getLogger().debug(e);
+        } catch (AWTException e) {
+            Utils.getLogger().debug(e);
+        }
 
         File monitorDir = new File(DIR);
 
         if (!monitorDir.exists()) {
             // It should exist, as it's a system folder
-            Utils.displayPopup("The Desktop folder (" + DIR + ") does not exist.\n\nmac2imgur will now close.", JOptionPane.ERROR_MESSAGE);
+            new PopupDialog("The Desktop folder (" + DIR + ") does not exist.\n\nmac2imgur will now close.", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
 
@@ -53,18 +60,17 @@ public class Main {
         try {
             watchableFile.register(watch, StandardWatchEventKind.ENTRY_CREATE);
         } catch (IOException e) {
-            logger.severe(e);
-            Utils.displayPopup("Could not start folder watcher.\n\nmac2imgur will now close.", JOptionPane.ERROR_MESSAGE);
+            Utils.getLogger().severe(e);
+            new PopupDialog("Could not start folder watcher.\n\nmac2imgur will now close.", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
 
-        Runnable runnable = createRunnable(watch);
-        final Thread consumer = new Thread(runnable);
-        consumer.start();
+        final Thread t = new Thread(createRunnable(watch));
+        t.start();
 
     }
 
-    private static Runnable createRunnable(final WatchService watcher) {
+    public static Runnable createRunnable(final WatchService watcher) {
         return new Runnable() {
             public void run() {
                 for (; ; ) {
@@ -80,19 +86,70 @@ public class Main {
                     for (WatchEvent<?> event : key.pollEvents()) {
                         WatchEvent.Kind<?> kind = event.kind();
 
-                        if (kind == OVERFLOW) {
+                        if (kind.equals(StandardWatchEventKind.OVERFLOW)) {
                             continue;
                         }
 
                         @SuppressWarnings({"unchecked"})
-                        WatchEvent<File> e = (WatchEvent<File>) event;
-                        File sc = new File(String.valueOf(e.context()));
-                        String name = sc.getName();
+                        WatchEvent<File> ev = (WatchEvent<File>) event;
+                        File file = new File(String.valueOf(ev.context()));
 
-                        // Check the file is a screenshot in the right place
-                        if (name.endsWith(".png") && new File(DIR + name).exists()) {
-                            logger.debug(e.context() + " found, now uploading.");
-                            ImgurUploader.upload(sc);
+                        // Check that uploads haven't been paused and the file is in the right place
+                        if (!tray.uploadsPaused() && new File(DIR + file.getName()).exists()) {
+
+                            String extension = FilenameUtils.getExtension(file.getName());
+                            ImageType it = ImageType.getTypeByName(extension.toUpperCase());
+
+                            // Check the file is a supported image
+                            if (!it.equals(ImageType.INVALID) && it.isEnabled()) {
+                                Image img = new Image(file);
+
+                                Utils.getLogger().debug(ev.context() + " found, now uploading.");
+                                ImgurUpload upload = new AnonymousUpload(img);
+
+                                // Change icon to indicate activity has started and begin the upload
+                                tray.setTrayIconActive(true);
+                                try {
+                                    upload.start();
+                                } catch (UnirestException e) {
+                                    Utils.getLogger().debug(e);
+                                } catch (IOException e) {
+                                    Utils.getLogger().debug(e);
+                                }
+
+                                if (upload.wasSuccessful()) {
+                                    JSONObject json = upload.getResponse();
+
+                                    // Check whether the user wants the gallery or direct link
+                                    String url = Utils.getPrefs().getBoolean("DIRECT-LINK", true) ? json.getJSONObject("data").getString("link") : "https://imgur.com/" + json.getJSONObject("data").getString("id");
+
+                                    // Check if the user wants the image automatically opened
+                                    if (Utils.getPrefs().getBoolean("OPEN-IMAGE", false)) {
+                                        Utils.openBrowser(url);
+                                    }
+
+                                    // Copy url to clipboard
+                                    Utils.copyToClipboard(url);
+
+                                    // Notify the user
+                                    Notification notification = new Notification("mac2imgur", "", "Screenshot uploaded successfully!", 0);
+                                    notification.display();
+
+                                    try {
+                                        img.tidyUp(Utils.getPrefs());
+                                    } catch (IOException e) {
+                                        Utils.getLogger().debug(e);
+                                        JOptionPane.showMessageDialog(null, "The screenshot could not be moved!\n\nTry changing the folder in the options menu.", "mac2imgur", JOptionPane.WARNING_MESSAGE);
+                                    }
+                                } else {
+                                    // Notify the user
+                                    Notification notification = new Notification("mac2imgur", "", "Screenshot failed to upload", 0);
+                                    notification.display();
+                                }
+
+                                // Change icon to indicate activity has ceased
+                                tray.setTrayIconActive(false);
+                            }
                         }
                     }
 

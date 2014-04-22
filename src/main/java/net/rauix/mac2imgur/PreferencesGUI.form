@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="net.rauix.mac2imgur.OptionsGUI">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="net.rauix.mac2imgur.PreferencesGUI">
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="48" y="54" width="280" height="302"/>
+      <xy x="48" y="54" width="280" height="314"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -17,7 +17,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="6f0c1" binding="optionsPanel" layout-manager="GridLayoutManager" row-count="8" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="6f0c1" binding="optionsPanel" layout-manager="GridLayoutManager" row-count="7" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Options"/>
@@ -33,16 +33,6 @@
                   <text value="Use direct link (i.imgur.com)"/>
                 </properties>
               </component>
-              <hspacer id="859ad">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
-              <vspacer id="24464">
-                <constraints>
-                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
               <component id="5ea89" class="javax.swing.JCheckBox" binding="openImagesInBrowserCheckBox">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -53,7 +43,7 @@
               </component>
               <component id="3ffce" class="javax.swing.JSeparator">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
               </component>
@@ -92,7 +82,81 @@
               </component>
             </children>
           </grid>
-          <grid id="c6b73" binding="advancedPanel" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="2bdb" binding="formatsPanel" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Formats"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="183cf" class="javax.swing.JCheckBox" binding="JPEGJPGCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="JPEG / JPG"/>
+                </properties>
+              </component>
+              <component id="dc126" class="javax.swing.JCheckBox" binding="GIFCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="GIF"/>
+                </properties>
+              </component>
+              <component id="c076e" class="javax.swing.JCheckBox" binding="PNGCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="PNG"/>
+                </properties>
+              </component>
+              <component id="deb50" class="javax.swing.JCheckBox" binding="APNGCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="APNG"/>
+                </properties>
+              </component>
+              <component id="5b853" class="javax.swing.JCheckBox" binding="TIFFCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="TIFF"/>
+                </properties>
+              </component>
+              <component id="dea60" class="javax.swing.JCheckBox" binding="BMPCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="BMP"/>
+                </properties>
+              </component>
+              <component id="20c6a" class="javax.swing.JCheckBox" binding="PDFCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="PDF"/>
+                </properties>
+              </component>
+              <component id="82992" class="javax.swing.JCheckBox" binding="XCFCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="XCF"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="c6b73" binding="advancedPanel" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Advanced"/>
@@ -108,11 +172,6 @@
                   <text value="Debug logging"/>
                 </properties>
               </component>
-              <hspacer id="8d5e6">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
               <component id="e87b6" class="javax.swing.JSeparator">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -143,11 +202,6 @@
                   <text value="Reset to default directory"/>
                 </properties>
               </component>
-              <vspacer id="6939a">
-                <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
             </children>
           </grid>
         </children>

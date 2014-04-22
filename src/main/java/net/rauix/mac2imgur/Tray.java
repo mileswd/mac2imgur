@@ -5,83 +5,95 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import static net.rauix.mac2imgur.Main.logger;
 
 public class Tray {
 
-    static TrayIcon trayIcon = new TrayIcon(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
+    private TrayIcon trayIcon;
+    CheckboxMenuItem pauseChk;
+    java.awt.Image activeImg;
+    java.awt.Image inactiveImg;
 
-    static void addSystemTray() {
+    public Tray() throws IOException, AWTException {
 
+        activeImg = getScaledTrayIcon(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("resources/active.png")));
+        inactiveImg = getScaledTrayIcon(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("resources/inactive.png")));
+
+        trayIcon = new TrayIcon(inactiveImg);
+
+        // To be perfectly honest, I'm not sure there's any purpose to this check...
         if (!SystemTray.isSupported()) {
-            // To be perfectly honest, I'm not sure there's any purpose to this check...
-            Utils.displayPopup("The system tray is unsupported", JOptionPane.ERROR_MESSAGE);
+            new PopupDialog("The system tray is unsupported", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
+        SystemTray tray = SystemTray.getSystemTray();
 
-            final SystemTray tray = SystemTray.getSystemTray();
+        PopupMenu popup = new PopupMenu();
 
-            final PopupMenu popup = new PopupMenu();
+        pauseChk = new CheckboxMenuItem("Pause monitoring");
 
-            setTrayIcon(Status.INACTIVE);
+        MenuItem prefs = new MenuItem("Preferences...");
+        prefs.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                PreferencesGUI.open();
+            }
+        });
 
-            MenuItem options = new MenuItem("Options");
-            options.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    OptionsGUI.open();
-                }
-            });
+        MenuItem website = new MenuItem("Website");
+        website.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Utils.openBrowser("https://github.com/rauix/mac2imgur");
+            }
+        });
 
-            MenuItem support = new MenuItem("Support");
-            support.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    Utils.openBrowser("https://github.com/rauix/mac2imgur");
-                }
-            });
+        MenuItem quit = new MenuItem("Quit");
+        quit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
 
-            MenuItem quit = new MenuItem("Quit mac2imgur");
-            quit.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
-                }
-            });
+        popup.add(pauseChk);
+        popup.addSeparator();
+        popup.add(prefs);
+        popup.add(website);
+        popup.addSeparator();
+        popup.add(quit);
 
-            popup.add(options);
-            popup.addSeparator();
-            popup.add(support);
-            popup.addSeparator();
-            popup.add(quit);
+        trayIcon.setPopupMenu(popup);
 
-            trayIcon.setPopupMenu(popup);
+        tray.add(trayIcon);
 
-            tray.add(trayIcon);
+    }
 
-        } catch (AWTException e) {
-            logger.severe(e);
+    private java.awt.Image getScaledTrayIcon(java.awt.Image i) {
+        // Scale the image according (fixes blurriness on retina displays)
+        TrayIcon temp = new TrayIcon(i);
+        // This is different to trayIcon.setImageAutoSize(true);
+        return i.getScaledInstance(temp.getSize().width, temp.getSize().height, java.awt.Image.SCALE_SMOOTH);
+    }
+
+    /**
+     * Changes the icon accordingly
+     *
+     * @param active Whether or not the icon should be active
+     */
+    public void setTrayIconActive(boolean active) {
+        if (active) {
+            trayIcon.setImage(activeImg);
+        } else {
+            trayIcon.setImage(inactiveImg);
         }
     }
 
-    enum Status {ACTIVE, INACTIVE}
-
-    static void setTrayIcon(Status status) {
-        try {
-
-            Image i = ImageIO.read(Tray.class.getClassLoader().getResourceAsStream("resources/" + status.name().toLowerCase() + ".png"));
-
-            // Scale the image according (fixes blurriness on retina displays)
-            TrayIcon temp = new TrayIcon(i);
-            // This is different to trayIcon.setImageAutoSize(true);
-            trayIcon.setImage(i.getScaledInstance(temp.getSize().width, temp.getSize().height, Image.SCALE_SMOOTH));
-
-        } catch (IOException e) {
-            logger.severe(e);
-        }
+    /**
+     * Checks if the menu item 'Pause monitoring' has been clicked
+     *
+     * @return whether or not uploads should be paused
+     */
+    public boolean uploadsPaused() {
+        return pauseChk.getState();
     }
-
 
 }
