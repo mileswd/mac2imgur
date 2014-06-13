@@ -105,7 +105,15 @@ public class Main {
                                 Image img = new Image(file);
 
                                 Utils.getLogger().debug(ev.context() + " found, now uploading.");
-                                ImgurUpload upload = new AnonymousUpload(img);
+                                ImgurUpload upload;
+
+                                // Check if the user wants to use the anonymous or the account upload
+                                if(Utils.getPrefs().getBoolean("ANONYMOUS", true))
+                                    upload = new AnonymousUpload(img);
+
+                                else
+                                    upload = new AccountUpload(img);
+
 
                                 // Change icon to indicate activity has started and begin the upload
                                 tray.setTrayIconActive(true);
@@ -118,6 +126,7 @@ public class Main {
                                 }
 
                                 if (upload.wasSuccessful()) {
+
                                     JSONObject json = upload.getResponse();
 
                                     // Check whether the user wants the gallery or direct link

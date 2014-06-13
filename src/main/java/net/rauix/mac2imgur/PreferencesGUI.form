@@ -3,7 +3,7 @@
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="48" y="54" width="280" height="314"/>
+      <xy x="48" y="54" width="350" height="314"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -27,7 +27,9 @@
             <children>
               <component id="4f6cb" class="javax.swing.JCheckBox" binding="useDirectLinkICheckBox" default-binding="true">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="392" height="23"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="Use direct link (i.imgur.com)"/>
@@ -35,7 +37,9 @@
               </component>
               <component id="5ea89" class="javax.swing.JCheckBox" binding="openImagesInBrowserCheckBox">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="392" height="23"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="Open images in browser"/>
@@ -43,13 +47,17 @@
               </component>
               <component id="3ffce" class="javax.swing.JSeparator">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="392" height="12"/>
+                  </grid>
                 </constraints>
                 <properties/>
               </component>
               <component id="a95c4" class="javax.swing.JRadioButton" binding="doNothingAfterUploadRadioButton" default-binding="true">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="392" height="23"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="Do nothing after upload"/>
@@ -57,7 +65,9 @@
               </component>
               <component id="3b59d" class="javax.swing.JRadioButton" binding="deleteAfterUploadRadioButton" default-binding="true">
                 <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="392" height="23"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="Delete after upload"/>
@@ -65,7 +75,9 @@
               </component>
               <component id="904e9" class="javax.swing.JRadioButton" binding="moveAfterUploadRadioButton" default-binding="true">
                 <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="392" height="23"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="Move after upload"/>
@@ -73,11 +85,78 @@
               </component>
               <component id="3f3ea" class="javax.swing.JButton" binding="chooseDirectoryButton" default-binding="true">
                 <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="392" height="29"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <enabled value="true"/>
                   <text value="Choose directory"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="21d6f" binding="accountPanel" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Account"/>
+            </constraints>
+            <properties/>
+            <border type="none">
+              <font/>
+            </border>
+            <children>
+              <component id="92a1a" class="javax.swing.JButton" binding="openBrowserForAuthenticationButton" default-binding="true">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Open browser for Authentication"/>
+                </properties>
+              </component>
+              <component id="773ed" class="javax.swing.JSeparator">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="c3008" class="javax.swing.JButton" binding="authorizeButton" default-binding="true">
+                <constraints>
+                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Authorize"/>
+                </properties>
+              </component>
+              <component id="e732e" class="javax.swing.JLabel" binding="pinLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="PIN"/>
+                </properties>
+              </component>
+              <component id="e116f" class="javax.swing.JTextField" binding="pinField">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                </properties>
+              </component>
+              <component id="b1c40" class="javax.swing.JCheckBox" binding="anonymousUploadCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <selected value="true"/>
+                  <text value="Anonymous Upload"/>
                 </properties>
               </component>
             </children>
