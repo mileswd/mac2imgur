@@ -29,16 +29,31 @@ If the upload was successful, then your screenshot has been uploaded and the lin
 
 ###Options###
 
-There are a few options that you can change, via the options dialog (accessible by clicking the system tray icon, then selecting 'Options' from the popup menu) - these include:
+There are a few options that you can change, via the options dialog (accessible by clicking the system tray icon, then selecting 'Preferences' from the popup menu) - these include:
 
 * What happens to the screenshot after it is uploaded (it can be moved, deleted, or simply left as it is)
 * Whether the direct link or gallery link is used
 * If the screenshot should be opened in the browser after upload
 * The directory monitored for new screenshots
+* Select which formats should mac2imgur upload
+* Choose between Anonymous or Account uploads
 
-![alt text](http://i.imgur.com/ayY42ur.png "mac2imgur options menu")
+![alt text](http://i.imgur.com/xfjCQYL.png "mac2imgur options menu")
 ---
 
+###Account support###
+Since v2.4, mac2imgur gives support for account-uploading, giving you the option for managing and deleting the images you no longer want online.
+
+Enabling it is as simple as going to the options dialog (accessible by clicking the system tray icon, then selecting 'Preferences' from the popup menu), Accounts option and at the Account section, just follow the instructions.
+![Account support](http://i.imgur.com/G3jHSnI.png "Account support")
+---
+
+### Building your own .app###
+If you would like compiling your own version of mac2imgur, you may read the wiki page I wrote, in order to make things easier to you: https://github.com/dexafree/mac2imgur/wiki/Building-the-.app
+
+Also, I uploaded all the .jar files, in order to avoid any maven-dependency problem.
+
+---
 ###Issues & Pull Requests###
 
 If something isn't working as expected, feel free to [submit an issue](https://github.com/rauix/mac2imgur/issues).

@@ -1,5 +1,7 @@
 package net.rauix.mac2imgur;
 
+import org.joda.time.DateTime;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -11,6 +13,8 @@ import java.util.prefs.Preferences;
 public final class Utils {
 
     private static Logger logger;
+    private static String lastToken;
+    private static DateTime lastTokenTime = DateTime.now();
 
     /**
      * Gets the preference node for mac2imgur
@@ -70,6 +74,21 @@ public final class Utils {
             new PopupDialog("Could not open website, try going to " + url + " manually.", JOptionPane.WARNING_MESSAGE);
             logger.warning(e);
         }
+    }
+
+    public static void setLastToken(String token){
+        lastTokenTime = DateTime.now();
+        lastToken = token;
+    }
+
+    public static String getLastToken(){
+        return lastToken;
+    }
+
+    public static boolean isTokenStillValid(){
+
+        return (DateTime.now().plusSeconds(3600).isAfter(lastTokenTime));
+
     }
 
 }
