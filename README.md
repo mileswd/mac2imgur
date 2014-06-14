@@ -48,6 +48,12 @@ Enabling it is as simple as going to the options dialog (accessible by clicking 
 ![Account support](http://i.imgur.com/G3jHSnI.png "Account support")
 ---
 
+### Building your own .app###
+If you would like compiling your own version of mac2imgur, you may read the wiki page I wrote, in order to make things easier to you: https://github.com/dexafree/mac2imgur/wiki/Building-the-.app
+
+Also, I uploaded all the .jar files, in order to avoid any maven-dependency problem.
+
+---
 ###Issues & Pull Requests###
 
 If something isn't working as expected, feel free to [submit an issue](https://github.com/rauix/mac2imgur/issues).
