@@ -1,0 +1,414 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2D0194DF89D00E8CBC9 /* main.swift */; };
+		02FDC2D3194DF89D00E8CBC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */; };
+		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
+		02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
+		02FDC2E4194DF89D00E8CBC9 /* mac2imgurTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		02FDC2DE194DF89D00E8CBC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02FDC2C3194DF89D00E8CBC9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02FDC2CA194DF89D00E8CBC9;
+			remoteInfo = mac2imgur;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mac2imgur.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02FDC2CF194DF89D00E8CBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02FDC2D0194DF89D00E8CBC9 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		02FDC2D7194DF89D00E8CBC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mac2imgurTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		02FDC2E2194DF89D00E8CBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac2imgurTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		02FDC2C8194DF89D00E8CBC9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02FDC2DA194DF89D00E8CBC9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		02FDC2C2194DF89D00E8CBC9 = {
+			isa = PBXGroup;
+			children = (
+				02FDC2CD194DF89D00E8CBC9 /* mac2imgur */,
+				02FDC2E0194DF89D00E8CBC9 /* mac2imgurTests */,
+				02FDC2CC194DF89D00E8CBC9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		02FDC2CC194DF89D00E8CBC9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */,
+				02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		02FDC2CD194DF89D00E8CBC9 /* mac2imgur */ = {
+			isa = PBXGroup;
+			children = (
+				02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */,
+				02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */,
+				02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */,
+				02FDC2CE194DF89D00E8CBC9 /* Supporting Files */,
+			);
+			path = mac2imgur;
+			sourceTree = "<group>";
+		};
+		02FDC2CE194DF89D00E8CBC9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02FDC2CF194DF89D00E8CBC9 /* Info.plist */,
+				02FDC2D0194DF89D00E8CBC9 /* main.swift */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02FDC2E0194DF89D00E8CBC9 /* mac2imgurTests */ = {
+			isa = PBXGroup;
+			children = (
+				02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */,
+				02FDC2E1194DF89D00E8CBC9 /* Supporting Files */,
+			);
+			path = mac2imgurTests;
+			sourceTree = "<group>";
+		};
+		02FDC2E1194DF89D00E8CBC9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02FDC2E2194DF89D00E8CBC9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		02FDC2CA194DF89D00E8CBC9 /* mac2imgur */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02FDC2E7194DF89D00E8CBC9 /* Build configuration list for PBXNativeTarget "mac2imgur" */;
+			buildPhases = (
+				02FDC2C7194DF89D00E8CBC9 /* Sources */,
+				02FDC2C8194DF89D00E8CBC9 /* Frameworks */,
+				02FDC2C9194DF89D00E8CBC9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mac2imgur;
+			productName = mac2imgur;
+			productReference = 02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */;
+			productType = "com.apple.product-type.application";
+		};
+		02FDC2DC194DF89D00E8CBC9 /* mac2imgurTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02FDC2EA194DF89D00E8CBC9 /* Build configuration list for PBXNativeTarget "mac2imgurTests" */;
+			buildPhases = (
+				02FDC2D9194DF89D00E8CBC9 /* Sources */,
+				02FDC2DA194DF89D00E8CBC9 /* Frameworks */,
+				02FDC2DB194DF89D00E8CBC9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				02FDC2DF194DF89D00E8CBC9 /* PBXTargetDependency */,
+			);
+			name = mac2imgurTests;
+			productName = mac2imgurTests;
+			productReference = 02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		02FDC2C3194DF89D00E8CBC9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = Miles;
+				TargetAttributes = {
+					02FDC2CA194DF89D00E8CBC9 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					02FDC2DC194DF89D00E8CBC9 = {
+						CreatedOnToolsVersion = 6.0;
+						TestTargetID = 02FDC2CA194DF89D00E8CBC9;
+					};
+				};
+			};
+			buildConfigurationList = 02FDC2C6194DF89D00E8CBC9 /* Build configuration list for PBXProject "mac2imgur" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 02FDC2C2194DF89D00E8CBC9;
+			productRefGroup = 02FDC2CC194DF89D00E8CBC9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				02FDC2CA194DF89D00E8CBC9 /* mac2imgur */,
+				02FDC2DC194DF89D00E8CBC9 /* mac2imgurTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		02FDC2C9194DF89D00E8CBC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */,
+				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02FDC2DB194DF89D00E8CBC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		02FDC2C7194DF89D00E8CBC9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02FDC2D3194DF89D00E8CBC9 /* AppDelegate.swift in Sources */,
+				02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02FDC2D9194DF89D00E8CBC9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02FDC2E4194DF89D00E8CBC9 /* mac2imgurTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		02FDC2DF194DF89D00E8CBC9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02FDC2CA194DF89D00E8CBC9 /* mac2imgur */;
+			targetProxy = 02FDC2DE194DF89D00E8CBC9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02FDC2D7194DF89D00E8CBC9 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		02FDC2E5194DF89D00E8CBC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				METAL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		02FDC2E6194DF89D00E8CBC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				METAL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		02FDC2E8194DF89D00E8CBC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = mac2imgur/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		02FDC2E9194DF89D00E8CBC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = mac2imgur/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		02FDC2EB194DF89D00E8CBC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mac2imgur.app/Contents/MacOS/mac2imgur";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = mac2imgurTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				METAL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+			};
+			name = Debug;
+		};
+		02FDC2EC194DF89D00E8CBC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mac2imgur.app/Contents/MacOS/mac2imgur";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = mac2imgurTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				METAL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02FDC2C6194DF89D00E8CBC9 /* Build configuration list for PBXProject "mac2imgur" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02FDC2E5194DF89D00E8CBC9 /* Debug */,
+				02FDC2E6194DF89D00E8CBC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02FDC2E7194DF89D00E8CBC9 /* Build configuration list for PBXNativeTarget "mac2imgur" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02FDC2E8194DF89D00E8CBC9 /* Debug */,
+				02FDC2E9194DF89D00E8CBC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		02FDC2EA194DF89D00E8CBC9 /* Build configuration list for PBXNativeTarget "mac2imgurTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02FDC2EB194DF89D00E8CBC9 /* Debug */,
+				02FDC2EC194DF89D00E8CBC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 02FDC2C3194DF89D00E8CBC9 /* Project object */;
+}
