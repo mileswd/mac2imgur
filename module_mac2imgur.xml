@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_mac2imgur" default="compile.module.mac2imgur">
+  <dirname property="module.mac2imgur.basedir" file="${ant.file.module_mac2imgur}"/>
+  
+  <property name="module.jdk.home.mac2imgur" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.mac2imgur" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.mac2imgur" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.mac2imgur" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="mac2imgur.output.dir" value="${module.mac2imgur.basedir}/target/classes"/>
+  <property name="mac2imgur.testoutput.dir" value="${module.mac2imgur.basedir}/target/test-classes"/>
+  
+  <path id="mac2imgur.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="mac2imgur.module.production.classpath">
+    <path refid="${module.jdk.classpath.mac2imgur}"/>
+    <path refid="library.maven:_com.mashape.unirest:unirest-java:1.3.10.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.3.3.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.3.2.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.3.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpasyncclient:4.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore-nio:4.3.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpmime:4.3.3.classpath"/>
+    <path refid="library.maven:_org.json:json:20140107.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.maven:_com.intellij:forms_rt:7.0.3.classpath"/>
+    <path refid="library.maven:_asm:asm-commons:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm-tree:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm:3.0.classpath"/>
+    <path refid="library.maven:_com.jgoodies:forms:1.1-preview.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.org.json:json:20140107.classpath"/>
+    <path refid="library.commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.io.restx:restx-barbarywatch:0.32.classpath"/>
+  </path>
+  
+  <path id="mac2imgur.runtime.production.module.classpath">
+    <pathelement location="${mac2imgur.output.dir}"/>
+    <path refid="library.maven:_com.mashape.unirest:unirest-java:1.3.10.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.3.3.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.3.2.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.3.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpasyncclient:4.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore-nio:4.3.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpmime:4.3.3.classpath"/>
+    <path refid="library.maven:_org.json:json:20140107.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.maven:_com.intellij:forms_rt:7.0.3.classpath"/>
+    <path refid="library.maven:_asm:asm-commons:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm-tree:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm:3.0.classpath"/>
+    <path refid="library.maven:_com.jgoodies:forms:1.1-preview.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.org.json:json:20140107.classpath"/>
+    <path refid="library.commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.io.restx:restx-barbarywatch:0.32.classpath"/>
+  </path>
+  
+  <path id="mac2imgur.module.classpath">
+    <path refid="${module.jdk.classpath.mac2imgur}"/>
+    <pathelement location="${mac2imgur.output.dir}"/>
+    <path refid="library.maven:_com.mashape.unirest:unirest-java:1.3.10.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.3.3.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.3.2.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.3.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpasyncclient:4.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore-nio:4.3.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpmime:4.3.3.classpath"/>
+    <path refid="library.maven:_org.json:json:20140107.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.maven:_com.intellij:forms_rt:7.0.3.classpath"/>
+    <path refid="library.maven:_asm:asm-commons:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm-tree:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm:3.0.classpath"/>
+    <path refid="library.maven:_com.jgoodies:forms:1.1-preview.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.org.json:json:20140107.classpath"/>
+    <path refid="library.commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.io.restx:restx-barbarywatch:0.32.classpath"/>
+  </path>
+  
+  <path id="mac2imgur.runtime.module.classpath">
+    <pathelement location="${mac2imgur.testoutput.dir}"/>
+    <pathelement location="${mac2imgur.output.dir}"/>
+    <path refid="library.maven:_com.mashape.unirest:unirest-java:1.3.10.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.3.3.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.3.2.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.1.3.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.6.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpasyncclient:4.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore-nio:4.3.2.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpmime:4.3.3.classpath"/>
+    <path refid="library.maven:_org.json:json:20140107.classpath"/>
+    <path refid="library.maven:_commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.maven:_net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.maven:_com.intellij:forms_rt:7.0.3.classpath"/>
+    <path refid="library.maven:_asm:asm-commons:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm-tree:3.0.classpath"/>
+    <path refid="library.maven:_asm:asm:3.0.classpath"/>
+    <path refid="library.maven:_com.jgoodies:forms:1.1-preview.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.net.java.dev.jna:jna:4.1.0.classpath"/>
+    <path refid="library.org.json:json:20140107.classpath"/>
+    <path refid="library.commons-io:commons-io:2.4.classpath"/>
+    <path refid="library.io.restx:restx-barbarywatch:0.32.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.mac2imgur">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.mac2imgur">
+    <patternset refid="excluded.from.module.mac2imgur"/>
+  </patternset>
+  
+  <path id="mac2imgur.module.sourcepath">
+    <dirset dir="${module.mac2imgur.basedir}">
+      <include name="src/main/java"/>
+      <include name="src/main/resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.mac2imgur" depends="compile.module.mac2imgur.production,compile.module.mac2imgur.tests" description="Compile module mac2imgur"/>
+  
+  <target name="compile.module.mac2imgur.production" depends="register.custom.compilers" description="Compile module mac2imgur; production classes">
+    <mkdir dir="${mac2imgur.output.dir}"/>
+    <javac2 destdir="${mac2imgur.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.mac2imgur}/javac">
+      <compilerarg line="${compiler.args.mac2imgur}"/>
+      <bootclasspath refid="mac2imgur.module.bootclasspath"/>
+      <classpath refid="mac2imgur.module.production.classpath"/>
+      <src refid="mac2imgur.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.mac2imgur"/>
+    </javac2>
+    
+    <copy todir="${mac2imgur.output.dir}">
+      <fileset dir="${module.mac2imgur.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.mac2imgur.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.mac2imgur.tests" depends="register.custom.compilers,compile.module.mac2imgur.production" description="compile module mac2imgur; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.mac2imgur" description="cleanup module">
+    <delete dir="${mac2imgur.output.dir}"/>
+    <delete dir="${mac2imgur.testoutput.dir}"/>
+  </target>
+</project>

@@ -41,7 +41,12 @@ public class Image {
     public String getEncodedImage() throws IOException {
         BufferedImage image = ImageIO.read(f);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", baos);
+
+        String extension = FilenameUtils.getExtension(f.getName());
+
+        if(extension.equalsIgnoreCase("JPEG")) extension = "jpg";
+
+        ImageIO.write(image, extension, baos);
         return new Base64().encodeAsString(baos.toByteArray());
     }
 

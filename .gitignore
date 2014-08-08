@@ -1,0 +1,5 @@
+.idea/
+target/
+dist/
+classes/
+.DS_STORE

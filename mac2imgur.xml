@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="mac2imgur" default="all">
+  
+  
+  <property file="mac2imgur.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/*.lib/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.ear"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.swc"/>
+    <include name="*.ane"/>
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.7" value="${jdk.home.1.7}/bin"/>
+  <path id="jdk.classpath.1.7">
+    <fileset dir="${jdk.home.1.7}">
+      <include name="lib/ant-javafx.jar"/>
+      <include name="lib/dt.jar"/>
+      <include name="lib/javafx-doclet.jar"/>
+      <include name="lib/javafx-mx.jar"/>
+      <include name="lib/jconsole.jar"/>
+      <include name="lib/sa-jdi.jar"/>
+      <include name="lib/tools.jar"/>
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/htmlconverter.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxrt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.7}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.7}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.7"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.commons-io:commons-io:2.4.classpath">
+    <pathelement location="${basedir}/lib/commons-io-2.4.jar"/>
+  </path>
+  
+  <path id="library.io.restx:restx-barbarywatch:0.32.classpath">
+    <pathelement location="${basedir}/lib/dom4j-1.6.1.jar"/>
+    <pathelement location="${basedir}/lib/guava-15.0.jar"/>
+    <pathelement location="${basedir}/lib/javassist-3.16.1-GA.jar"/>
+    <pathelement location="${basedir}/lib/jmustache-1.8.jar"/>
+    <pathelement location="${basedir}/lib/jna-3.2.7.jar"/>
+    <pathelement location="${basedir}/lib/joda-time-2.3.jar"/>
+    <pathelement location="${basedir}/lib/reflections-0.9.9-RC1.jar"/>
+    <pathelement location="${basedir}/lib/restx-barbarywatch-0.32.jar"/>
+    <pathelement location="${basedir}/lib/restx-common-0.32.jar"/>
+    <pathelement location="${basedir}/lib/xml-apis-1.0.b2.jar"/>
+  </path>
+  
+  <path id="library.maven:_asm:asm-commons:3.0.classpath">
+    <pathelement location="${path.variable.maven_repository}/asm/asm-commons/3.0/asm-commons-3.0.jar"/>
+  </path>
+  
+  <path id="library.maven:_asm:asm-tree:3.0.classpath">
+    <pathelement location="${path.variable.maven_repository}/asm/asm-tree/3.0/asm-tree-3.0.jar"/>
+  </path>
+  
+  <path id="library.maven:_asm:asm:3.0.classpath">
+    <pathelement location="${path.variable.maven_repository}/asm/asm/3.0/asm-3.0.jar"/>
+  </path>
+  
+  <path id="library.maven:_com.intellij:forms_rt:7.0.3.classpath">
+    <pathelement location="${path.variable.maven_repository}/com/intellij/forms_rt/7.0.3/forms_rt-7.0.3.jar"/>
+  </path>
+  
+  <path id="library.maven:_com.jgoodies:forms:1.1-preview.classpath">
+    <pathelement location="${path.variable.maven_repository}/com/jgoodies/forms/1.1-preview/forms-1.1-preview.jar"/>
+  </path>
+  
+  <path id="library.maven:_com.mashape.unirest:unirest-java:1.3.10.classpath">
+    <pathelement location="${path.variable.maven_repository}/com/mashape/unirest/unirest-java/1.3.10/unirest-java-1.3.10.jar"/>
+  </path>
+  
+  <path id="library.maven:_commons-codec:commons-codec:1.6.classpath">
+    <pathelement location="${path.variable.maven_repository}/commons-codec/commons-codec/1.6/commons-codec-1.6.jar"/>
+  </path>
+  
+  <path id="library.maven:_commons-io:commons-io:2.4.classpath">
+    <pathelement location="${path.variable.maven_repository}/commons-io/commons-io/2.4/commons-io-2.4.jar"/>
+  </path>
+  
+  <path id="library.maven:_commons-logging:commons-logging:1.1.3.classpath">
+    <pathelement location="${path.variable.maven_repository}/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar"/>
+  </path>
+  
+  <path id="library.maven:_jdom:jdom:1.0.classpath">
+    <pathelement location="${path.variable.maven_repository}/jdom/jdom/1.0/jdom-1.0.jar"/>
+  </path>
+  
+  <path id="library.maven:_net.java.dev.jna:jna:4.1.0.classpath">
+    <pathelement location="${path.variable.maven_repository}/net/java/dev/jna/jna/4.1.0/jna-4.1.0.jar"/>
+  </path>
+  
+  <path id="library.maven:_org.apache.httpcomponents:httpasyncclient:4.0.1.classpath">
+    <pathelement location="${path.variable.maven_repository}/org/apache/httpcomponents/httpasyncclient/4.0.1/httpasyncclient-4.0.1.jar"/>
+  </path>
+  
+  <path id="library.maven:_org.apache.httpcomponents:httpclient:4.3.3.classpath">
+    <pathelement location="${path.variable.maven_repository}/org/apache/httpcomponents/httpclient/4.3.3/httpclient-4.3.3.jar"/>
+  </path>
+  
+  <path id="library.maven:_org.apache.httpcomponents:httpcore-nio:4.3.2.classpath">
+    <pathelement location="${path.variable.maven_repository}/org/apache/httpcomponents/httpcore-nio/4.3.2/httpcore-nio-4.3.2.jar"/>
+  </path>
+  
+  <path id="library.maven:_org.apache.httpcomponents:httpcore:4.3.2.classpath">
+    <pathelement location="${path.variable.maven_repository}/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.jar"/>
+  </path>
+  
+  <path id="library.maven:_org.apache.httpcomponents:httpmime:4.3.3.classpath">
+    <pathelement location="${path.variable.maven_repository}/org/apache/httpcomponents/httpmime/4.3.3/httpmime-4.3.3.jar"/>
+  </path>
+  
+  <path id="library.maven:_org.json:json:20140107.classpath">
+    <pathelement location="${path.variable.maven_repository}/org/json/json/20140107/json-20140107.jar"/>
+  </path>
+  
+  <path id="library.net.java.dev.jna:jna:4.1.0.classpath">
+    <pathelement location="${basedir}/lib/jna-4.1.0.jar"/>
+  </path>
+  
+  <path id="library.org.json:json:20140107.classpath">
+    <pathelement location="${basedir}/lib/json-20140107.jar"/>
+  </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm4-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  <import file="${basedir}/module_mac2imgur.xml"/>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.mac2imgur" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.mac2imgur" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>

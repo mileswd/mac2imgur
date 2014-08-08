@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="mac2imgur" default="default" basedir=".">
+
+    <taskdef name="bundleapp"
+             classname="com.oracle.appbundler.AppBundlerTask"
+             classpath="lib/appbundler-1.0.jar" />
+
+    <target name="bundle-mac2imgur">
+        <bundleapp outputdirectory="dist"
+            name="mac2imgur"
+            displayname="mac2imgur"
+            identifier="net.rauix.mac2imgur"
+            mainclassname="net.rauix.mac2imgur.Main">
+            <classpath file="classes/artifacts/mac2imgur_jar/mac2imgur.jar" />
+        </bundleapp>
+    </target>
+
+</project>
