@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		022321C119A6F57E00048626 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 022321C019A6F57E00048626 /* README.md */; };
+		022321C319A6FDCD00048626 /* version.txt in Resources */ = {isa = PBXBuildFile; fileRef = 022321C219A6FDCD00048626 /* version.txt */; };
 		0252CA5619A61B4500632013 /* AnonymousImgurUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0252CA5519A61B4500632013 /* AnonymousImgurUpload.swift */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
 		02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2D0194DF89D00E8CBC9 /* main.swift */; };
@@ -47,6 +48,7 @@
 /* Begin PBXFileReference section */
 		022321BE19A6959500048626 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		022321C019A6F57E00048626 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		022321C219A6FDCD00048626 /* version.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.txt; sourceTree = "<group>"; };
 		0252CA5519A61B4500632013 /* AnonymousImgurUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnonymousImgurUpload.swift; sourceTree = "<group>"; };
 		02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotMonitor.swift; sourceTree = "<group>"; };
 		02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mac2imgur.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +87,7 @@
 		02FDC2C2194DF89D00E8CBC9 = {
 			isa = PBXGroup;
 			children = (
+				022321C219A6FDCD00048626 /* version.txt */,
 				022321C019A6F57E00048626 /* README.md */,
 				022321BE19A6959500048626 /* LICENSE */,
 				02FDC2CD194DF89D00E8CBC9 /* mac2imgur */,
@@ -234,6 +237,7 @@
 				02FDC30F194E0C1900E8CBC9 /* Status_Inverted@2x.png in Resources */,
 				02FDC30E194E0C1900E8CBC9 /* Status_Inverted.png in Resources */,
 				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
+				022321C319A6FDCD00048626 /* version.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
