@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>mac2imgur Changelog</title>
+        <link>https://raw.githubusercontent.com/rauix/mac2imgur/master/Resources/appcast.xml</link>
+        <description>Most recent changes with links to updates.</description>
+        <language>en</language>
+        <item>
+            <title>Version 3.0</title>
+            <sparkle:releaseNotesLink>
+                https://github.com/rauix/mac2imgur/releases/tag/3.0
+            </sparkle:releaseNotesLink>
+            <pubDate>Fri, 22 Aug 2014 06:00:00 +0000</pubDate>
+            <enclosure url="https://github.com/rauix/mac2imgur/releases/download/3.0/mac2imgur.zip" sparkle:version="3.0" length="1623481" type="application/octet-stream" sparkle:dsaSignature="MCwCFA/qGuqOHyaPY1Dz6vhxugEzpToHAhR4zPUoxiv4GqsmQk21P1nuMC4cNQ==" />
+            <sparkle:minimumSystemVersion>10.9</sparkle:minimumSystemVersion>
+        </item>
+    </channel>
+</rss>
