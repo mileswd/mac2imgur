@@ -14,9 +14,10 @@
  * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Foundation
 import Cocoa
 
-class AppDelegate: NSObject, NSApplicationDelegate, AnonymousImgurUploadDelegate, ScreenshotMonitorDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, AnonymousImgurUploadDelegate, ScreenshotMonitorDelegate {
     
     @IBOutlet var window: NSWindow?
     var statusItem: NSStatusItem?
@@ -45,6 +46,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, AnonymousImgurUploadDelegate
         // Setup screenshot monitor
         monitor = ScreenshotMonitor(delegate: self)
         
+        NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
+        
     }
     
     func uploadAttemptCompleted(successful: Bool, link: String) {
@@ -60,6 +63,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, AnonymousImgurUploadDelegate
     func screenshotEventOccurred(pathToImage: String) {
         let upload = AnonymousImgurUpload(pathToImage: pathToImage, delegate: self)
         upload.attemptUpload()
+    }
+    
+    func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
+        if notification.informativeText != "" {
+            NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString(notification.informativeText))
+        }
     }
     
     func applicationWillTerminate(aNotification: NSNotification?) {
