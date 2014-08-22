@@ -43,4 +43,4 @@ On the same note, pull requests to fix issues, add features or simply to improve
 
 ###License###
 
-mac2imgur is released under an GPLv3 license. See [LICENSE](https://github.com/rauix/mac2imgur/blob/master/LICENSE) for more information.
+mac2imgur is released under a GPLv3 license. See [LICENSE](https://github.com/rauix/mac2imgur/blob/master/LICENSE) for more information.
