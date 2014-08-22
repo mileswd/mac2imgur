@@ -11,7 +11,7 @@
                 https://github.com/rauix/mac2imgur/releases/tag/3.0
             </sparkle:releaseNotesLink>
             <pubDate>Fri, 22 Aug 2014 06:00:00 +0000</pubDate>
-            <enclosure url="https://github.com/rauix/mac2imgur/releases/download/3.0/mac2imgur.zip" sparkle:version="3.0" length="1623481" type="application/octet-stream" sparkle:dsaSignature="MCwCFDphB201UXHENBRHTaBJKWJeAKVIAhQzXkf0DIFjAc4tBxDr4QNfRGLdxA==" />
+            <enclosure url="https://github.com/rauix/mac2imgur/releases/download/3.0/mac2imgur.zip" sparkle:version="3.0" length="2779432" type="application/octet-stream" sparkle:dsaSignature="MCwCFDphB201UXHENBRHTaBJKWJeAKVIAhQzXkf0DIFjAc4tBxDr4QNfRGLdxA==" />
             <sparkle:minimumSystemVersion>10.9</sparkle:minimumSystemVersion>
         </item>
     </channel>
