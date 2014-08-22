@@ -7,7 +7,7 @@ mac2imgur
 
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
-![alt text](https://i.imgur.com/HJ8C4pz.png "mac2imgur system tray icon")
+![mac2imgur system tray icon](https://i.imgur.com/HJ8C4pz.png "mac2imgur system tray icon")
 
 ---
 
@@ -23,7 +23,7 @@ After you've taken a screenshot, you'll receive a notification via the Mac OS X 
 
 If the upload was successful, then your screenshot has been uploaded and the link has been copied to your clipboard.
 
-![mac2imgur upload notification](http://i.imgur.com/6JSYPWv.png "mac2imgur upload notification")
+![mac2imgur upload notification](https://i.imgur.com/7ezVpLE.png "mac2imgur upload notification")
 
 ---
 
