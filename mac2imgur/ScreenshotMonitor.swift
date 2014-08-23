@@ -60,7 +60,7 @@ class ScreenshotMonitor {
     }
     
     @objc func initialiseBlacklist() {
-        for index in 0..<(query.results.count) {
+        for index in 0..<(query.resultCount) {
             addToBlacklist(query.resultAtIndex(index).valueForKey(NSMetadataItemPathKey) as String)
         }
     }
