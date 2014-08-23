@@ -39,8 +39,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(CGFloat(-1))
         statusItem!.highlightMode = true
         statusItem!.menu = menu
-        statusItem!.image = NSImage(named: "Status")
         statusItem!.alternateImage = NSImage(named: "Status_Inverted")
+        setInactiveStatus()
         statusItem!.toolTip = "mac2imgur"
         
         // Setup screenshot monitor
@@ -58,11 +58,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         } else {
             displayNotification("Screenshot upload failed...", informativeText: "")
         }
+        setInactiveStatus()
     }
     
     func screenshotEventOccurred(pathToImage: String) {
         let upload = AnonymousImgurUpload(pathToImage: pathToImage, delegate: self)
         upload.attemptUpload()
+        setUploadingStatus()
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
@@ -91,6 +93,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         notification.title = title
         notification.informativeText = informativeText
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+    }
+    
+    func setUploadingStatus(){
+        statusItem!.image = NSImage(named: "Status")
+
+    }
+    
+    func setInactiveStatus(){
+        statusItem!.image = NSImage(named: "Inactive")
     }
     
 }
