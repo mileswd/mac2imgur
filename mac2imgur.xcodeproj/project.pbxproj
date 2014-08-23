@@ -23,6 +23,8 @@
 		02FDC30E194E0C1900E8CBC9 /* Status_Inverted.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30A194E0C1800E8CBC9 /* Status_Inverted.png */; };
 		02FDC30F194E0C1900E8CBC9 /* Status_Inverted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30B194E0C1800E8CBC9 /* Status_Inverted@2x.png */; };
 		02FDC310194E0C1900E8CBC9 /* Status@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30C194E0C1800E8CBC9 /* Status@2x.png */; };
+		0756029719A8E74000BAB12B /* Inactive.png in Resources */ = {isa = PBXBuildFile; fileRef = 0756029519A8E74000BAB12B /* Inactive.png */; };
+		0756029819A8E74000BAB12B /* Inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0756029619A8E74000BAB12B /* Inactive@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,8 @@
 		02FDC30A194E0C1800E8CBC9 /* Status_Inverted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Status_Inverted.png; sourceTree = "<group>"; };
 		02FDC30B194E0C1800E8CBC9 /* Status_Inverted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Status_Inverted@2x.png"; sourceTree = "<group>"; };
 		02FDC30C194E0C1800E8CBC9 /* Status@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Status@2x.png"; sourceTree = "<group>"; };
+		0756029519A8E74000BAB12B /* Inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Inactive.png; sourceTree = "<group>"; };
+		0756029619A8E74000BAB12B /* Inactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Inactive@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,8 @@
 		02FDC2CD194DF89D00E8CBC9 /* mac2imgur */ = {
 			isa = PBXGroup;
 			children = (
+				0756029519A8E74000BAB12B /* Inactive.png */,
+				0756029619A8E74000BAB12B /* Inactive@2x.png */,
 				02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */,
 				0252CA5519A61B4500632013 /* AnonymousImgurUpload.swift */,
 				02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */,
@@ -255,6 +261,8 @@
 				02FDC310194E0C1900E8CBC9 /* Status@2x.png in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
 				02FDC30F194E0C1900E8CBC9 /* Status_Inverted@2x.png in Resources */,
+				0756029819A8E74000BAB12B /* Inactive@2x.png in Resources */,
+				0756029719A8E74000BAB12B /* Inactive.png in Resources */,
 				02FDC30E194E0C1900E8CBC9 /* Status_Inverted.png in Resources */,
 				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
 				022321CE19A7042D00048626 /* dsa_pub.pem in Resources */,
