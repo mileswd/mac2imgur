@@ -1,36 +1,51 @@
-/* This file is part of mac2imgur.
- *
- * mac2imgur is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * mac2imgur is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
- */
+//
+//  ImgurClient.swift
+//  mac2imgur
+//
+//  Created by Dexafree on 25/08/14.
+//
+//
 
 import Foundation
 
-class AnonymousImgurUpload {
+class UploadController {
     
-    let clientId: String = "5867856c9027819"
-    let supportUrl: String = "https://github.com/rauix/mac2imgur"
-    let boundary: String = "-----------------------------\(arc4random())\(arc4random())" // Random boundary
     var pathToImage: String
-    var delegate: AnonymousImgurUploadDelegate
+    var client: ImgurClient?
+    let boundary: String = "-----------------------------\(arc4random())\(arc4random())" // Random boundary
+    var delegate: ImgurUploadDelegate
+
     
-    init(pathToImage: String, delegate: AnonymousImgurUploadDelegate) {
+    init(pathToImage: String, client: ImgurClient, delegate: ImgurUploadDelegate) {
         self.pathToImage = pathToImage
+        self.client = client
         self.delegate = delegate
     }
     
     func attemptUpload() {
-        println("Attempting to upload image")
+        
+        if client!.isUserLoggedIn! {
+            
+            if client!.isAccessTokenStillValid() {
+                NSLog("TOKEN IS VALID")
+                upload(false)
+            } else {
+                NSLog("TOKEN IS NOT VALID")
+                client?.requestNewAccessToken({ ()->Void in
+                    NSLog("NEW TOKEN REQUESTED")
+                    self.upload(false)
+                })
+            }
+            
+        } else {
+            NSLog("Anonymous upload")
+            upload(true)
+        }
+        
+    }
+    
+    func upload(anonymous: Bool){
+        println("Attempting to upload image (\(anonymous))")
         
         let url: NSURL = NSURL.fileURLWithPath(pathToImage)!
         let imageData: NSData = NSData.dataWithContentsOfURL(url, options: nil, error: nil)
@@ -43,8 +58,15 @@ class AnonymousImgurUpload {
         let contentType = "multipart/form-data; boundary=\(boundary)"
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
+        let clientId: NSString! = client!.imgurClientId
+        
         // Add Client-ID authorization
-        request.addValue("Client-ID \(clientId)", forHTTPHeaderField: "Authorization")
+        if anonymous {
+        request.addValue("Client-ID \(client?.imgurClientId)", forHTTPHeaderField: "Authorization")
+        } else {
+            NSLog("ACCESS: (\(client!.accessToken!))")
+        request.addValue("Client-Bearer \(client!.accessToken!)", forHTTPHeaderField: "Authorization")
+        }
         
         // Add image data
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -63,7 +85,7 @@ class AnonymousImgurUpload {
         // Add description
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        requestBody.appendData("Uploaded by mac2imgur! (\(supportUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Uploaded by swift2imgur! (\(client!.projectUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         requestBody.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -87,8 +109,4 @@ class AnonymousImgurUpload {
             }
         })
     }
-}
-
-protocol AnonymousImgurUploadDelegate {
-    func uploadAttemptCompleted(successful: Bool, link: String) -> ()
 }
