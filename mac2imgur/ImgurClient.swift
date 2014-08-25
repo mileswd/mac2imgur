@@ -25,7 +25,7 @@ class ImgurClient: NSObject {
     
     let imgurClientId = "fa5eb2e5869b836"
     let imgurClientSecret = "905fc35122f45819a1883dd2d51dca22fc2642b8"
-    let projectUrl = "https://github.com/dexafree/swift2imgur"
+    let projectUrl = "https://github.com/rauix/mac2imgur"
     
     override init(){
         super.init()
