@@ -33,7 +33,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7HP-T3-upD">
-                                            <rect key="frame" x="15" y="102" width="215" height="18"/>
+                                            <rect key="frame" x="110" y="102" width="215" height="18"/>
                                             <buttonCell key="cell" type="check" title="Delete screenshot after upload" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ntQ-kO-9c8">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
