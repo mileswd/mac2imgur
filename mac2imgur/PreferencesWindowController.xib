@@ -32,6 +32,18 @@
                                 <view key="view" ambiguous="YES" id="ecH-Wg-cnj">
                                     <rect key="frame" x="10" y="33" width="434" height="208"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7HP-T3-upD">
+                                            <rect key="frame" x="15" y="189" width="215" height="18"/>
+                                            <buttonCell key="cell" type="check" title="Delete screenshot after upload" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ntQ-kO-9c8">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="onDeleteScreenshotAfterUploadButtonPress:" target="-2" id="J8h-ym-rhS"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Account" identifier="2" id="k9K-VK-YNr">
@@ -112,16 +124,6 @@
                             </tabViewItem>
                         </tabViewItems>
                     </tabView>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7HP-T3-upD">
-                        <rect key="frame" x="49" y="190" width="215" height="18"/>
-                        <buttonCell key="cell" type="check" title="Delete screenshot after upload" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ntQ-kO-9c8">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="onDeleteScreenshotAfterUploadButtonPress:" target="-2" id="J8h-ym-rhS"/>
-                        </connections>
-                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="-76" y="110"/>
