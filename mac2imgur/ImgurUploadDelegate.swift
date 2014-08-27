@@ -7,5 +7,5 @@
 //
 
 protocol ImgurUploadDelegate {
-    func uploadAttemptCompleted(successful: Bool, link: String) -> ()
+    func uploadAttemptCompleted(successful: Bool, link: String, pathToImage: String) -> ()
 }

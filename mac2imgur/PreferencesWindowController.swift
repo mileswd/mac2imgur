@@ -16,6 +16,8 @@ class PreferencesWindowController : NSWindowController {
     @IBOutlet weak var pinCodeField: NSTextField!
     @IBOutlet weak var saveButton: NSButton!
     @IBOutlet weak var accountLabel: NSTextField!
+    @IBOutlet weak var deleteScreenshotAfterUploadButton: NSButton!
+    
     
     override init() {
 
@@ -35,18 +37,30 @@ class PreferencesWindowController : NSWindowController {
 
     }
     
+    
     required init(coder aDecoder: NSCoder!){
     
         super.init(coder: aDecoder)
     
     }
     
+    
     override func showWindow(sender: AnyObject!) {
+        
         super.showWindow(sender)
+        
         if imgurSession.isUserLoggedIn! {
+        
             setWindowForLoggedUser(imgurSession.username!)
+        
         }
+        
+        if imgurSession.deleteScreenshotAfterUpload! {
+            deleteScreenshotAfterUploadButton.state = NSOnState
+        }
+    
     }
+    
     
     /*
      * Disables the "Sign in" button, as the user won't be signing in again
@@ -56,17 +70,36 @@ class PreferencesWindowController : NSWindowController {
     @IBAction func signInButtonClick(sender: AnyObject) {
     
         if imgurSession.isUserLoggedIn == true {
+            
             imgurSession.deleteCredentials()
+
         } else {
+        
             signInButton!.enabled = false
             pinCodeField!.enabled = true
+            
             saveButton!.enabled = true
             imgurSession.openBrowserForAuth()
-        }
         
-
+        }
     
     }
+    
+    
+    @IBAction func onDeleteScreenshotAfterUploadButtonPress(sender: AnyObject) {
+        
+        if deleteScreenshotAfterUploadButton.state == NSOnState {
+            
+            imgurSession.setDeleteScreenshotAfterUpload(true)
+        
+        } else {
+        
+            imgurSession.setDeleteScreenshotAfterUpload(false)
+        
+        }
+        
+    }
+    
     
     /*
      * Loads the text written at the PIN Code field, and starts
@@ -91,24 +124,29 @@ class PreferencesWindowController : NSWindowController {
         
     }
     
+    
     func setWindowForLoggedUser(username: NSString){
+        
         self.signInButton!.title = "Sign out"
         self.signInButton!.enabled = true
         
         self.saveButton!.enabled = false
         
         let labelMessage = "Logged in as \(username)"
-        
         self.accountLabel!.stringValue = labelMessage
         self.accountLabel!.hidden = false
+    
     }
     
     func setWindowForAnonymousUser(){
+        
         self.signInButton!.title = "Sign in"
         self.signInButton!.enabled = true
+        
         self.pinCodeField!.enabled = false
         self.saveButton!.enabled = false
         self.accountLabel!.hidden = true
+    
     }
     
 }
