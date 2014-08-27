@@ -7,6 +7,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindowController" customModule="mac2imgur" customModuleProvider="target">
             <connections>
                 <outlet property="accountLabel" destination="eE8-35-I4D" id="IrV-kr-tQD"/>
+                <outlet property="deleteScreenshotAfterUploadButton" destination="7HP-T3-upD" id="p6W-TJ-I8t"/>
                 <outlet property="pinCodeField" destination="39S-hc-U6b" id="oQV-qS-HEK"/>
                 <outlet property="saveButton" destination="pX9-ik-K1x" id="sWt-cf-MP3"/>
                 <outlet property="signInButton" destination="ZAf-d1-jN7" id="tsj-h7-dUL"/>
@@ -28,12 +29,12 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="General" identifier="1" id="RSC-PG-McI">
-                                <view key="view" id="ecH-Wg-cnj">
+                                <view key="view" ambiguous="YES" id="ecH-Wg-cnj">
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Account" identifier="2" id="k9K-VK-YNr">
-                                <view key="view" ambiguous="YES" id="Twc-0L-sC5">
+                                <view key="view" id="Twc-0L-sC5">
                                     <rect key="frame" x="10" y="33" width="434" height="208"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -110,8 +111,19 @@
                             </tabViewItem>
                         </tabViewItems>
                     </tabView>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7HP-T3-upD">
+                        <rect key="frame" x="49" y="190" width="215" height="18"/>
+                        <buttonCell key="cell" type="check" title="Delete screenshot after upload" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ntQ-kO-9c8">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="onDeleteScreenshotAfterUploadButtonPress:" target="-2" id="J8h-ym-rhS"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="-76" y="110"/>
         </window>
     </objects>
     <resources>
