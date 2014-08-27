@@ -12,9 +12,11 @@ class ImgurClient: NSObject {
     
     let REFRESH_TOKEN_CONSTANT: NSString! = "refresh_token"
     let USERNAME_CONSTANT: NSString! = "imgur_username"
+    let DELETE_SCREENSHOT_AFTER_UPLOAD_CONSTANT: NSString! = "delete_screenshot_after_upload"
     
     var isUserLoggedIn: Bool! = false
     var lastTokenExpiry: NSDate?
+    var deleteScreenshotAfterUpload: Bool! = false
     
     var username: NSString?
     var accessToken: NSString?
@@ -32,6 +34,7 @@ class ImgurClient: NSObject {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         refreshToken = userDefaults.objectForKey(REFRESH_TOKEN_CONSTANT) as NSString?
         username = userDefaults.objectForKey(USERNAME_CONSTANT) as NSString?
+        deleteScreenshotAfterUpload = userDefaults.boolForKey(DELETE_SCREENSHOT_AFTER_UPLOAD_CONSTANT)
         if refreshToken != nil {
             isUserLoggedIn = true
         }
@@ -106,9 +109,9 @@ class ImgurClient: NSObject {
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            NSLog("Response: \(response)")
+            //NSLog("Response: \(response)")
             var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            NSLog("Body: \(strData)")
+            //NSLog("Body: \(strData)")
             var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
             
@@ -118,7 +121,7 @@ class ImgurClient: NSObject {
             else {
                 if let access = json["access_token"] as NSString? {
                     self.setAccessToken(access)
-                    NSLog("Succes: \(access)")
+                    //NSLog("Succes: \(access)")
                 }
             }
         })
@@ -134,7 +137,7 @@ class ImgurClient: NSObject {
         
         request.HTTPMethod = "POST"
         
-        NSLog("Refresh token (\(refreshToken))")
+        //NSLog("Refresh token (\(refreshToken))")
         
         let params = ["client_id":imgurClientId, "client_secret":imgurClientSecret, "grant_type":"refresh_token", "refresh_token":self.refreshToken!] as Dictionary
         
@@ -144,7 +147,7 @@ class ImgurClient: NSObject {
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             //NSLog("Response: \(response)")
             var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            NSLog("Body: \(strData)")
+            //NSLog("Body: \(strData)")
             var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
             
@@ -155,7 +158,7 @@ class ImgurClient: NSObject {
                 if let access = json["access_token"] as NSString? {
                     self.setAccessToken(access)
                     closure()
-                    NSLog("Succes: \(access)")
+                    //NSLog("Succes: \(access)")
                 }
             }
         })
@@ -167,7 +170,7 @@ class ImgurClient: NSObject {
     func isAccessTokenStillValid() -> Bool {
         
         if self.accessToken == nil {
-            NSLog("Token was nil")
+            //NSLog("Token was nil")
             return false
         }
         
@@ -177,13 +180,13 @@ class ImgurClient: NSObject {
         
         if comparison == NSComparisonResult.OrderedDescending {
             
-            NSLog("Token is still valid")
+            //NSLog("Token is still valid")
             
             return true
             
         } else {
             
-            NSLog("Token is no longer valid")
+            //NSLog("Token is no longer valid")
             
             return false
             
@@ -203,6 +206,12 @@ class ImgurClient: NSObject {
     func saveRefreshToken(token: NSString){
         self.refreshToken = token
         NSUserDefaults.standardUserDefaults().setValue(token, forKey: REFRESH_TOKEN_CONSTANT)
+    }
+    
+    func setDeleteScreenshotAfterUpload(delete: Bool!){
+        self.deleteScreenshotAfterUpload = delete
+        
+        NSUserDefaults.standardUserDefaults().setBool(delete, forKey: DELETE_SCREENSHOT_AFTER_UPLOAD_CONSTANT)
     }
     
     func saveUserName(username: NSString?){

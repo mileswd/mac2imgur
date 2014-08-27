@@ -27,25 +27,25 @@ class UploadController {
         if client!.isUserLoggedIn! {
             
             if client!.isAccessTokenStillValid() {
-                NSLog("TOKEN IS VALID")
+                //NSLog("TOKEN IS VALID")
                 upload(false)
             } else {
-                NSLog("TOKEN IS NOT VALID")
+                //NSLog("TOKEN IS NOT VALID")
                 client?.requestNewAccessToken({ ()->Void in
-                    NSLog("NEW TOKEN REQUESTED")
+                    //NSLog("NEW TOKEN REQUESTED")
                     self.upload(false)
                 })
             }
             
         } else {
-            NSLog("Anonymous upload")
+            //NSLog("Anonymous upload")
             upload(true)
         }
         
     }
     
     func upload(anonymous: Bool){
-        println("Attempting to upload image (\(anonymous))")
+        //println("Attempting to upload image (\(anonymous))")
         
         let url: NSURL = NSURL.fileURLWithPath(pathToImage)!
         let imageData: NSData = NSData.dataWithContentsOfURL(url, options: nil, error: nil)
@@ -96,14 +96,14 @@ class UploadController {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if error != nil {
                 NSLog("An error occurred: %@", error);
-                self.delegate.uploadAttemptCompleted(false, link: "")
+                self.delegate.uploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
             } else {
                 var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
-                println("Received response: \(responseDict)")
+                //println("Received response: \(responseDict)")
                 if responseDict.valueForKey("status")?.integerValue == 200 {
-                    self.delegate.uploadAttemptCompleted(true, link: responseDict.valueForKey("data")!.valueForKey("link") as String)
+                    self.delegate.uploadAttemptCompleted(true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
                 } else {
-                    self.delegate.uploadAttemptCompleted(false, link: "")
+                    self.delegate.uploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
                     NSLog("An error occurred (%@): %@", responseDict.valueForKey("status") as String, responseDict);
                 }
             }
