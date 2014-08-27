@@ -62,7 +62,7 @@ class UploadController {
         
         // Add Client-ID authorization
         if anonymous {
-        request.addValue("Client-ID \(client?.imgurClientId)", forHTTPHeaderField: "Authorization")
+        request.addValue("Client-ID \(client!.imgurClientId)", forHTTPHeaderField: "Authorization")
         } else {
             NSLog("ACCESS: (\(client!.accessToken!))")
         request.addValue("Client-Bearer \(client!.accessToken!)", forHTTPHeaderField: "Authorization")
