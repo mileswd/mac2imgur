@@ -25,8 +25,8 @@ class ImgurClient: NSObject {
     let urlStart: NSString! = "https://api.imgur.com/oauth2/authorize?client_id="
     let urlEnd: NSString! = "&response_type=pin&state=active"
     
-    let imgurClientId = "fa5eb2e5869b836"
-    let imgurClientSecret = "905fc35122f45819a1883dd2d51dca22fc2642b8"
+    let imgurClientId = "5867856c9027819"
+    let imgurClientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"
     let projectUrl = "https://github.com/rauix/mac2imgur"
     
     override init(){
@@ -222,6 +222,7 @@ class ImgurClient: NSObject {
     func deleteCredentials(){
         NSUserDefaults.standardUserDefaults().removeObjectForKey(REFRESH_TOKEN_CONSTANT)
         NSUserDefaults.standardUserDefaults().removeObjectForKey(USERNAME_CONSTANT)
+        isUserLoggedIn = false
     }
     
     

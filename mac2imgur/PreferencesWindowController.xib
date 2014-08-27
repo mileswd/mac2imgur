@@ -6,7 +6,6 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindowController" customModule="mac2imgur" customModuleProvider="target">
             <connections>
-                <outlet property="accountLabel" destination="eE8-35-I4D" id="IrV-kr-tQD"/>
                 <outlet property="deleteScreenshotAfterUploadButton" destination="7HP-T3-upD" id="p6W-TJ-I8t"/>
                 <outlet property="pinCodeField" destination="39S-hc-U6b" id="oQV-qS-HEK"/>
                 <outlet property="saveButton" destination="pX9-ik-K1x" id="sWt-cf-MP3"/>
@@ -34,7 +33,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7HP-T3-upD">
-                                            <rect key="frame" x="15" y="189" width="215" height="18"/>
+                                            <rect key="frame" x="15" y="102" width="215" height="18"/>
                                             <buttonCell key="cell" type="check" title="Delete screenshot after upload" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ntQ-kO-9c8">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -52,8 +51,8 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZAf-d1-jN7">
-                                            <rect key="frame" x="176" y="143" width="83" height="32"/>
-                                            <buttonCell key="cell" type="push" title="Sign in" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HvP-6w-OYv">
+                                            <rect key="frame" x="96" y="115" width="243" height="32"/>
+                                            <buttonCell key="cell" type="push" title="1. Sign in" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HvP-6w-OYv">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -62,15 +61,15 @@
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="39S-hc-U6b">
-                                            <rect key="frame" x="182" y="100" width="94" height="22"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="PIN Code" drawsBackground="YES" id="vbD-AX-tyQ">
+                                            <rect key="frame" x="102" y="80" width="137" height="22"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="2. Enter PIN code" bezelStyle="round" id="vbD-AX-tyQ">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pX9-ik-K1x">
-                                            <rect key="frame" x="284" y="101" width="87" height="19"/>
+                                            <rect key="frame" x="247" y="81" width="86" height="19"/>
                                             <buttonCell key="cell" type="roundRect" title="Save" bezelStyle="roundedRect" image="NSLockUnlockedTemplate" imagePosition="left" alignment="center" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NNQ-6v-PMh">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="cellTitle"/>
@@ -79,22 +78,6 @@
                                                 <action selector="onSaveButtonClick:" target="-2" id="jte-RR-Spi"/>
                                             </connections>
                                         </button>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OLg-yv-Ndj">
-                                            <rect key="frame" x="107" y="152" width="60" height="17"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Account:" id="jai-XJ-yhj">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eE8-35-I4D">
-                                            <rect key="frame" x="107" y="35" width="266" height="17"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="center" title="Account" id="9qq-Gx-eJW">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -103,18 +86,18 @@
                                     <rect key="frame" x="10" y="33" width="434" height="208"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kYM-Tx-dAR">
-                                            <rect key="frame" x="157" y="145" width="121" height="24"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="mac2Imgur" id="hfv-jX-79b">
-                                                <font key="font" metaFont="system" size="20"/>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6gU-xS-1xh">
+                                            <rect key="frame" x="140" y="103" width="154" height="17"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Author: rauix &amp; Dexafree" id="Ycb-hy-Xgi">
+                                                <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6gU-xS-1xh">
-                                            <rect key="frame" x="157" y="103" width="161" height="17"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Author: rauix &amp; Dexafree" id="Ycb-hy-Xgi">
-                                                <font key="font" metaFont="system"/>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kYM-Tx-dAR">
+                                            <rect key="frame" x="165" y="128" width="105" height="24"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="mac2imgur" id="hfv-jX-79b">
+                                                <font key="font" metaFont="system" size="20"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
