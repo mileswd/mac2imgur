@@ -15,7 +15,6 @@ class PreferencesWindowController : NSWindowController {
     @IBOutlet weak var signInButton: NSButton!
     @IBOutlet weak var pinCodeField: NSTextField!
     @IBOutlet weak var saveButton: NSButton!
-    @IBOutlet weak var accountLabel: NSTextField!
     @IBOutlet weak var deleteScreenshotAfterUploadButton: NSButton!
     
     
@@ -72,6 +71,7 @@ class PreferencesWindowController : NSWindowController {
         if imgurSession.isUserLoggedIn == true {
             
             imgurSession.deleteCredentials()
+            self.setWindowForAnonymousUser()
 
         } else {
         
@@ -115,8 +115,9 @@ class PreferencesWindowController : NSWindowController {
             
             NSLog("PINCODE: \(pinCode!)")
             imgurSession.getTokenFromPin(pinCode!, closure: { username in
-                
-                self.setWindowForLoggedUser(username)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.setWindowForLoggedUser(username)
+                }
                 
             })
             
@@ -127,25 +128,24 @@ class PreferencesWindowController : NSWindowController {
     
     func setWindowForLoggedUser(username: NSString){
         
-        self.signInButton!.title = "Sign out"
+        self.signInButton!.title = "Sign out (\(username))"
         self.signInButton!.enabled = true
         
-        self.saveButton!.enabled = false
-        
-        let labelMessage = "Logged in as \(username)"
-        self.accountLabel!.stringValue = labelMessage
-        self.accountLabel!.hidden = false
+        self.pinCodeField!.hidden = true
+        self.saveButton!.hidden = true
     
     }
     
     func setWindowForAnonymousUser(){
         
-        self.signInButton!.title = "Sign in"
+        self.signInButton!.title = "1. Sign in"
         self.signInButton!.enabled = true
         
+        self.pinCodeField!.stringValue = ""
         self.pinCodeField!.enabled = false
+        self.pinCodeField!.hidden = false
         self.saveButton!.enabled = false
-        self.accountLabel!.hidden = true
+        self.saveButton!.hidden = false
     
     }
     
