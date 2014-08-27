@@ -39,34 +39,76 @@ class ScreenshotMonitor {
     }
     
     @objc func eventOccurred() {
-        // Get the latest NSMetadataItem
-        var metadataItem: NSMetadataItem = query.resultAtIndex(query.resultCount - 1) as NSMetadataItem
         
-        // Get the path to the screenshot
-        var screenshotPath = metadataItem.valueForKey(NSMetadataItemPathKey) as String
+        let resultCount: Int = query.resultCount
         
-        println("Screenshot file event detected @ \(screenshotPath)")
+        if isDeletion() || resultCount <= 0 {
+            
+            // TODO: Make a loop for finding only the item missing and deleting it from blacklist
+            NSLog("Screenshot has been deleted")
         
-        // Check that the screenshot is actually new
-        if !contains(blacklist, screenshotPath.lastPathComponent.stringByDeletingPathExtension) {
-            // Notify the delegate with the path to the screenshot
-            delegate.screenshotEventOccurred(screenshotPath)
         } else {
-            println("Ignoring screenshot @ \(screenshotPath) as it is not a new screenshot")
+            
+            NSLog("RESULTCOUNT: \(resultCount)")
+            
+            if resultCount > 0 {
+                
+                var metadataItem: NSMetadataItem? = query.resultAtIndex(query.resultCount - 1) as NSMetadataItem?
+                
+                NSLog("NSMetadataItem: \(metadataItem?.description!)")
+                
+                // Get the path to the screenshot
+                var screenshotPath: String = metadataItem!.valueForKey(NSMetadataItemPathKey) as String
+                
+                println("Screenshot file event detected @ \(screenshotPath)")
+                
+                // Check that the screenshot is actually new
+                if !contains(blacklist, screenshotPath.lastPathComponent.stringByDeletingPathExtension) {
+                    // Notify the delegate with the path to the screenshot
+                    delegate.screenshotEventOccurred(screenshotPath)
+                } else {
+                    println("Ignoring screenshot @ \(screenshotPath) as it is not a new screenshot")
+                }
+                
+                // Add uploaded screenshot to blacklist
+                addToBlacklist(screenshotPath)
+            }
         }
-        
-        // Add uploaded screenshot to blacklist
-        addToBlacklist(screenshotPath)
     }
     
     @objc func initialiseBlacklist() {
-        for index in 0..<(query.resultCount) {
-            addToBlacklist(query.resultAtIndex(index).valueForKey(NSMetadataItemPathKey) as String)
+        if query.resultCount > 0 {
+            for element: NSMetadataItem? in (query.results as [NSMetadataItem]) {
+                addToBlacklist(element!.valueForKey(NSMetadataItemPathKey) as String)
+            }
         }
+        NSLog("BLACKLIST SIZE \(blacklist.count)")
     }
     
     func addToBlacklist(screenshotPath: String) {
         blacklist.append(screenshotPath.lastPathComponent.stringByDeletingPathExtension)
+    }
+    
+    
+    func removeFromBlackList(screenshotPath: String){
+        var indexOfScreenshot: NSInteger?
+        
+        for index in 0..<query.resultCount {
+            if blacklist[index] == screenshotPath {
+                indexOfScreenshot = index
+            }
+        }
+        
+        if indexOfScreenshot != nil {
+            blacklist.removeAtIndex(indexOfScreenshot!)
+        }
+
+    }
+    
+    func isDeletion() -> Bool {
+        
+        return query.resultCount < blacklist.count
+        
     }
     
     func stop() {

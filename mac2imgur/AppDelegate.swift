@@ -50,14 +50,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         monitor = ScreenshotMonitor(delegate: self)
         
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
-        
     }
     
-    func uploadAttemptCompleted(successful: Bool, link: String) {
+    func uploadAttemptCompleted(successful: Bool, link: String, pathToImage: String) {
         if successful {
             lastLink = link
             copyLinkToClipboard()
             displayNotification("Screenshot uploaded successfully!", informativeText: lastLink)
+            
+            if imgurSession.deleteScreenshotAfterUpload! {
+                deleteScreenshot(pathToImage)
+            }
+            
         } else {
             displayNotification("Screenshot upload failed...", informativeText: "")
         }
@@ -85,6 +89,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         let pasteBoard = NSPasteboard.generalPasteboard()
         pasteBoard.clearContents()
         pasteBoard.setString(lastLink, forType: NSStringPboardType)
+    }
+    
+    func deleteScreenshot(pathToImage: String!){
+        let fileManager = NSFileManager.defaultManager()
+        var error: NSError?
+        fileManager.removeItemAtPath(pathToImage, error: &error)
+        if error != nil {
+            NSLog(error!.localizedDescription)
+        }
+        
     }
     
     func quit() {
