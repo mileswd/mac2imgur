@@ -17,12 +17,14 @@
 import Foundation
 import Cocoa
 
-class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, AnonymousImgurUploadDelegate, ScreenshotMonitorDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, ImgurUploadDelegate, ScreenshotMonitorDelegate {
     
     @IBOutlet var window: NSWindow?
     var statusItem: NSStatusItem?
     var monitor: ScreenshotMonitor?
     var lastLink: String = ""
+    var preferencesController: PreferencesWindowController?
+    var imgurSession: ImgurClient! = ImgurClient()
     
     func applicationDidFinishLaunching(aNotification: NSNotification?) {
         
@@ -31,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Create menu
         let menu = NSMenu()
         menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLinkToClipboard"), keyEquivalent: "c")
+        menu.addItemWithTitle("Open Preferences", action: NSSelectorFromString("showPreferences"), keyEquivalent: "p")
         menu.addItem(NSMenuItem.separatorItem())
         menu.addItemWithTitle("Quit", action: NSSelectorFromString("quit"), keyEquivalent: "q")
         menu.autoenablesItems = false
@@ -62,7 +65,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func screenshotEventOccurred(pathToImage: String) {
-        let upload = AnonymousImgurUpload(pathToImage: pathToImage, delegate: self)
+        let upload = UploadController(pathToImage: pathToImage, client: imgurSession, delegate: self)
         upload.attemptUpload()
         updateStatusIcon(true)
     }
@@ -101,6 +104,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         } else {
             statusItem!.image = NSImage(named: "Inactive")
         }
+    }
+    
+    func showPreferences(){
+        preferencesController = PreferencesWindowController(windowNibName: "PreferencesWindowController")
+        preferencesController?.imgurSession = self.imgurSession
+        preferencesController?.showWindow(self)
+
+        
     }
     
 }
