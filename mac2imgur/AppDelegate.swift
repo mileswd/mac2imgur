@@ -76,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
         if notification.informativeText != "" {
-            NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString(notification.informativeText))
+            NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString(notification.informativeText!))
         }
     }
     
