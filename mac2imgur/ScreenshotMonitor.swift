@@ -53,12 +53,12 @@ class ScreenshotMonitor {
             
             if resultCount > 0 {
                 
-                var metadataItem: NSMetadataItem? = query.resultAtIndex(query.resultCount - 1) as NSMetadataItem?
+                var metadataItem: NSMetadataItem = query.resultAtIndex(query.resultCount - 1) as NSMetadataItem
                 
-                NSLog("NSMetadataItem: \(metadataItem?.description!)")
+                NSLog("NSMetadataItem: \(metadataItem.description!)")
                 
                 // Get the path to the screenshot
-                var screenshotPath: String = metadataItem!.valueForKey(NSMetadataItemPathKey) as String
+                var screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
                 
                 println("Screenshot file event detected @ \(screenshotPath)")
                 
