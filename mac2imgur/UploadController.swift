@@ -1,18 +1,18 @@
 /* This file is part of mac2imgur.
- *
- * mac2imgur is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+*
+* mac2imgur is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
 
- * mac2imgur is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+* mac2imgur is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 
- * You should have received a copy of the GNU General Public License
- * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
- */
+* You should have received a copy of the GNU General Public License
+* along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 import Foundation
 
@@ -22,7 +22,7 @@ class UploadController {
     var client: ImgurClient?
     let boundary: String = "-----------------------------\(arc4random())\(arc4random())" // Random boundary
     var delegate: ImgurUploadDelegate
-
+    
     
     init(pathToImage: String, client: ImgurClient, delegate: ImgurUploadDelegate) {
         self.pathToImage = pathToImage
@@ -70,10 +70,10 @@ class UploadController {
         
         // Add Client-ID authorization
         if anonymous {
-        request.addValue("Client-ID \(client!.imgurClientId)", forHTTPHeaderField: "Authorization")
+            request.addValue("Client-ID \(client!.imgurClientId)", forHTTPHeaderField: "Authorization")
         } else {
-            NSLog("ACCESS: (\(client!.accessToken!))")
-        request.addValue("Client-Bearer \(client!.accessToken!)", forHTTPHeaderField: "Authorization")
+            println("Access token: \(client!.accessToken!)")
+            request.addValue("Client-Bearer \(client!.accessToken!)", forHTTPHeaderField: "Authorization")
         }
         
         // Add image data

@@ -1,18 +1,18 @@
 /* This file is part of mac2imgur.
- *
- * mac2imgur is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+*
+* mac2imgur is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
 
- * mac2imgur is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+* mac2imgur is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
 
- * You should have received a copy of the GNU General Public License
- * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
- */
+* You should have received a copy of the GNU General Public License
+* along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 import Cocoa
 
@@ -61,27 +61,27 @@ class ImgurClient: NSObject {
         workspace.openURL(urlNS)
     }
     
-    func getTokenFromPin(pin: NSString, closure: (username: NSString)->() ){
-
+    func getTokenFromPin(pin: NSString, closure: (username: NSString)->()){
+        
         let url: NSURL = NSURL.URLWithString("https://api.imgur.com/oauth2/token")
         let request = NSMutableURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
         
         request.HTTPMethod = "POST"
-            
+        
         let params = ["client_id":imgurClientId, "client_secret":imgurClientSecret, "grant_type":"pin", "pin":pin] as Dictionary
-            
+        
         var err: NSError?
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            NSLog("Response: \(response)")
+            println("Response: \(response)")
             var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            NSLog("Body: \(strData)")
+            println("Body: \(strData)")
             var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
             
-            if(err != nil) {
+            if err != nil {
                 NSLog(err!.localizedDescription)
             }
             else {
@@ -95,7 +95,7 @@ class ImgurClient: NSObject {
                     self.saveUserName(user)
                     
                     closure(username: user!)
-                    NSLog("Succes: \(refToken)")
+                    println("Success: \(refToken)")
                 }
             }
         })
@@ -135,7 +135,7 @@ class ImgurClient: NSObject {
         })
         
         task.resume()
-
+        
     }
     
     func requestNewAccessToken(closure: ()->Void){
