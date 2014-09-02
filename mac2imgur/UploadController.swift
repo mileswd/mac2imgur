@@ -93,7 +93,7 @@ class UploadController {
         // Add description
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        requestBody.appendData("Uploaded by swift2imgur! (\(client!.projectUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Uploaded by mac2imgur! (\(client!.projectUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         requestBody.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
