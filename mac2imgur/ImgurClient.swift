@@ -63,7 +63,7 @@ class ImgurClient: NSObject {
     
     func getTokenFromPin(pin: NSString, closure: (username: NSString)->()){
         
-        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")
+        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
         let request = NSMutableURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
         
@@ -105,7 +105,7 @@ class ImgurClient: NSObject {
     }
     
     func requestNewAccessToken(){
-        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")
+        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
         let request = NSMutableURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
         
@@ -139,7 +139,7 @@ class ImgurClient: NSObject {
     }
     
     func requestNewAccessToken(closure: ()->Void){
-        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")
+        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
         let request = NSMutableURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
         
