@@ -56,7 +56,7 @@ class UploadController {
         //println("Attempting to upload image (\(anonymous))")
         
         let url: NSURL = NSURL.fileURLWithPath(pathToImage)!
-        let imageData: NSData = NSData.dataWithContentsOfURL(url, options: nil, error: nil)
+        let imageData: NSData = NSData(contentsOfURL: url, options: nil, error: nil)!
         
         let request = NSMutableURLRequest()
         request.URL = NSURL(string: "https://api.imgur.com/3/upload")
