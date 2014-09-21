@@ -17,14 +17,15 @@
 import Foundation
 import Cocoa
 
-class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, ImgurUploadDelegate, ScreenshotMonitorDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
     
     @IBOutlet var window: NSWindow?
     var statusItem: NSStatusItem?
     var monitor: ScreenshotMonitor?
-    var lastLink: String = ""
     var preferencesController: PreferencesWindowController?
-    var imgurSession: ImgurClient! = ImgurClient()
+    var prefs: PreferencesManager?
+    var imgurSession: ImgurClient?
+    var lastLink: String = ""
     
     func applicationDidFinishLaunching(aNotification: NSNotification?) {
         
@@ -32,46 +33,47 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         // Create menu
         let menu = NSMenu()
-        menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLinkToClipboard"), keyEquivalent: "c")
-        menu.addItemWithTitle("Open Preferences", action: NSSelectorFromString("showPreferences"), keyEquivalent: "p")
+        menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLinkToClipboard"), keyEquivalent: "")
         menu.addItem(NSMenuItem.separatorItem())
-        menu.addItemWithTitle("Quit", action: NSSelectorFromString("quit"), keyEquivalent: "q")
+        menu.addItemWithTitle("Preferences...", action: NSSelectorFromString("showPreferences"), keyEquivalent: "")
+        menu.addItem(NSMenuItem.separatorItem())
+        menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
+        menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
         menu.autoenablesItems = false
         
         // Add to status bar
-        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(CGFloat(-1))
+        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
         statusItem!.highlightMode = true
         statusItem!.menu = menu
         statusItem!.alternateImage = NSImage(named: "Active_Inverted")
         updateStatusIcon(false)
         statusItem!.toolTip = "mac2imgur"
         
-        // Setup screenshot monitor
-        monitor = ScreenshotMonitor(delegate: self)
+        prefs = PreferencesManager()
+        imgurSession = ImgurClient(prefs: prefs!)
+        
+        // Setup screenshot monitor & upload function
+        monitor = ScreenshotMonitor(callback: { (pathToImage) -> () in
+            let upload = UploadController(pathToImage: pathToImage, client: self.imgurSession!, callback: { (successful, link, pathToImage) -> () in
+                if successful {
+                    self.lastLink = link
+                    self.copyLinkToClipboard()
+                    self.displayNotification("Screenshot uploaded successfully!", informativeText: self.lastLink)
+                    
+                    if self.prefs!.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false){
+                        self.deleteScreenshot(pathToImage)
+                    }
+                    
+                } else {
+                    self.displayNotification("Screenshot upload failed...", informativeText: "")
+                }
+                self.updateStatusIcon(false)
+            })
+            upload.attemptUpload()
+            self.updateStatusIcon(true)
+        })
         
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
-    }
-    
-    func uploadAttemptCompleted(successful: Bool, link: String, pathToImage: String) {
-        if successful {
-            lastLink = link
-            copyLinkToClipboard()
-            displayNotification("Screenshot uploaded successfully!", informativeText: lastLink)
-            
-            if imgurSession.deleteScreenshotAfterUpload! {
-                deleteScreenshot(pathToImage)
-            }
-            
-        } else {
-            displayNotification("Screenshot upload failed...", informativeText: "")
-        }
-        updateStatusIcon(false)
-    }
-    
-    func screenshotEventOccurred(pathToImage: String) {
-        let upload = UploadController(pathToImage: pathToImage, client: imgurSession, delegate: self)
-        upload.attemptUpload()
-        updateStatusIcon(true)
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
@@ -101,10 +103,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
     }
     
-    func quit() {
-        NSApplication.sharedApplication().terminate(self)
-    }
-    
     func displayNotification(title: String, informativeText: String) {
         let notification = NSUserNotification()
         notification.title = title
@@ -122,10 +120,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func showPreferences(){
         preferencesController = PreferencesWindowController(windowNibName: "PreferencesWindowController")
-        preferencesController?.imgurSession = self.imgurSession
+        preferencesController?.imgurSession = imgurSession
+        preferencesController?.prefs = prefs
         preferencesController?.showWindow(self)
-        
-        
     }
     
 }

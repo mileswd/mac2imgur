@@ -19,41 +19,37 @@ import Foundation
 class UploadController {
     
     var pathToImage: String
-    var client: ImgurClient?
-    let boundary: String = "-----------------------------\(arc4random())\(arc4random())" // Random boundary
-    var delegate: ImgurUploadDelegate
+    var client: ImgurClient
+    let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
+    var callback: (successful: Bool, link: String, pathToImage: String) -> ()
     
     
-    init(pathToImage: String, client: ImgurClient, delegate: ImgurUploadDelegate) {
+    init(pathToImage: String, client: ImgurClient, callback: (successful: Bool, link: String, pathToImage: String) -> ()) {
         self.pathToImage = pathToImage
         self.client = client
-        self.delegate = delegate
+        self.callback = callback
     }
     
     func attemptUpload() {
         
-        if client!.isUserLoggedIn! {
+        if client.loggedIn {
             
-            if client!.isAccessTokenStillValid() {
-                //NSLog("TOKEN IS VALID")
+            if client.isAccessTokenValid() {
                 upload(false)
             } else {
-                //NSLog("TOKEN IS NOT VALID")
-                client?.requestNewAccessToken({ ()->Void in
-                    //NSLog("NEW TOKEN REQUESTED")
+                client.requestNewAccessToken({ () -> Void in
                     self.upload(false)
                 })
             }
-            
         } else {
-            //NSLog("Anonymous upload")
             upload(true)
         }
         
     }
     
-    func upload(anonymous: Bool){
-        //println("Attempting to upload image (\(anonymous))")
+    func upload(anonymous: Bool) {
+        
+        println("Uploading image as authenticated user: \(!anonymous)")
         
         let url: NSURL = NSURL.fileURLWithPath(pathToImage)!
         let imageData: NSData = NSData(contentsOfURL: url, options: nil, error: nil)!
@@ -66,14 +62,14 @@ class UploadController {
         let contentType = "multipart/form-data; boundary=\(boundary)"
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
-        let clientId: NSString! = client!.imgurClientId
+        let clientId: NSString! = client.imgurClientId
         
         // Add Client-ID authorization
         if anonymous {
-            request.addValue("Client-ID \(client!.imgurClientId)", forHTTPHeaderField: "Authorization")
+            request.addValue("Client-ID \(client.imgurClientId)", forHTTPHeaderField: "Authorization")
         } else {
-            println("Access token: \(client!.accessToken!)")
-            request.addValue("Client-Bearer \(client!.accessToken!)", forHTTPHeaderField: "Authorization")
+            println("Access token: \(client.accessToken!)")
+            request.addValue("Client-Bearer \(client.accessToken!)", forHTTPHeaderField: "Authorization")
         }
         
         // Add image data
@@ -93,7 +89,7 @@ class UploadController {
         // Add description
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        requestBody.appendData("Uploaded by mac2imgur! (\(client!.projectUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Uploaded by mac2imgur! (\(client.projectUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         requestBody.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -104,14 +100,14 @@ class UploadController {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if error != nil {
                 NSLog("An error occurred: %@", error);
-                self.delegate.uploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
+                self.callback(successful: false, link: "", pathToImage: self.pathToImage)
             } else {
                 var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
-                //println("Received response: \(responseDict)")
+                println("Received response: \(responseDict)")
                 if responseDict.valueForKey("status")?.integerValue == 200 {
-                    self.delegate.uploadAttemptCompleted(true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
+                    self.callback(successful: true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
                 } else {
-                    self.delegate.uploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
+                    self.callback(successful: false, link: "", pathToImage: self.pathToImage)
                     NSLog("An error occurred (%@): %@", responseDict.valueForKey("status") as String, responseDict);
                 }
             }

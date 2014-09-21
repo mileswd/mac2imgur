@@ -16,55 +16,40 @@
 
 import Cocoa
 
-class ImgurClient: NSObject {
+class ImgurClient {
     
-    let REFRESH_TOKEN_CONSTANT: NSString! = "refresh_token"
-    let USERNAME_CONSTANT: NSString! = "imgur_username"
-    let DELETE_SCREENSHOT_AFTER_UPLOAD_CONSTANT: NSString! = "delete_screenshot_after_upload"
-    
-    var isUserLoggedIn: Bool! = false
-    var lastTokenExpiry: NSDate?
-    var deleteScreenshotAfterUpload: Bool! = false
-    
-    var username: NSString?
-    var accessToken: NSString?
-    var refreshToken: NSString?
-    
-    let urlStart: NSString! = "https://api.imgur.com/oauth2/authorize?client_id="
-    let urlEnd: NSString! = "&response_type=pin&state=active"
+    let urlStart = "https://api.imgur.com/oauth2/authorize?client_id="
+    let urlEnd = "&response_type=pin&state=active"
     
     let imgurClientId = "5867856c9027819"
     let imgurClientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"
     let projectUrl = "https://github.com/rauix/mac2imgur"
     
-    override init(){
-        super.init()
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        refreshToken = userDefaults.objectForKey(REFRESH_TOKEN_CONSTANT) as NSString?
-        username = userDefaults.objectForKey(USERNAME_CONSTANT) as NSString?
-        deleteScreenshotAfterUpload = userDefaults.boolForKey(DELETE_SCREENSHOT_AFTER_UPLOAD_CONSTANT)
-        if refreshToken != nil {
-            isUserLoggedIn = true
-        }
-        
-    }
+    var prefs: PreferencesManager
     
-    func hasAccount() -> Bool! {
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        return userDefaults.objectForKey(REFRESH_TOKEN_CONSTANT) != nil
+    var loggedIn: Bool = false
+    var lastTokenExpiry: NSDate?
+
+    var username: String?
+    var accessToken: String?
+    var refreshToken: String?
+    
+    init (prefs: PreferencesManager) {
+        self.prefs = prefs
+        username = prefs.getString(PreferencesConstant.username.rawValue, def: nil)
+        refreshToken = prefs.getString(PreferencesConstant.refreshToken.rawValue, def: nil)
+        if (username != nil) && (refreshToken != nil) {
+            loggedIn = true
+        }
     }
     
     func openBrowserForAuth() {
-        let workspace: NSWorkspace! = NSWorkspace.sharedWorkspace()
-        let urlString: NSString! = urlStart + imgurClientId + urlEnd
-        let urlNS: NSURL! = NSURL(string: urlString)
-        workspace.openURL(urlNS)
+        NSWorkspace.sharedWorkspace().openURL(NSURL(string: urlStart + imgurClientId + urlEnd))
     }
     
-    func getTokenFromPin(pin: NSString, closure: (username: NSString)->()){
+    func getTokenFromPin(pin: NSString, closure: (username: String) -> ()){
         
-        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://api.imgur.com/oauth2/token")!)
         let session = NSURLSession.sharedSession()
         
         request.HTTPMethod = "POST"
@@ -85,26 +70,24 @@ class ImgurClient: NSObject {
                 NSLog(err!.localizedDescription)
             }
             else {
-                if let refToken = json["refresh_token"] as NSString? {
-                    self.isUserLoggedIn = true
-                    self.accessToken = json["access_token"] as NSString?
+                if let refToken = json["refresh_token"] as? String {
+                    self.loggedIn = true
+                    self.setAccessToken(json["access_token"] as String)
                     
-                    var user = json["account_username"] as NSString?
+                    var user = json["account_username"] as? String
                     
-                    self.saveRefreshToken(refToken)
-                    self.saveUserName(user)
+                    self.prefs.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
+                    self.prefs.setString(PreferencesConstant.username.rawValue, value: user!)
                     
                     closure(username: user!)
                     println("Success: \(refToken)")
                 }
             }
         })
-        
         task.resume()
-        
     }
     
-    func requestNewAccessToken(){
+    func requestNewAccessToken() {
         let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
         let request = NSMutableURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
@@ -117,9 +100,6 @@ class ImgurClient: NSObject {
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            //NSLog("Response: \(response)")
-            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            //NSLog("Body: \(strData)")
             var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
             
@@ -127,25 +107,22 @@ class ImgurClient: NSObject {
                 NSLog(err!.localizedDescription)
             }
             else {
-                if let access = json["access_token"] as NSString? {
+                if let access = json["access_token"] as? String {
                     self.setAccessToken(access)
-                    //NSLog("Succes: \(access)")
                 }
             }
         })
-        
         task.resume()
-        
     }
     
-    func requestNewAccessToken(closure: ()->Void){
+    func requestNewAccessToken(callback: () -> Void) {
         let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
         let request = NSMutableURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
         
         request.HTTPMethod = "POST"
         
-        //NSLog("Refresh token (\(refreshToken))")
+        println("Refresh token \(refreshToken!)")
         
         let params = ["client_id":imgurClientId, "client_secret":imgurClientSecret, "grant_type":"refresh_token", "refresh_token":self.refreshToken!] as Dictionary
         
@@ -153,85 +130,40 @@ class ImgurClient: NSObject {
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            //NSLog("Response: \(response)")
-            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
-            //NSLog("Body: \(strData)")
-            var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
             
-            if(err != nil) {
+            if err != nil {
                 NSLog(err!.localizedDescription)
-            }
-            else {
+            } else {
                 if let access = json["access_token"] as NSString? {
                     self.setAccessToken(access)
-                    closure()
-                    //NSLog("Succes: \(access)")
+                    callback()
                 }
             }
         })
         
         task.resume()
-        
     }
     
-    func isAccessTokenStillValid() -> Bool {
-        
+    func isAccessTokenValid() -> Bool {
         if self.accessToken == nil {
-            //NSLog("Token was nil")
             return false
         }
-        
         let now: NSDate! = NSDate()
-        
         let comparison: NSComparisonResult! = self.lastTokenExpiry?.compare(now)
-        
-        if comparison == NSComparisonResult.OrderedDescending {
-            
-            //NSLog("Token is still valid")
-            
-            return true
-            
-        } else {
-            
-            //NSLog("Token is no longer valid")
-            
-            return false
-            
-        }
-        
+        return comparison == NSComparisonResult.OrderedDescending
     }
     
-    
-    func setAccessToken(token: NSString){
+    func setAccessToken(token: String) {
         self.accessToken = token
         let secondsInAnHour: NSTimeInterval = 1 * 60 * 60
-        let now: NSDate! = NSDate()
+        let now: NSDate = NSDate()
         self.lastTokenExpiry = now.dateByAddingTimeInterval(secondsInAnHour)
     }
     
-    
-    func saveRefreshToken(token: NSString){
-        self.refreshToken = token
-        NSUserDefaults.standardUserDefaults().setValue(token, forKey: REFRESH_TOKEN_CONSTANT)
+    func deleteCredentials() {
+        prefs.deleteKey(PreferencesConstant.username.rawValue)
+        prefs.deleteKey(PreferencesConstant.refreshToken.rawValue)
+        loggedIn = false
     }
-    
-    func setDeleteScreenshotAfterUpload(delete: Bool!){
-        self.deleteScreenshotAfterUpload = delete
-        
-        NSUserDefaults.standardUserDefaults().setBool(delete, forKey: DELETE_SCREENSHOT_AFTER_UPLOAD_CONSTANT)
-    }
-    
-    func saveUserName(username: NSString?){
-        self.username = username
-        NSUserDefaults.standardUserDefaults().setValue(username, forKey: USERNAME_CONSTANT)
-    }
-    
-    func deleteCredentials(){
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(REFRESH_TOKEN_CONSTANT)
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(USERNAME_CONSTANT)
-        isUserLoggedIn = false
-    }
-    
-    
 }
