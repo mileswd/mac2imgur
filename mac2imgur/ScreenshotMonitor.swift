@@ -19,11 +19,11 @@ import Foundation
 class ScreenshotMonitor {
     
     var query: NSMetadataQuery
-    var delegate: ScreenshotMonitorDelegate
+    var callback: (pathToImage: String) -> ()
     var blacklist: [String] = []
     
-    init(delegate: ScreenshotMonitorDelegate) {
-        self.delegate = delegate
+    init(callback: (pathToImage: String) -> ()) {
+        self.callback = callback
         
         query = NSMetadataQuery()
         
@@ -39,47 +39,33 @@ class ScreenshotMonitor {
     }
     
     @objc func eventOccurred() {
-        
-        let resultCount: Int = query.resultCount
-        
-        if isDeletion() || resultCount <= 0 {
+        if query.resultCount > 0 {
             
-            // TODO: Make a loop for finding only the item missing and deleting it from blacklist
-            println("Screenshot has been deleted")
-            
-        } else {
-            
-            println("resultCount =  \(resultCount)")
-            
-            if resultCount > 0 {
-                
-                var metadataItem: NSMetadataItem = query.resultAtIndex(query.resultCount - 1) as NSMetadataItem
-                
-                println("NSMetadataItem: \(metadataItem.description)")
-                
-                // Get the path to the screenshot
-                var screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
-                
-                println("Screenshot file event detected @ \(screenshotPath)")
-                
+            for metadataItem: NSMetadataItem in (query.results as [NSMetadataItem]) {
                 // Check that the screenshot is actually new
-                if !contains(blacklist, screenshotPath.lastPathComponent.stringByDeletingPathExtension) {
+                if !contains(blacklist, (metadataItem.valueForKey(NSMetadataItemPathKey) as String).lastPathComponent.stringByDeletingPathExtension) {
+                    
+                    println("NSMetadataItem: \(metadataItem.description)")
+                    
+                    // Get the path to the screenshot
+                    var screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
+                    
+                    println("Screenshot file event detected @ \(screenshotPath)")
+                    
                     // Notify the delegate with the path to the screenshot
-                    delegate.screenshotEventOccurred(screenshotPath)
-                } else {
-                    println("Ignoring screenshot @ \(screenshotPath) as it is not a new screenshot")
+                    callback(pathToImage: screenshotPath)
+                    
+                    // Add uploaded screenshot to blacklist
+                    addToBlacklist(screenshotPath)
                 }
-                
-                // Add uploaded screenshot to blacklist
-                addToBlacklist(screenshotPath)
             }
         }
     }
     
     @objc func initialiseBlacklist() {
         if query.resultCount > 0 {
-            for element: NSMetadataItem? in (query.results as [NSMetadataItem]) {
-                addToBlacklist(element!.valueForKey(NSMetadataItemPathKey) as String)
+            for metadataItem: NSMetadataItem in (query.results as [NSMetadataItem]) {
+                addToBlacklist(metadataItem.valueForKey(NSMetadataItemPathKey) as String)
             }
         }
         println("Blacklist size = \(blacklist.count)")
@@ -89,34 +75,8 @@ class ScreenshotMonitor {
         blacklist.append(screenshotPath.lastPathComponent.stringByDeletingPathExtension)
     }
     
-    
-    func removeFromBlackList(screenshotPath: String){
-        var indexOfScreenshot: NSInteger?
-        
-        for (index, element) in enumerate(query.results) {
-            if blacklist[index] == screenshotPath {
-                indexOfScreenshot = index
-            }
-        }
-        
-        if indexOfScreenshot != nil {
-            blacklist.removeAtIndex(indexOfScreenshot!)
-        }
-        
-    }
-    
-    func isDeletion() -> Bool {
-        
-        return query.resultCount < blacklist.count
-        
-    }
-    
     func stop() {
         query.stopQuery()
     }
     
-}
-
-protocol ScreenshotMonitorDelegate {
-    func screenshotEventOccurred(pathToImage: String) -> ()
 }

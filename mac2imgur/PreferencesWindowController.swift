@@ -19,50 +19,38 @@ import Cocoa
 class PreferencesWindowController : NSWindowController {
     
     var imgurSession: ImgurClient!
+    var prefs: PreferencesManager!
     
     @IBOutlet weak var signInButton: NSButton!
     @IBOutlet weak var pinCodeField: NSTextField!
     @IBOutlet weak var saveButton: NSButton!
     @IBOutlet weak var deleteScreenshotAfterUploadButton: NSButton!
     
-    
     override init() {
-        
         super.init()
-        
     }
     
     override init(window: NSWindow?) {
-        
         super.init(window: window)
-        
         if self.window? != nil {
-            
             self.window!.releasedWhenClosed = false
-            
         }
-        
     }
     
     
     required init(coder aDecoder: NSCoder!){
-        
         super.init(coder: aDecoder)
-        
     }
     
     
     override func showWindow(sender: AnyObject!) {
-        
         super.showWindow(sender)
         
-        if imgurSession.isUserLoggedIn! {
-            
+        if imgurSession.loggedIn {
             setWindowForLoggedUser(imgurSession.username!)
-            
         }
         
-        if imgurSession.deleteScreenshotAfterUpload! {
+        if prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false) {
             deleteScreenshotAfterUploadButton.state = NSOnState
         }
         
@@ -75,39 +63,25 @@ class PreferencesWindowController : NSWindowController {
     * Loads the AUTH URL with the default browser
     */
     @IBAction func signInButtonClick(sender: AnyObject) {
-        
-        if imgurSession.isUserLoggedIn == true {
-            
+        if imgurSession.loggedIn {
             imgurSession.deleteCredentials()
             self.setWindowForAnonymousUser()
-            
         } else {
-            
             signInButton!.enabled = false
             pinCodeField!.enabled = true
             
             saveButton!.enabled = true
             imgurSession.openBrowserForAuth()
-            
         }
-        
     }
-    
     
     @IBAction func onDeleteScreenshotAfterUploadButtonPress(sender: AnyObject) {
-        
         if deleteScreenshotAfterUploadButton.state == NSOnState {
-            
-            imgurSession.setDeleteScreenshotAfterUpload(true)
-            
+            prefs.setBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, value: true)
         } else {
-            
-            imgurSession.setDeleteScreenshotAfterUpload(false)
-            
+            prefs.setBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, value: false)
         }
-        
     }
-    
     
     /*
     * Loads the text written at the PIN Code field, and starts
@@ -119,33 +93,26 @@ class PreferencesWindowController : NSWindowController {
     */
     @IBAction func onSaveButtonClick(sender: AnyObject) {
         
-        if let pinCode: NSString? = pinCodeField.stringValue {
-            
-            NSLog("PINCODE: \(pinCode!)")
-            imgurSession.getTokenFromPin(pinCode!, closure: { username in
+        if (pinCodeField.stringValue != nil) {
+            NSLog("PINCODE: \(pinCodeField.stringValue)")
+            imgurSession.getTokenFromPin(pinCodeField.stringValue, closure: { username in
                 dispatch_async(dispatch_get_main_queue()) {
                     self.setWindowForLoggedUser(username)
                 }
-                
             })
-            
         }
-        
     }
     
     
-    func setWindowForLoggedUser(username: NSString){
-        
+    func setWindowForLoggedUser(username: String){
         self.signInButton!.title = "Sign out (\(username))"
         self.signInButton!.enabled = true
         
         self.pinCodeField!.hidden = true
         self.saveButton!.hidden = true
-        
     }
     
     func setWindowForAnonymousUser(){
-        
         self.signInButton!.title = "1. Sign in"
         self.signInButton!.enabled = true
         
@@ -154,7 +121,6 @@ class PreferencesWindowController : NSWindowController {
         self.pinCodeField!.hidden = false
         self.saveButton!.enabled = false
         self.saveButton!.hidden = false
-        
     }
     
 }
