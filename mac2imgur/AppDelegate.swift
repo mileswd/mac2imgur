@@ -31,23 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         println("Launching mac2imgur")
         
-        // Create menu
-        let menu = NSMenu()
-        menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLinkToClipboard"), keyEquivalent: "")
-        menu.addItem(NSMenuItem.separatorItem())
-        menu.addItemWithTitle("Preferences...", action: NSSelectorFromString("showPreferences"), keyEquivalent: "")
-        menu.addItem(NSMenuItem.separatorItem())
-        menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
-        menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
-        menu.autoenablesItems = false
-        
-        // Add to status bar
-        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
-        statusItem!.highlightMode = true
-        statusItem!.menu = menu
-        statusItem!.alternateImage = NSImage(named: "Active_Inverted")
-        updateStatusIcon(false)
-        statusItem!.toolTip = "mac2imgur"
+        NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
         prefs = PreferencesManager()
         imgurSession = ImgurClient(prefs: prefs!)
@@ -63,7 +47,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                     if self.prefs!.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false){
                         self.deleteScreenshot(pathToImage)
                     }
-                    
                 } else {
                     self.displayNotification("Screenshot upload failed...", informativeText: "")
                 }
@@ -73,7 +56,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             self.updateStatusIcon(true)
         })
         
-        NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
+        // Create menu
+        let menu = NSMenu()
+        menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLinkToClipboard"), keyEquivalent: "")
+        menu.addItem(NSMenuItem.separatorItem())
+        menu.addItemWithTitle("Preferences...", action: NSSelectorFromString("showPreferences"), keyEquivalent: "")
+        menu.addItem(NSMenuItem.separatorItem())
+        menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
+        menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
+        menu.autoenablesItems = false
+        
+        // Add to status bar
+        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
+        statusItem!.highlightMode = true
+        statusItem!.menu = menu
+        statusItem!.alternateImage = NSImage(named: "Active_Inverted")
+        statusItem!.toolTip = "mac2imgur"
+        updateStatusIcon(false)
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
@@ -83,7 +82,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func applicationWillTerminate(aNotification: NSNotification?) {
-        monitor?.stop()
+        monitor?.query.stopQuery()
         NSStatusBar.systemStatusBar().removeStatusItem(statusItem)
     }
     
@@ -100,7 +99,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if error != nil {
             NSLog(error!.localizedDescription)
         }
-        
     }
     
     func displayNotification(title: String, informativeText: String) {

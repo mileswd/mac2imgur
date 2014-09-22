@@ -74,9 +74,4 @@ class ScreenshotMonitor {
     func addToBlacklist(screenshotPath: String) {
         blacklist.append(screenshotPath.lastPathComponent.stringByDeletingPathExtension)
     }
-    
-    func stop() {
-        query.stopQuery()
-    }
-    
 }
