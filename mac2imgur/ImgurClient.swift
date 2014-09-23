@@ -47,7 +47,7 @@ class ImgurClient {
         NSWorkspace.sharedWorkspace().openURL(NSURL(string: urlStart + imgurClientId + urlEnd))
     }
     
-    func getTokenFromPin(pin: NSString, closure: (username: String) -> ()){
+    func getTokenFromPin(pin: String, callback: (username: String) -> ()){
         
         let request = NSMutableURLRequest(URL: NSURL(string: "https://api.imgur.com/oauth2/token")!)
         let session = NSURLSession.sharedSession()
@@ -61,7 +61,7 @@ class ImgurClient {
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             println("Response: \(response)")
-            var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+            var strData: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
             println("Body: \(strData)")
             var err: NSError?
             var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
@@ -79,7 +79,7 @@ class ImgurClient {
                     self.prefs.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
                     self.prefs.setString(PreferencesConstant.username.rawValue, value: user!)
                     
-                    closure(username: user!)
+                    callback(username: user!)
                     println("Success: \(refToken)")
                 }
             }
