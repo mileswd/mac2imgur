@@ -95,7 +95,7 @@ class PreferencesWindowController : NSWindowController {
         
         if (pinCodeField.stringValue != nil) {
             NSLog("PINCODE: \(pinCodeField.stringValue)")
-            imgurSession.getTokenFromPin(pinCodeField.stringValue, closure: { username in
+            imgurSession.getTokenFromPin(pinCodeField.stringValue, callback: { username in
                 dispatch_async(dispatch_get_main_queue()) {
                     self.setWindowForLoggedUser(username)
                 }

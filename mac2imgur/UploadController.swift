@@ -62,8 +62,6 @@ class UploadController {
         let contentType = "multipart/form-data; boundary=\(boundary)"
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
-        let clientId: NSString! = client.imgurClientId
-        
         // Add Client-ID authorization
         if anonymous {
             request.addValue("Client-ID \(client.imgurClientId)", forHTTPHeaderField: "Authorization")
