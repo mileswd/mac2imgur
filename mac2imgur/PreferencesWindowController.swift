@@ -38,7 +38,7 @@ class PreferencesWindowController : NSWindowController {
     }
     
     
-    required init(coder aDecoder: NSCoder!){
+    required init(coder aDecoder: NSCoder!) {
         super.init(coder: aDecoder)
     }
     
@@ -104,7 +104,7 @@ class PreferencesWindowController : NSWindowController {
     }
     
     
-    func setWindowForLoggedUser(username: String){
+    func setWindowForLoggedUser(username: String) {
         self.signInButton!.title = "Sign out (\(username))"
         self.signInButton!.enabled = true
         
@@ -112,7 +112,7 @@ class PreferencesWindowController : NSWindowController {
         self.saveButton!.hidden = true
     }
     
-    func setWindowForAnonymousUser(){
+    func setWindowForAnonymousUser() {
         self.signInButton!.title = "1. Sign in"
         self.signInButton!.enabled = true
         
