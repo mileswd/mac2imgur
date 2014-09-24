@@ -47,7 +47,7 @@ class ImgurClient {
         NSWorkspace.sharedWorkspace().openURL(NSURL(string: urlStart + imgurClientId + urlEnd))
     }
     
-    func getTokenFromPin(pin: String, callback: (username: String) -> ()){
+    func getTokenFromPin(pin: String, callback: (username: String) -> ()) {
         
         let request = NSMutableURLRequest(URL: NSURL(string: "https://api.imgur.com/oauth2/token")!)
         let session = NSURLSession.sharedSession()
