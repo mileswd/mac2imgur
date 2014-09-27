@@ -38,7 +38,7 @@ class ImgurClient {
         self.prefs = prefs
         username = prefs.getString(PreferencesConstant.username.rawValue, def: nil)
         refreshToken = prefs.getString(PreferencesConstant.refreshToken.rawValue, def: nil)
-        if (username != nil) && (refreshToken != nil) {
+        if username != nil && refreshToken != nil {
             loggedIn = true
         }
     }
@@ -64,51 +64,23 @@ class ImgurClient {
             var strData: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
             println("Body: \(strData)")
             var err: NSError?
-            var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
-            
-            if err != nil {
-                NSLog(err!.localizedDescription)
-            }
-            else {
-                if let refToken = json["refresh_token"] as? String {
-                    self.loggedIn = true
-                    self.setAccessToken(json["access_token"] as String)
-                    
-                    var user = json["account_username"] as? String
-                    
-                    self.prefs.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
-                    self.prefs.setString(PreferencesConstant.username.rawValue, value: user!)
-                    
-                    callback(username: user!)
-                    println("Success: \(refToken)")
+            if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
+                if err != nil {
+                    NSLog(err!.localizedDescription)
                 }
-            }
-        })
-        task.resume()
-    }
-    
-    func requestNewAccessToken() {
-        let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
-        let request = NSMutableURLRequest(URL: url)
-        let session = NSURLSession.sharedSession()
-        
-        request.HTTPMethod = "POST"
-        
-        let params = ["client_id":imgurClientId, "client_secret":imgurClientSecret, "grant_type":"refresh_token", "refresh_token":self.refreshToken!] as Dictionary
-        
-        var err: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
-        
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            var err: NSError?
-            var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
-            
-            if(err != nil) {
-                NSLog(err!.localizedDescription)
-            }
-            else {
-                if let access = json["access_token"] as? String {
-                    self.setAccessToken(access)
+                else {
+                    if let refToken = json["refresh_token"] as? String {
+                        self.loggedIn = true
+                        self.setAccessToken(json["access_token"] as String)
+                    
+                        var user = json["account_username"] as String
+                    
+                        self.prefs.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
+                        self.prefs.setString(PreferencesConstant.username.rawValue, value: user)
+                    
+                        callback(username: user)
+                        println("Success: \(refToken)")
+                    }
                 }
             }
         })
@@ -135,15 +107,13 @@ class ImgurClient {
                 if err != nil {
                     NSLog(err!.localizedDescription)
                 } else {
-                    if let access = json["access_token"] as
-                        NSString? {
+                    if let access = json["access_token"] as? String {
                         self.setAccessToken(access)
                         callback()
                     }
                 }
             }
         })
-        
         task.resume()
     }
     
