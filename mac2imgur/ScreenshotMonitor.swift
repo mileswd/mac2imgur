@@ -20,7 +20,6 @@ class ScreenshotMonitor {
     
     var query: NSMetadataQuery
     var callback: (pathToImage: String) -> ()
-    var blacklist: [String] = []
     
     init(callback: (pathToImage: String) -> ()) {
         self.callback = callback
@@ -30,48 +29,28 @@ class ScreenshotMonitor {
         // Only accept screenshots
         query.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1", argumentArray: nil)
         
-        // Add observers
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("initialiseBlacklist"), name: NSMetadataQueryDidFinishGatheringNotification, object: query)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("eventOccurred"), name: NSMetadataQueryDidUpdateNotification, object: query)
+        // Add observer
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("eventOccurred:"), name: NSMetadataQueryDidUpdateNotification, object: query)
         
         // Start query
         query.startQuery()
     }
     
-    @objc func eventOccurred() {
-        if query.resultCount > 0 {
-            
-            for metadataItem: NSMetadataItem in (query.results as [NSMetadataItem]) {
-                // Check that the screenshot is actually new
-                if !contains(blacklist, (metadataItem.valueForKey(NSMetadataItemPathKey) as String).lastPathComponent.stringByDeletingPathExtension) {
-                    
-                    println("NSMetadataItem: \(metadataItem.description)")
-                    
+    @objc func eventOccurred(notification: NSNotification) {
+        if let info = notification.userInfo {
+            if let itemsAdded = info["kMDQueryUpdateAddedItems"] as? NSArray {
+                for item in itemsAdded {
+                    var metadataItem = item as NSMetadataItem
+                        
                     // Get the path to the screenshot
                     var screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
-                    
+                        
                     println("Screenshot file event detected @ \(screenshotPath)")
-                    
+                        
                     // Notify the delegate with the path to the screenshot
                     callback(pathToImage: screenshotPath)
-                    
-                    // Add uploaded screenshot to blacklist
-                    addToBlacklist(screenshotPath)
                 }
             }
         }
-    }
-    
-    @objc func initialiseBlacklist() {
-        if query.resultCount > 0 {
-            for metadataItem: NSMetadataItem in (query.results as [NSMetadataItem]) {
-                addToBlacklist(metadataItem.valueForKey(NSMetadataItemPathKey) as String)
-            }
-        }
-        println("Blacklist size = \(blacklist.count)")
-    }
-    
-    func addToBlacklist(screenshotPath: String) {
-        blacklist.append(screenshotPath.lastPathComponent.stringByDeletingPathExtension)
     }
 }
