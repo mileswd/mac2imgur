@@ -130,14 +130,16 @@ class ImgurClient {
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
         var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as NSDictionary
             
-            if err != nil {
-                NSLog(err!.localizedDescription)
-            } else {
-                if let access = json["access_token"] as NSString? {
-                    self.setAccessToken(access)
-                    callback()
+            if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
+                if err != nil {
+                    NSLog(err!.localizedDescription)
+                } else {
+                    if let access = json["access_token"] as
+                        NSString? {
+                        self.setAccessToken(access)
+                        callback()
+                    }
                 }
             }
         })
