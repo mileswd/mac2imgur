@@ -11,7 +11,7 @@
                 <![CDATA[
                     <p>You are running an unsupported development version of mac2imgur, please update.</p>
                 ]]>
-            <description>
+            </description>
             <pubDate>Sun, 28 Sep 2014 16:00:00 +0000</pubDate>
             <enclosure url="https://github.com/rauix/mac2imgur/releases/download/3.0/mac2imgur.zip" sparkle:version="49" sparkle:shortVersionString="3.0 (r49)" length="2769598" type="application/octet-stream" sparkle:dsaSignature="MCwCFFUYXHGxk5lK75q8On8Yes1MNdLFAhQ9XhMTLYc1WI/JM7riR4e4CaBkig==" />
             <sparkle:minimumSystemVersion>10.9</sparkle:minimumSystemVersion>
