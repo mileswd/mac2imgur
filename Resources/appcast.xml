@@ -2,16 +2,18 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
         <title>mac2imgur Changelog</title>
-        <link>https://raw.githubusercontent.com/rauix/mac2imgur/master/Resources/appcast.xml</link>
-        <description>Most recent changes with links to updates.</description>
+        <link>http://mac2imgur.rauix.net/update</link>
+        <description>Most recent changes with links to updates</description>
         <language>en</language>
         <item>
             <title>Version 3.0</title>
-            <sparkle:releaseNotesLink>
-                https://github.com/rauix/mac2imgur/releases/tag/3.0
-            </sparkle:releaseNotesLink>
-            <pubDate>Fri, 22 Aug 2014 06:00:00 +0000</pubDate>
-            <enclosure url="https://github.com/rauix/mac2imgur/releases/download/3.0/mac2imgur.zip" sparkle:version="3.0" length="2779432" type="application/octet-stream" sparkle:dsaSignature="MCwCFDphB201UXHENBRHTaBJKWJeAKVIAhQzXkf0DIFjAc4tBxDr4QNfRGLdxA==" />
+            <description>
+                <![CDATA[
+                    <p>You are running an unsupported development version of mac2imgur, please update.</p>
+                ]]>
+            <description>
+            <pubDate>Sun, 28 Sep 2014 16:00:00 +0000</pubDate>
+            <enclosure url="https://github.com/rauix/mac2imgur/releases/download/3.0/mac2imgur.zip" sparkle:version="49" sparkle:shortVersionString="3.0 (r49)" length="2769598" type="application/octet-stream" sparkle:dsaSignature="MCwCFFUYXHGxk5lK75q8On8Yes1MNdLFAhQ9XhMTLYc1WI/JM7riR4e4CaBkig==" />
             <sparkle:minimumSystemVersion>10.9</sparkle:minimumSystemVersion>
         </item>
     </channel>
