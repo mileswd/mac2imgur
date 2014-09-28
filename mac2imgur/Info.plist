@@ -37,7 +37,7 @@
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/rauix/mac2imgur/master/Resources/appcast.xml</string>
+	<string>http://mac2imgur.rauix.net/update</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>
