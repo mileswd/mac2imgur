@@ -87,7 +87,7 @@ class ImgurClient {
         task.resume()
     }
     
-    func requestNewAccessToken(callback: () -> Void) {
+    func requestNewAccessToken(callback: () -> ()) {
         let url: NSURL = NSURL(string: "https://api.imgur.com/oauth2/token")!
         let request = NSMutableURLRequest(URL: url)
         let session = NSURLSession.sharedSession()
@@ -101,7 +101,7 @@ class ImgurClient {
         var err: NSError?
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> () in
             
             if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
                 if err != nil {
@@ -122,7 +122,7 @@ class ImgurClient {
             return false
         }
         let now: NSDate! = NSDate()
-        let comparison: NSComparisonResult! = self.lastTokenExpiry?.compare(now)
+        let comparison: NSComparisonResult = self.lastTokenExpiry!.compare(now)
         return comparison == NSComparisonResult.OrderedDescending
     }
     

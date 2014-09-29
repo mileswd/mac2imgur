@@ -37,7 +37,7 @@ class UploadController {
             if client.isAccessTokenValid() {
                 upload(false)
             } else {
-                client.requestNewAccessToken({ () -> Void in
+                client.requestNewAccessToken({ () -> () in
                     self.upload(false)
                 })
             }
