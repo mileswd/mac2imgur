@@ -40,10 +40,10 @@ class ScreenshotMonitor {
         if let info = notification.userInfo {
             if let itemsAdded = info["kMDQueryUpdateAddedItems"] as? NSArray {
                 for item in itemsAdded {
-                    var metadataItem = item as NSMetadataItem
+                    let metadataItem = item as NSMetadataItem
                         
                     // Get the path to the screenshot
-                    var screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
+                    let screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
                         
                     println("Screenshot file event detected @ \(screenshotPath)")
                         
