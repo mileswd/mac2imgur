@@ -44,7 +44,7 @@ class ImgurClient {
     }
     
     func openBrowserForAuth() {
-        NSWorkspace.sharedWorkspace().openURL(NSURL(string: urlStart + imgurClientId + urlEnd))
+        NSWorkspace.sharedWorkspace().openURL(NSURL(string: urlStart + imgurClientId + urlEnd)!)
     }
     
     func getTokenFromPin(pin: String, callback: (username: String) -> ()) {
