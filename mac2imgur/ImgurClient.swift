@@ -59,7 +59,7 @@ class ImgurClient {
         var err: NSError?
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             println("Response: \(response)")
             var strData: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
             println("Body: \(strData)")
@@ -67,8 +67,7 @@ class ImgurClient {
             if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
                 if err != nil {
                     NSLog(err!.localizedDescription)
-                }
-                else {
+                } else {
                     if let refToken = json["refresh_token"] as? String {
                         self.loggedIn = true
                         self.setAccessToken(json["access_token"] as String)
@@ -101,8 +100,7 @@ class ImgurClient {
         var err: NSError?
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
         
-        var task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> () in
-            
+        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> () in
             if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
                 if err != nil {
                     NSLog(err!.localizedDescription)
