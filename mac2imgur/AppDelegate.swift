@@ -77,13 +77,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
         if notification.informativeText != "" {
-            NSWorkspace.sharedWorkspace().openURL(NSURL(string: notification.informativeText!))
+            NSWorkspace.sharedWorkspace().openURL(NSURL(string: notification.informativeText!)!)
         }
     }
     
     func applicationWillTerminate(aNotification: NSNotification?) {
         monitor?.query.stopQuery()
-        NSStatusBar.systemStatusBar().removeStatusItem(statusItem)
+        NSStatusBar.systemStatusBar().removeStatusItem(statusItem!)
     }
     
     func copyLinkToClipboard() {

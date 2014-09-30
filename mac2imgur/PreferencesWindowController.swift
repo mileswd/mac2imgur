@@ -36,12 +36,10 @@ class PreferencesWindowController : NSWindowController {
             self.window!.releasedWhenClosed = false
         }
     }
-    
-    
-    required init(coder aDecoder: NSCoder!) {
-        super.init(coder: aDecoder)
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
-    
     
     override func showWindow(sender: AnyObject!) {
         super.showWindow(sender)
@@ -93,7 +91,7 @@ class PreferencesWindowController : NSWindowController {
     */
     @IBAction func onSaveButtonClick(sender: AnyObject) {
         
-        if (pinCodeField.stringValue != nil) {
+        if pinCodeField.stringValue != "" {
             NSLog("PINCODE: \(pinCodeField.stringValue)")
             imgurSession.getTokenFromPin(pinCodeField.stringValue, callback: { username in
                 dispatch_async(dispatch_get_main_queue()) {
