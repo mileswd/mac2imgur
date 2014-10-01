@@ -97,7 +97,7 @@ class UploadController {
         // Attempt request
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if error != nil {
-                NSLog("An error occurred: %@", error);
+                NSLog(error!.localizedDescription);
                 self.callback(successful: false, link: "", pathToImage: self.pathToImage)
             } else {
                 var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
