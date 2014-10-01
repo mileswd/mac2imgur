@@ -10,7 +10,6 @@
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		022321C119A6F57E00048626 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 022321C019A6F57E00048626 /* README.md */; };
 		022321CE19A7042D00048626 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 022321CC19A7042D00048626 /* dsa_pub.pem */; };
-		0266497019DC884C003C7C67 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 0266496F19DC884C003C7C67 /* .travis.yml */; };
 		02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B00A7419CE388800F924D6 /* PreferencesManager.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
@@ -65,7 +64,6 @@
 		022321CC19A7042D00048626 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		022321CD19A7042D00048626 /* mac2imgur.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = mac2imgur.psd; sourceTree = "<group>"; };
 		022321D019A7066000048626 /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
-		0266496F19DC884C003C7C67 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		02B00A7419CE388800F924D6 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotMonitor.swift; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 		02FDC2C2194DF89D00E8CBC9 = {
 			isa = PBXGroup;
 			children = (
-				0266496F19DC884C003C7C67 /* .travis.yml */,
 				07B42AE619AB75DA00A6349D /* AppKit.framework */,
 				07B42AE219AB75D500A6349D /* Sparkle.framework */,
 				022321CB19A7042D00048626 /* Resources */,
@@ -281,7 +278,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				02FDC30D194E0C1900E8CBC9 /* Active.png in Resources */,
-				0266497019DC884C003C7C67 /* .travis.yml in Resources */,
 				02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */,
 				02FDC310194E0C1900E8CBC9 /* Active@2x.png in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
