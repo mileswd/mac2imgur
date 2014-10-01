@@ -92,7 +92,6 @@ class PreferencesWindowController : NSWindowController {
     @IBAction func onSaveButtonClick(sender: AnyObject) {
         
         if pinCodeField.stringValue != "" {
-            NSLog("PINCODE: \(pinCodeField.stringValue)")
             imgurSession.getTokenFromPin(pinCodeField.stringValue, callback: { username in
                 dispatch_async(dispatch_get_main_queue()) {
                     self.setWindowForLoggedUser(username)
