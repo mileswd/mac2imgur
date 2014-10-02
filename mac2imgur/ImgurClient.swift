@@ -116,12 +116,12 @@ class ImgurClient {
     }
     
     func isAccessTokenValid() -> Bool {
-        if self.accessToken == nil {
-            return false
+        if self.accessToken != nil {
+            let now: NSDate! = NSDate()
+            let comparison: NSComparisonResult = self.lastTokenExpiry!.compare(now)
+            return comparison == NSComparisonResult.OrderedDescending
         }
-        let now: NSDate! = NSDate()
-        let comparison: NSComparisonResult = self.lastTokenExpiry!.compare(now)
-        return comparison == NSComparisonResult.OrderedDescending
+        return false
     }
     
     func setAccessToken(token: String) {
