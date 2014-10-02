@@ -46,8 +46,7 @@ class ScreenshotMonitor {
                     let screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
                         
                     println("Screenshot file event detected @ \(screenshotPath)")
-                        
-                    // Notify the delegate with the path to the screenshot
+                    
                     callback(pathToImage: screenshotPath)
                 }
             }
