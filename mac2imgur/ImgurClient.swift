@@ -61,7 +61,7 @@ class ImgurClient {
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
             println("Response: \(response)")
-            var strData: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
+            let strData: String = NSString(data: data, encoding: NSUTF8StringEncoding)!
             println("Body: \(strData)")
             var err: NSError?
             if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
@@ -72,7 +72,7 @@ class ImgurClient {
                         self.loggedIn = true
                         self.setAccessToken(json["access_token"] as String)
                     
-                        var user = json["account_username"] as String
+                        let user = json["account_username"] as String
                     
                         self.prefs.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
                         self.prefs.setString(PreferencesConstant.username.rawValue, value: user)
