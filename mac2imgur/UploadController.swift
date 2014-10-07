@@ -18,11 +18,10 @@ import Foundation
 
 class UploadController {
     
+    let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
     var pathToImage: String
     var client: ImgurClient
-    let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
     var callback: (successful: Bool, link: String, pathToImage: String) -> ()
-    
     
     init(pathToImage: String, client: ImgurClient, callback: (successful: Bool, link: String, pathToImage: String) -> ()) {
         self.pathToImage = pathToImage
