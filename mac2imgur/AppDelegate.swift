@@ -92,7 +92,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         pasteBoard.setString(lastLink, forType: NSStringPboardType)
     }
     
-    func deleteScreenshot(pathToImage: String!) {
+    func deleteScreenshot(pathToImage: String) {
+        println("Deleting screenshot @ \(pathToImage)")
         var error: NSError?
         NSFileManager.defaultManager().removeItemAtPath(pathToImage, error: &error)
         if error != nil {
