@@ -30,9 +30,9 @@ class UploadController {
     }
     
     func attemptUpload() {
-        
+        // Check if client is logged in, otherwise upload anonymously
         if client.loggedIn {
-            
+            // If necessary, request a new access token
             if client.isAccessTokenValid() {
                 upload(false)
             } else {
@@ -43,14 +43,13 @@ class UploadController {
         } else {
             upload(true)
         }
-        
     }
     
     func upload(anonymous: Bool) {
         
         println("Uploading image as authenticated user: \(!anonymous)")
         
-        let url: NSURL = NSURL.fileURLWithPath(pathToImage)!
+        let url: NSURL = NSURL(fileURLWithPath: pathToImage)!
         let imageData: NSData = NSData(contentsOfURL: url, options: nil, error: nil)!
         
         let request = NSMutableURLRequest()
