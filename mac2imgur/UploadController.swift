@@ -98,13 +98,17 @@ class UploadController {
                 NSLog(error!.localizedDescription);
                 self.callback(successful: false, link: "", pathToImage: self.pathToImage)
             } else {
-                var responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
-                println("Received response: \(responseDict)")
-                if responseDict.valueForKey("status")?.integerValue == 200 {
-                    self.callback(successful: true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
+                if let responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary {
+                    println("Received response: \(responseDict)")
+                    if responseDict.valueForKey("status") != nil && responseDict.valueForKey("status")?.integerValue == 200 {
+                        self.callback(successful: true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
+                    } else {
+                        NSLog("An error occurred: %@", responseDict);
+                        self.callback(successful: false, link: "", pathToImage: self.pathToImage)
+                    }
                 } else {
+                    NSLog("An error occurred - the response was invalid: %@", response)
                     self.callback(successful: false, link: "", pathToImage: self.pathToImage)
-                    NSLog("An error occurred (%@): %@", responseDict.valueForKey("status") as String, responseDict);
                 }
             }
         })
