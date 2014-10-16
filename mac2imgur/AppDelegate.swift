@@ -19,7 +19,6 @@ import Cocoa
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
     
-    @IBOutlet var window: NSWindow?
     var statusItem: NSStatusItem?
     var monitor: ScreenshotMonitor?
     var preferencesController: PreferencesWindowController?
@@ -34,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
         prefs = PreferencesManager()
-        imgurSession = ImgurClient(prefs: prefs!)
+        imgurSession = ImgurClient(preferences: prefs!)
         
         // Setup screenshot monitor & upload function
         monitor = ScreenshotMonitor(callback: { (pathToImage) -> () in

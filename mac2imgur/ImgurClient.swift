@@ -25,7 +25,7 @@ class ImgurClient {
     let imgurClientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"
     let projectUrl = "https://github.com/rauix/mac2imgur"
     
-    var prefs: PreferencesManager
+    var preferences: PreferencesManager
     
     var loggedIn: Bool = false
     var lastTokenExpiry: NSDate?
@@ -34,10 +34,10 @@ class ImgurClient {
     var accessToken: String?
     var refreshToken: String?
     
-    init (prefs: PreferencesManager) {
-        self.prefs = prefs
-        username = prefs.getString(PreferencesConstant.username.rawValue, def: nil)
-        refreshToken = prefs.getString(PreferencesConstant.refreshToken.rawValue, def: nil)
+    init (preferences: PreferencesManager) {
+        self.preferences = preferences
+        username = preferences.getString(PreferencesConstant.username.rawValue, def: nil)
+        refreshToken = preferences.getString(PreferencesConstant.refreshToken.rawValue, def: nil)
         if username != nil && refreshToken != nil {
             loggedIn = true
         }
@@ -74,8 +74,8 @@ class ImgurClient {
                     
                         let user = json["account_username"] as String
                     
-                        self.prefs.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
-                        self.prefs.setString(PreferencesConstant.username.rawValue, value: user)
+                        self.preferences.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
+                        self.preferences.setString(PreferencesConstant.username.rawValue, value: user)
                     
                         callback(username: user)
                         println("Success: \(refToken)")
@@ -132,8 +132,8 @@ class ImgurClient {
     }
     
     func deleteCredentials() {
-        prefs.deleteKey(PreferencesConstant.username.rawValue)
-        prefs.deleteKey(PreferencesConstant.refreshToken.rawValue)
+        preferences.deleteKey(PreferencesConstant.username.rawValue)
+        preferences.deleteKey(PreferencesConstant.refreshToken.rawValue)
         loggedIn = false
     }
 }
