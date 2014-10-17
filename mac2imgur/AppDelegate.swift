@@ -14,7 +14,6 @@
 * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Foundation
 import Cocoa
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
