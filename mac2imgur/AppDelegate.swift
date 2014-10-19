@@ -71,7 +71,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         statusItem!.image = statusIcon
         statusItem!.highlightMode = true
         statusItem!.menu = menu
-        statusItem!.toolTip = "mac2imgur"
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
