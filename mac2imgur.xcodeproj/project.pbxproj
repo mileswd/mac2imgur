@@ -18,12 +18,8 @@
 		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
 		02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
 		02FDC2E4194DF89D00E8CBC9 /* mac2imgurTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */; };
-		02FDC30D194E0C1900E8CBC9 /* Active.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC309194E0C1800E8CBC9 /* Active.png */; };
-		02FDC30E194E0C1900E8CBC9 /* Active_Inverted.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30A194E0C1800E8CBC9 /* Active_Inverted.png */; };
-		02FDC30F194E0C1900E8CBC9 /* Active_Inverted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30B194E0C1800E8CBC9 /* Active_Inverted@2x.png */; };
-		02FDC310194E0C1900E8CBC9 /* Active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30C194E0C1800E8CBC9 /* Active@2x.png */; };
-		0756029719A8E74000BAB12B /* Inactive.png in Resources */ = {isa = PBXBuildFile; fileRef = 0756029519A8E74000BAB12B /* Inactive.png */; };
-		0756029819A8E74000BAB12B /* Inactive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0756029619A8E74000BAB12B /* Inactive@2x.png */; };
+		02FDC30D194E0C1900E8CBC9 /* StatusIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC309194E0C1800E8CBC9 /* StatusIcon.png */; };
+		02FDC310194E0C1900E8CBC9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */; };
 		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
 		07B42AE319AB75D500A6349D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; };
 		07B42AE419AB75D500A6349D /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -76,12 +72,8 @@
 		02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mac2imgurTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02FDC2E2194DF89D00E8CBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac2imgurTests.swift; sourceTree = "<group>"; };
-		02FDC309194E0C1800E8CBC9 /* Active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Active.png; sourceTree = "<group>"; };
-		02FDC30A194E0C1800E8CBC9 /* Active_Inverted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Active_Inverted.png; sourceTree = "<group>"; };
-		02FDC30B194E0C1800E8CBC9 /* Active_Inverted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Active_Inverted@2x.png"; sourceTree = "<group>"; };
-		02FDC30C194E0C1800E8CBC9 /* Active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Active@2x.png"; sourceTree = "<group>"; };
-		0756029519A8E74000BAB12B /* Inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Inactive.png; sourceTree = "<group>"; };
-		0756029619A8E74000BAB12B /* Inactive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Inactive@2x.png"; sourceTree = "<group>"; };
+		02FDC309194E0C1800E8CBC9 /* StatusIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StatusIcon.png; sourceTree = "<group>"; };
+		02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StatusIcon@2x.png"; sourceTree = "<group>"; };
 		07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurClient.swift; sourceTree = "<group>"; };
 		07B42AE219AB75D500A6349D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		07B42AE619AB75DA00A6349D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -150,12 +142,8 @@
 			children = (
 				02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */,
 				02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */,
-				02FDC309194E0C1800E8CBC9 /* Active.png */,
-				02FDC30C194E0C1800E8CBC9 /* Active@2x.png */,
-				02FDC30A194E0C1800E8CBC9 /* Active_Inverted.png */,
-				02FDC30B194E0C1800E8CBC9 /* Active_Inverted@2x.png */,
-				0756029519A8E74000BAB12B /* Inactive.png */,
-				0756029619A8E74000BAB12B /* Inactive@2x.png */,
+				02FDC309194E0C1800E8CBC9 /* StatusIcon.png */,
+				02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */,
 				02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */,
 				02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */,
 				02FDC2CE194DF89D00E8CBC9 /* Supporting Files */,
@@ -277,16 +265,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02FDC30D194E0C1900E8CBC9 /* Active.png in Resources */,
+				02FDC30D194E0C1900E8CBC9 /* StatusIcon.png in Resources */,
 				02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */,
-				02FDC310194E0C1900E8CBC9 /* Active@2x.png in Resources */,
+				02FDC310194E0C1900E8CBC9 /* StatusIcon@2x.png in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
-				02FDC30F194E0C1900E8CBC9 /* Active_Inverted@2x.png in Resources */,
-				0756029819A8E74000BAB12B /* Inactive@2x.png in Resources */,
 				07E0DDA819AABAA200D8ACC6 /* PreferencesWindowController.xib in Resources */,
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
-				0756029719A8E74000BAB12B /* Inactive.png in Resources */,
-				02FDC30E194E0C1900E8CBC9 /* Active_Inverted.png in Resources */,
 				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
 				022321CE19A7042D00048626 /* dsa_pub.pem in Resources */,
 			);

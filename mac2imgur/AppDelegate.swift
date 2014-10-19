@@ -48,10 +48,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 } else {
                     self.displayNotification("Screenshot upload failed...", informativeText: "")
                 }
-                self.updateStatusIcon(false)
             })
             upload.attemptUpload()
-            self.updateStatusIcon(true)
         })
         
         // Create menu
@@ -63,14 +61,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
         menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
         menu.autoenablesItems = false
+
+        // Create status bar icon
+        let statusIcon = NSImage(named: "StatusIcon")!
+        statusIcon.setTemplate(true)
         
         // Add to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
+        statusItem!.image = statusIcon
         statusItem!.highlightMode = true
         statusItem!.menu = menu
-        statusItem!.alternateImage = NSImage(named: "Active_Inverted")
         statusItem!.toolTip = "mac2imgur"
-        updateStatusIcon(false)
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
@@ -104,14 +105,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         notification.title = title
         notification.informativeText = informativeText
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
-    }
-    
-    func updateStatusIcon(isActive: Bool) {
-        if isActive {
-            statusItem!.image = NSImage(named: "Active")
-        } else {
-            statusItem!.image = NSImage(named: "Inactive")
-        }
     }
     
     func showPreferences(){
