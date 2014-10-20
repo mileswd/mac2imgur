@@ -16,9 +16,9 @@
 
 import Cocoa
 
-class PreferencesWindowController : NSWindowController {
+class PreferencesWindowController: NSWindowController {
     
-    var imgurSession: ImgurClient!
+    var imgurClient: ImgurClient!
     var prefs: PreferencesManager!
     
     @IBOutlet weak var signInButton: NSButton!
@@ -26,34 +26,19 @@ class PreferencesWindowController : NSWindowController {
     @IBOutlet weak var saveButton: NSButton!
     @IBOutlet weak var deleteScreenshotAfterUploadButton: NSButton!
     
-    override init() {
-        super.init()
-    }
-    
-    override init(window: NSWindow?) {
-        super.init(window: window)
-        if self.window? != nil {
-            self.window!.releasedWhenClosed = false
-        }
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
     override func showWindow(sender: AnyObject!) {
         super.showWindow(sender)
         
-        if imgurSession.loggedIn {
-            setWindowForLoggedUser(imgurSession.username!)
+        if imgurClient.loggedIn {
+            setWindowForLoggedUser(imgurClient.username!)
         }
         
         if prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false) {
             deleteScreenshotAfterUploadButton.state = NSOnState
         }
         
+        window?.makeKeyAndOrderFront(self)
     }
-    
     
     /*
     * Disables the "Sign in" button, as the user won't be signing in again
@@ -61,15 +46,15 @@ class PreferencesWindowController : NSWindowController {
     * Loads the AUTH URL with the default browser
     */
     @IBAction func signInButtonClick(sender: AnyObject) {
-        if imgurSession.loggedIn {
-            imgurSession.deleteCredentials()
+        if imgurClient.loggedIn {
+            imgurClient.deleteCredentials()
             self.setWindowForAnonymousUser()
         } else {
             signInButton!.enabled = false
             pinCodeField!.enabled = true
             
             saveButton!.enabled = true
-            imgurSession.openBrowserForAuth()
+            imgurClient.openBrowserForAuth()
         }
     }
     
@@ -92,7 +77,7 @@ class PreferencesWindowController : NSWindowController {
     @IBAction func onSaveButtonClick(sender: AnyObject) {
         
         if pinCodeField.stringValue != "" {
-            imgurSession.getTokenFromPin(pinCodeField.stringValue, callback: { username in
+            imgurClient.getTokenFromPin(pinCodeField.stringValue, callback: { username in
                 dispatch_async(dispatch_get_main_queue()) {
                     self.setWindowForLoggedUser(username)
                 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220B2AA19F4104A0064E9FE /* AppDelegate.swift */; };
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		022321C119A6F57E00048626 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 022321C019A6F57E00048626 /* README.md */; };
 		022321CE19A7042D00048626 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 022321CC19A7042D00048626 /* dsa_pub.pem */; };
@@ -14,7 +15,6 @@
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
 		02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2D0194DF89D00E8CBC9 /* main.swift */; };
-		02FDC2D3194DF89D00E8CBC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */; };
 		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
 		02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
 		02FDC2E4194DF89D00E8CBC9 /* mac2imgurTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */; };
@@ -26,7 +26,7 @@
 		07B42AE719AB75DA00A6349D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
 		07E0DDA819AABAA200D8ACC6 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */; };
 		07E0DDAA19AABB1300D8ACC6 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */; };
-		07F6F73B19ABE6A600BDEB11 /* UploadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6F73A19ABE6A600BDEB11 /* UploadController.swift */; };
+		07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,11 +54,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0220B2AA19F4104A0064E9FE /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		022321BE19A6959500048626 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		022321C019A6F57E00048626 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		022321C219A6FDCD00048626 /* version.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.txt; sourceTree = "<group>"; };
 		022321CC19A7042D00048626 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
-		022321CD19A7042D00048626 /* mac2imgur.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = mac2imgur.psd; sourceTree = "<group>"; };
 		022321D019A7066000048626 /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
 		02B00A7419CE388800F924D6 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -66,7 +66,6 @@
 		02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mac2imgur.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02FDC2CF194DF89D00E8CBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02FDC2D0194DF89D00E8CBC9 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		02FDC2D7194DF89D00E8CBC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mac2imgurTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,7 +78,7 @@
 		07B42AE619AB75DA00A6349D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesWindowController.xib; sourceTree = "<group>"; };
 		07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
-		07F6F73A19ABE6A600BDEB11 /* UploadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadController.swift; sourceTree = "<group>"; };
+		07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUpload.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +105,6 @@
 			isa = PBXGroup;
 			children = (
 				022321CC19A7042D00048626 /* dsa_pub.pem */,
-				022321CD19A7042D00048626 /* mac2imgur.psd */,
 				022321D019A7066000048626 /* appcast.xml */,
 			);
 			path = Resources;
@@ -140,7 +138,6 @@
 		02FDC2CD194DF89D00E8CBC9 /* mac2imgur */ = {
 			isa = PBXGroup;
 			children = (
-				02FDC2D2194DF89D00E8CBC9 /* AppDelegate.swift */,
 				02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */,
 				02FDC309194E0C1800E8CBC9 /* StatusIcon.png */,
 				02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */,
@@ -150,8 +147,9 @@
 				07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */,
 				07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */,
 				07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */,
-				07F6F73A19ABE6A600BDEB11 /* UploadController.swift */,
+				07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */,
 				02B00A7419CE388800F924D6 /* PreferencesManager.swift */,
+				0220B2AA19F4104A0064E9FE /* AppDelegate.swift */,
 			);
 			path = mac2imgur;
 			sourceTree = "<group>";
@@ -309,10 +307,10 @@
 			files = (
 				07E0DDAA19AABB1300D8ACC6 /* PreferencesWindowController.swift in Sources */,
 				02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */,
-				07F6F73B19ABE6A600BDEB11 /* UploadController.swift in Sources */,
+				07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */,
 				07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */,
-				02FDC2D3194DF89D00E8CBC9 /* AppDelegate.swift in Sources */,
 				02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */,
+				0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */,
 				022321C119A6F57E00048626 /* README.md in Sources */,
 				02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */,
 			);
@@ -441,6 +439,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 			};
 			name = Debug;
 		};
@@ -460,6 +459,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 			};
 			name = Release;
 		};

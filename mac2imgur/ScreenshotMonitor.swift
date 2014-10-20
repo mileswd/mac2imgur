@@ -19,10 +19,10 @@ import Foundation
 class ScreenshotMonitor {
     
     var query: NSMetadataQuery
-    var callback: (pathToImage: String) -> ()
+    var delegate: ScreenshotMonitorDelegate
     
-    init(callback: (pathToImage: String) -> ()) {
-        self.callback = callback
+    init(delegate: ScreenshotMonitorDelegate) {
+        self.delegate = delegate
         
         query = NSMetadataQuery()
         
@@ -41,15 +41,19 @@ class ScreenshotMonitor {
             if let itemsAdded = info["kMDQueryUpdateAddedItems"] as? NSArray {
                 for item in itemsAdded {
                     let metadataItem = item as NSMetadataItem
-                        
+                    
                     // Get the path to the screenshot
                     let screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
-                        
+                    
                     println("Screenshot file event detected @ \(screenshotPath)")
                     
-                    callback(pathToImage: screenshotPath)
+                    delegate.screenshotDetected(screenshotPath)
                 }
             }
         }
     }
+}
+
+protocol ScreenshotMonitorDelegate {
+    func screenshotDetected(pathToImage: String)
 }

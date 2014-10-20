@@ -16,87 +16,111 @@
 
 import Cocoa
 
-class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, ScreenshotMonitorDelegate, UploadControllerDelegate {
     
-    var statusItem: NSStatusItem?
-    var monitor: ScreenshotMonitor?
-    var preferencesController: PreferencesWindowController?
-    var prefs: PreferencesManager?
-    var imgurSession: ImgurClient?
+    var prefs: PreferencesManager!
+    var imgurClient: ImgurClient!
+    var monitor: ScreenshotMonitor!
+    var statusItem: NSStatusItem!
     var lastLink: String = ""
+    var preferencesController: PreferencesWindowController?
+    
+    // Delegate methods
     
     func applicationDidFinishLaunching(aNotification: NSNotification?) {
-        
-        println("Launching mac2imgur")
+        NSApp.activateIgnoringOtherApps(true)
         
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
         prefs = PreferencesManager()
-        imgurSession = ImgurClient(preferences: prefs!)
+        imgurClient = ImgurClient(preferences: prefs)
         
-        // Setup screenshot monitor & upload function
-        monitor = ScreenshotMonitor(callback: { (pathToImage) -> () in
-            let upload = UploadController(pathToImage: pathToImage, client: self.imgurSession!, callback: { (successful, link, pathToImage) -> () in
-                if successful {
-                    self.lastLink = link
-                    self.copyLinkToClipboard()
-                    self.displayNotification("Screenshot uploaded successfully!", informativeText: self.lastLink)
-                    
-                    if self.prefs!.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false){
-                        self.deleteScreenshot(pathToImage)
-                    }
-                } else {
-                    self.displayNotification("Screenshot upload failed...", informativeText: "")
-                }
-            })
-            upload.attemptUpload()
-        })
+        // Start monitoring for screenshots
+        monitor = ScreenshotMonitor(delegate: self)
         
         // Create menu
         let menu = NSMenu()
-        menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLinkToClipboard"), keyEquivalent: "")
+        menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLastLinkToClipboard"), keyEquivalent: "")
         menu.addItem(NSMenuItem.separatorItem())
         menu.addItemWithTitle("Preferences...", action: NSSelectorFromString("showPreferences"), keyEquivalent: "")
         menu.addItem(NSMenuItem.separatorItem())
         menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
         menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
         menu.autoenablesItems = false
-
+        
         // Create status bar icon
         let statusIcon = NSImage(named: "StatusIcon")!
         statusIcon.setTemplate(true)
         
-        // Add to status bar
+        // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
-        statusItem!.image = statusIcon
-        statusItem!.highlightMode = true
-        statusItem!.menu = menu
+        statusItem.menu = menu
+        statusItem.button?.image = statusIcon
+        statusItem.button?.toolTip = "mac2imgur"
+    }
+    
+    func applicationWillTerminate(aNotification: NSNotification?) {
+        monitor.query.stopQuery()
+        NSStatusBar.systemStatusBar().removeStatusItem(statusItem)
+    }
+    
+    func screenshotDetected(pathToImage: String) {
+        let upload = ImgurUpload(pathToImage: pathToImage, client: imgurClient, delegate: self)
+        upload.attemptUpload()
+    }
+    
+    func screenshotUploadAttemptCompleted(successful: Bool, link: String, pathToImage: String) {
+        if successful {
+            lastLink = link
+            copyToClipboard(lastLink)
+            displayNotification("Screenshot uploaded successfully!", informativeText: self.lastLink)
+            
+            if prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false){
+                println("Deleting screenshot @ \(pathToImage)")
+                deleteFile(pathToImage)
+            }
+        } else {
+            displayNotification("Screenshot upload failed...", informativeText: "")
+        }
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification!) {
         if notification.informativeText != "" {
-            NSWorkspace.sharedWorkspace().openURL(NSURL(string: notification.informativeText!)!)
+            openURL(notification.informativeText!)
         }
     }
     
-    func applicationWillTerminate(aNotification: NSNotification?) {
-        monitor?.query.stopQuery()
-        NSStatusBar.systemStatusBar().removeStatusItem(statusItem!)
+    // Selector methods
+    
+    func copyLastLinkToClipboard() {
+        copyToClipboard(lastLink)
     }
     
-    func copyLinkToClipboard() {
+    func showPreferences() {
+        preferencesController = PreferencesWindowController(windowNibName: "PreferencesWindowController")
+        preferencesController!.imgurClient = imgurClient
+        preferencesController!.prefs = prefs
+        preferencesController!.showWindow(self)
+    }
+    
+    // Utility methods
+    
+    func copyToClipboard(string: String) {
         let pasteBoard = NSPasteboard.generalPasteboard()
         pasteBoard.clearContents()
-        pasteBoard.setString(lastLink, forType: NSStringPboardType)
+        pasteBoard.setString(string, forType: NSStringPboardType)
     }
     
-    func deleteScreenshot(pathToImage: String) {
-        println("Deleting screenshot @ \(pathToImage)")
+    func deleteFile(pathToFile: String) {
         var error: NSError?
-        NSFileManager.defaultManager().removeItemAtPath(pathToImage, error: &error)
+        NSFileManager.defaultManager().removeItemAtPath(pathToFile, error: &error)
         if error != nil {
             NSLog(error!.localizedDescription)
         }
+    }
+    
+    func openURL(url: String) {
+        NSWorkspace.sharedWorkspace().openURL(NSURL(string: url)!)
     }
     
     func displayNotification(title: String, informativeText: String) {
@@ -105,12 +129,4 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         notification.informativeText = informativeText
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
     }
-    
-    func showPreferences(){
-        preferencesController = PreferencesWindowController(windowNibName: "PreferencesWindowController")
-        preferencesController?.imgurSession = imgurSession
-        preferencesController?.prefs = prefs
-        preferencesController?.showWindow(self)
-    }
-    
 }
