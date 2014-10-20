@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6246" systemVersion="14A361c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6246"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindowController" customModule="mac2imgur" customModuleProvider="target">
@@ -11,6 +11,7 @@
                 <outlet property="pinCodeField" destination="39S-hc-U6b" id="oQV-qS-HEK"/>
                 <outlet property="saveButton" destination="pX9-ik-K1x" id="sWt-cf-MP3"/>
                 <outlet property="signInButton" destination="ZAf-d1-jN7" id="tsj-h7-dUL"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="648-S9-kYH"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -30,11 +31,10 @@
                         <tabViewItems>
                             <tabViewItem label="General" identifier="1" id="RSC-PG-McI">
                                 <view key="view" ambiguous="YES" id="ecH-Wg-cnj">
-                                    <rect key="frame" x="10" y="33" width="434" height="208"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7HP-T3-upD">
-                                            <rect key="frame" x="110" y="102" width="215" height="18"/>
+                                            <rect key="frame" x="110" y="-106" width="215" height="18"/>
                                             <buttonCell key="cell" type="check" title="Delete screenshot after upload" bezelStyle="regularSquare" imagePosition="left" inset="2" id="ntQ-kO-9c8">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -86,7 +86,7 @@
                     </tabView>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-76" y="110"/>
+            <point key="canvasLocation" x="191" y="147"/>
         </window>
     </objects>
     <resources>

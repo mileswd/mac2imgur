@@ -29,7 +29,7 @@ class ImgurClient {
     
     var loggedIn: Bool = false
     var lastTokenExpiry: NSDate?
-
+    
     var username: String?
     var accessToken: String?
     var refreshToken: String?
@@ -71,12 +71,12 @@ class ImgurClient {
                     if let refToken = json["refresh_token"] as? String {
                         self.loggedIn = true
                         self.setAccessToken(json["access_token"] as String)
-                    
+                        
                         let user = json["account_username"] as String
-                    
+                        
                         self.preferences.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
                         self.preferences.setString(PreferencesConstant.username.rawValue, value: user)
-                    
+                        
                         callback(username: user)
                         println("Success: \(refToken)")
                     }

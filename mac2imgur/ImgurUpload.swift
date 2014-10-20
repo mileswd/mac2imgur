@@ -16,17 +16,17 @@
 
 import Foundation
 
-class UploadController {
+class ImgurUpload {
     
     let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
     var pathToImage: String
     var client: ImgurClient
-    var callback: (successful: Bool, link: String, pathToImage: String) -> ()
+    var delegate: UploadControllerDelegate
     
-    init(pathToImage: String, client: ImgurClient, callback: (successful: Bool, link: String, pathToImage: String) -> ()) {
+    init(pathToImage: String, client: ImgurClient, delegate: UploadControllerDelegate) {
         self.pathToImage = pathToImage
         self.client = client
-        self.callback = callback
+        self.delegate = delegate
     }
     
     func attemptUpload() {
@@ -47,7 +47,7 @@ class UploadController {
     
     func upload(anonymous: Bool) {
         
-        println("Uploading image as authenticated user: \(!anonymous)")
+        println("Uploading image as " + (anonymous ? "anonymous" : "authenticated") + " user")
         
         let url: NSURL = NSURL(fileURLWithPath: pathToImage)!
         let imageData: NSData = NSData(contentsOfURL: url, options: nil, error: nil)!
@@ -96,21 +96,25 @@ class UploadController {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if error != nil {
                 NSLog(error!.localizedDescription);
-                self.callback(successful: false, link: "", pathToImage: self.pathToImage)
+                self.delegate.screenshotUploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
             } else {
                 if let responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary {
                     println("Received response: \(responseDict)")
                     if responseDict.valueForKey("status") != nil && responseDict.valueForKey("status")?.integerValue == 200 {
-                        self.callback(successful: true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
+                        self.delegate.screenshotUploadAttemptCompleted(true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
                     } else {
                         NSLog("An error occurred: %@", responseDict);
-                        self.callback(successful: false, link: "", pathToImage: self.pathToImage)
+                        self.delegate.screenshotUploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
                     }
                 } else {
                     NSLog("An error occurred - the response was invalid: %@", response)
-                    self.callback(successful: false, link: "", pathToImage: self.pathToImage)
+                    self.delegate.screenshotUploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
                 }
             }
         })
     }
+}
+
+protocol UploadControllerDelegate {
+    func screenshotUploadAttemptCompleted(successful: Bool, link: String, pathToImage: String)
 }
