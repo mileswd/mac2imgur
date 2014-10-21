@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220B2AA19F4104A0064E9FE /* AppDelegate.swift */; };
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
-		022321C119A6F57E00048626 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 022321C019A6F57E00048626 /* README.md */; };
 		022321CE19A7042D00048626 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 022321CC19A7042D00048626 /* dsa_pub.pem */; };
 		02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B00A7419CE388800F924D6 /* PreferencesManager.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
@@ -311,7 +310,6 @@
 				07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */,
 				02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */,
 				0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */,
-				022321C119A6F57E00048626 /* README.md in Sources */,
 				02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
