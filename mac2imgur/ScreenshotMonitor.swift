@@ -45,12 +45,21 @@ class ScreenshotMonitor {
                     // Get the path to the screenshot
                     let screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
                     
-                    println("Screenshot file event detected @ \(screenshotPath)")
-                    
-                    delegate.screenshotDetected(screenshotPath)
+                    // Ensure that the screenshot detected is from the right folder
+                    if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == getScreenshotDirectory().stringByStandardizingPath {
+                        println("Screenshot file event detected @ \(screenshotPath)")
+                        delegate.screenshotDetected(screenshotPath)
+                    }
                 }
             }
         }
+    }
+    
+    func getScreenshotDirectory() -> String {
+        if let dir = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
+            return dir
+        }
+        return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0] as String
     }
 }
 
