@@ -40,6 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         // Create menu
         let menu = NSMenu()
+        menu.addItemWithTitle("Select images...", action: NSSelectorFromString("selectImages"), keyEquivalent: "")
         menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLastLinkToClipboard"), keyEquivalent: "")
         menu.addItem(NSMenuItem.separatorItem())
         menu.addItemWithTitle("Preferences...", action: NSSelectorFromString("showPreferences"), keyEquivalent: "")
@@ -91,6 +92,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     // Selector methods
+    
+    func selectImages() {
+        var panel = NSOpenPanel()
+        panel.canChooseDirectories = false
+        let allowedTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
+        panel.allowedFileTypes = allowedTypes
+        panel.runModal()
+        for imageURL in panel.URLs {
+            if let path = (imageURL as NSURL).path? {
+                let upload = ImgurUpload(pathToImage: path, client: imgurClient, delegate: self)
+                upload.attemptUpload()
+            }
+        }
+    }
     
     func copyLastLinkToClipboard() {
         copyToClipboard(lastLink)
