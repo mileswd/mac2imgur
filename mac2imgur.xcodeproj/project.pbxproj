@@ -10,6 +10,8 @@
 		0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220B2AA19F4104A0064E9FE /* AppDelegate.swift */; };
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		022321CE19A7042D00048626 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 022321CC19A7042D00048626 /* dsa_pub.pem */; };
+		028DC13919F92E0000833F97 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; };
+		028DC13A19F92E0000833F97 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B00A7419CE388800F924D6 /* PreferencesManager.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
@@ -20,8 +22,6 @@
 		02FDC30D194E0C1900E8CBC9 /* StatusIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC309194E0C1800E8CBC9 /* StatusIcon.png */; };
 		02FDC310194E0C1900E8CBC9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */; };
 		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
-		07B42AE319AB75D500A6349D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; };
-		07B42AE419AB75D500A6349D /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07B42AE719AB75DA00A6349D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
 		07E0DDA819AABAA200D8ACC6 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */; };
 		07E0DDAA19AABB1300D8ACC6 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */; };
@@ -39,13 +39,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		07B42AE519AB75D500A6349D /* Embed Frameworks */ = {
+		028DC13B19F92E0000833F97 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				07B42AE419AB75D500A6349D /* Sparkle.framework in Embed Frameworks */,
+				028DC13A19F92E0000833F97 /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,7 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07B42AE719AB75DA00A6349D /* AppKit.framework in Frameworks */,
-				07B42AE319AB75D500A6349D /* Sparkle.framework in Frameworks */,
+				028DC13919F92E0000833F97 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,7 +191,7 @@
 				02FDC2C8194DF89D00E8CBC9 /* Frameworks */,
 				02236F3719D85668000CEAC3 /* Run Script */,
 				02FDC2C9194DF89D00E8CBC9 /* Resources */,
-				07B42AE519AB75D500A6349D /* Embed Frameworks */,
+				028DC13B19F92E0000833F97 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
