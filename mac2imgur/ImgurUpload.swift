@@ -20,34 +20,20 @@ class ImgurUpload {
     
     let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
     var pathToImage: String
+    var isScreenshot: Bool
     var client: ImgurClient
     var delegate: UploadControllerDelegate
     
-    init(pathToImage: String, client: ImgurClient, delegate: UploadControllerDelegate) {
+    init(pathToImage: String, isScreenshot: Bool, client: ImgurClient, delegate: UploadControllerDelegate) {
         self.pathToImage = pathToImage
+        self.isScreenshot = isScreenshot
         self.client = client
         self.delegate = delegate
     }
     
-    func attemptUpload() {
-        // Check if client is logged in, otherwise upload anonymously
-        if client.loggedIn {
-            // If necessary, request a new access token
-            if client.isAccessTokenValid() {
-                upload(false)
-            } else {
-                client.requestNewAccessToken({ () -> () in
-                    self.upload(false)
-                })
-            }
-        } else {
-            upload(true)
-        }
-    }
-    
-    func upload(anonymous: Bool) {
+    func attemptUpload(authenticated: Bool) {
         
-        println("Uploading image as " + (anonymous ? "anonymous" : "authenticated") + " user")
+        println("Uploading image as " + (authenticated ? "authenticated" : "anonymous") + " user")
         
         let url: NSURL = NSURL(fileURLWithPath: pathToImage)!
         let imageData: NSData = NSData(contentsOfURL: url, options: nil, error: nil)!
@@ -61,11 +47,11 @@ class ImgurUpload {
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
         // Add Client-ID authorization
-        if anonymous {
-            request.addValue("Client-ID \(client.imgurClientId)", forHTTPHeaderField: "Authorization")
-        } else {
+        if authenticated {
             println("Access token: \(client.accessToken!)")
             request.addValue("Client-Bearer \(client.accessToken!)", forHTTPHeaderField: "Authorization")
+        } else {
+            request.addValue("Client-ID \(client.imgurClientId)", forHTTPHeaderField: "Authorization")
         }
         
         // Add image data
@@ -96,19 +82,19 @@ class ImgurUpload {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if error != nil {
                 NSLog(error!.localizedDescription);
-                self.delegate.screenshotUploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
+                self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", pathToImage: self.pathToImage)
             } else {
                 if let responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary {
                     println("Received response: \(responseDict)")
                     if responseDict.valueForKey("status") != nil && responseDict.valueForKey("status")?.integerValue == 200 {
-                        self.delegate.screenshotUploadAttemptCompleted(true, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
+                        self.delegate.uploadAttemptCompleted(true, isScreenshot: self.isScreenshot, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
                     } else {
                         NSLog("An error occurred: %@", responseDict);
-                        self.delegate.screenshotUploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
+                        self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", pathToImage: self.pathToImage)
                     }
                 } else {
                     NSLog("An error occurred - the response was invalid: %@", response)
-                    self.delegate.screenshotUploadAttemptCompleted(false, link: "", pathToImage: self.pathToImage)
+                    self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", pathToImage: self.pathToImage)
                 }
             }
         })
@@ -116,5 +102,5 @@ class ImgurUpload {
 }
 
 protocol UploadControllerDelegate {
-    func screenshotUploadAttemptCompleted(successful: Bool, link: String, pathToImage: String)
+    func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, pathToImage: String)
 }
