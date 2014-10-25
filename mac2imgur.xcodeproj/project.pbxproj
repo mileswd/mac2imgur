@@ -12,6 +12,7 @@
 		022321CE19A7042D00048626 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 022321CC19A7042D00048626 /* dsa_pub.pem */; };
 		028DC13919F92E0000833F97 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; };
 		028DC13A19F92E0000833F97 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		028DC13D19FBBF6200833F97 /* ImgurUploadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */; };
 		02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B00A7419CE388800F924D6 /* PreferencesManager.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
@@ -59,6 +60,7 @@
 		022321C219A6FDCD00048626 /* version.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.txt; sourceTree = "<group>"; };
 		022321CC19A7042D00048626 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		022321D019A7066000048626 /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
+		028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUploadController.swift; sourceTree = "<group>"; };
 		02B00A7419CE388800F924D6 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotMonitor.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */,
 				07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */,
 				07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */,
+				028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */,
 				07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */,
 				02B00A7419CE388800F924D6 /* PreferencesManager.swift */,
 				0220B2AA19F4104A0064E9FE /* AppDelegate.swift */,
@@ -307,6 +310,7 @@
 				07E0DDAA19AABB1300D8ACC6 /* PreferencesWindowController.swift in Sources */,
 				02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */,
 				07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */,
+				028DC13D19FBBF6200833F97 /* ImgurUploadController.swift in Sources */,
 				07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */,
 				02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */,
 				0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */,

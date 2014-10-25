@@ -21,6 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var prefs: PreferencesManager!
     var imgurClient: ImgurClient!
     var monitor: ScreenshotMonitor!
+    var uploadController: ImgurUploadController!
     var statusItem: NSStatusItem!
     var lastLink: String = ""
     var preferencesController: PreferencesWindowController?
@@ -34,6 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         prefs = PreferencesManager()
         imgurClient = ImgurClient(preferences: prefs)
+        uploadController = ImgurUploadController(imgurClient: imgurClient)
         
         // Start monitoring for screenshots
         monitor = ScreenshotMonitor(delegate: self)
@@ -66,22 +68,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func screenshotDetected(pathToImage: String) {
-        let upload = ImgurUpload(pathToImage: pathToImage, client: imgurClient, delegate: self)
-        upload.attemptUpload()
+        let upload = ImgurUpload(pathToImage: pathToImage, isScreenshot: true, client: imgurClient, delegate: self)
+        uploadController.addToQueue(upload)
     }
     
-    func screenshotUploadAttemptCompleted(successful: Bool, link: String, pathToImage: String) {
+    func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, pathToImage: String) {
+        let type = isScreenshot ? "Screenshot" : "Image"
         if successful {
             lastLink = link
             copyToClipboard(lastLink)
-            displayNotification("Screenshot uploaded successfully!", informativeText: self.lastLink)
+            displayNotification("\(type) uploaded successfully!", informativeText: self.lastLink)
             
-            if prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false){
+            if isScreenshot && prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false) {
                 println("Deleting screenshot @ \(pathToImage)")
                 deleteFile(pathToImage)
             }
         } else {
-            displayNotification("Screenshot upload failed...", informativeText: "")
+            displayNotification("\(type) upload failed...", informativeText: "")
         }
     }
     
@@ -96,13 +99,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func selectImages() {
         var panel = NSOpenPanel()
         panel.canChooseDirectories = false
-        let allowedTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
-        panel.allowedFileTypes = allowedTypes
-        panel.runModal()
-        for imageURL in panel.URLs {
-            if let path = (imageURL as NSURL).path? {
-                let upload = ImgurUpload(pathToImage: path, client: imgurClient, delegate: self)
-                upload.attemptUpload()
+        panel.allowsMultipleSelection = true
+        panel.allowedFileTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
+        if panel.runModal() == NSOKButton {
+            for imageURL in panel.URLs {
+                if let path = (imageURL as NSURL).path? {
+                    let upload = ImgurUpload(pathToImage: path, isScreenshot: false, client: imgurClient, delegate: self)
+                    uploadController.addToQueue(upload)
+                }
             }
         }
     }
