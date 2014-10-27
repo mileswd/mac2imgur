@@ -72,12 +72,12 @@ class ImgurClient {
                         self.loggedIn = true
                         self.setAccessToken(json["access_token"] as String)
                         
-                        let user = json["account_username"] as String
+                        self.username = json["account_username"] as? String
                         
                         self.preferences.setString(PreferencesConstant.refreshToken.rawValue, value: refToken)
-                        self.preferences.setString(PreferencesConstant.username.rawValue, value: user)
+                        self.preferences.setString(PreferencesConstant.username.rawValue, value: self.username!)
                         
-                        callback(username: user)
+                        callback(username: self.username!)
                         println("Success: \(refToken)")
                     }
                 }

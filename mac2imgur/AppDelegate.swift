@@ -18,13 +18,17 @@ import Cocoa
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, ScreenshotMonitorDelegate, UploadControllerDelegate {
     
+    @IBOutlet weak var menu: NSMenu!
+    @IBOutlet weak var accountItem: NSMenuItem!
+    
     var prefs: PreferencesManager!
     var imgurClient: ImgurClient!
     var monitor: ScreenshotMonitor!
     var uploadController: ImgurUploadController!
+    var authController: ImgurAuthWindowController!
     var statusItem: NSStatusItem!
     var lastLink: String = ""
-    var preferencesController: PreferencesWindowController?
+    var paused = false
     
     // Delegate methods
     
@@ -37,39 +41,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         imgurClient = ImgurClient(preferences: prefs)
         uploadController = ImgurUploadController(imgurClient: imgurClient)
         
-        // Start monitoring for screenshots
-        monitor = ScreenshotMonitor(delegate: self)
-        
-        // Create menu
-        let menu = NSMenu()
-        menu.addItemWithTitle("Select images...", action: NSSelectorFromString("selectImages"), keyEquivalent: "")
-        menu.addItemWithTitle("Copy last link", action: NSSelectorFromString("copyLastLinkToClipboard"), keyEquivalent: "")
-        menu.addItem(NSMenuItem.separatorItem())
-        menu.addItemWithTitle("Preferences...", action: NSSelectorFromString("showPreferences"), keyEquivalent: "")
-        menu.addItem(NSMenuItem.separatorItem())
-        menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
-        menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
-        menu.autoenablesItems = false
-        
         // Create status bar icon
         let statusIcon = NSImage(named: "StatusIcon")!
         statusIcon.setTemplate(true)
+        
+        // Set account menu item to relevant title
+        updateAccountItemTitle()
+        
+        // Add about and quit items to menu
+        menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
+        menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
         
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
         statusItem.menu = menu
         statusItem.button?.image = statusIcon
         statusItem.button?.toolTip = "mac2imgur"
+        
+        // Start monitoring for screenshots
+        monitor = ScreenshotMonitor(delegate: self)
     }
     
     func applicationWillTerminate(aNotification: NSNotification?) {
         monitor.query.stopQuery()
-        NSStatusBar.systemStatusBar().removeStatusItem(statusItem)
     }
     
     func screenshotDetected(pathToImage: String) {
-        let upload = ImgurUpload(pathToImage: pathToImage, isScreenshot: true, client: imgurClient, delegate: self)
-        uploadController.addToQueue(upload)
+        if !paused {
+            let upload = ImgurUpload(pathToImage: pathToImage, isScreenshot: true, client: imgurClient, delegate: self)
+            uploadController.addToQueue(upload)
+        }
     }
     
     func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, pathToImage: String) {
@@ -96,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     // Selector methods
     
-    func selectImages() {
+    @IBAction func selectImages(sender: NSMenuItem) {
         var panel = NSOpenPanel()
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
@@ -111,15 +112,43 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
-    func copyLastLinkToClipboard() {
+    @IBAction func copyLastLink(sender: NSMenuItem) {
         copyToClipboard(lastLink)
     }
     
-    func showPreferences() {
-        preferencesController = PreferencesWindowController(windowNibName: "PreferencesWindowController")
-        preferencesController!.imgurClient = imgurClient
-        preferencesController!.prefs = prefs
-        preferencesController!.showWindow(self)
+    @IBAction func accountAction(sender: NSMenuItem) {
+        if imgurClient.loggedIn {
+            imgurClient.deleteCredentials()
+            updateAccountItemTitle()
+        } else {
+            authController = ImgurAuthWindowController(windowNibName: "ImgurAuthWindow")
+            authController.imgurClient = imgurClient
+            authController.prefs = prefs
+            authController.callback = {
+                self.updateAccountItemTitle()
+            }
+            authController.showWindow(self)
+        }
+    }
+    
+    @IBAction func deleteAfterUploadOption(sender: NSMenuItem) {
+        if sender.state == NSOnState {
+            prefs.setBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, value: false)
+            sender.state = NSOffState
+        } else {
+            prefs.setBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, value: true)
+            sender.state = NSOnState
+        }
+    }
+    
+    @IBAction func pauseDetectionOption(sender: NSMenuItem) {
+        if sender.state == NSOnState {
+            paused = false
+            sender.state = NSOffState
+        } else {
+            paused = true
+            sender.state = NSOnState
+        }
     }
     
     // Utility methods
@@ -147,5 +176,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         notification.title = title
         notification.informativeText = informativeText
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+    }
+    
+    func updateAccountItemTitle() {
+        accountItem.title = imgurClient.loggedIn ? "Sign out (\(imgurClient.username!))" : "Sign in"
     }
 }

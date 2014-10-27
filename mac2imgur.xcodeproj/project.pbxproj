@@ -24,8 +24,8 @@
 		02FDC310194E0C1900E8CBC9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */; };
 		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
 		07B42AE719AB75DA00A6349D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
-		07E0DDA819AABAA200D8ACC6 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */; };
-		07E0DDAA19AABB1300D8ACC6 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */; };
+		07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */; };
+		07E0DDAA19AABB1300D8ACC6 /* ImgurAuthWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */; };
 		07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */; };
 /* End PBXBuildFile section */
 
@@ -77,8 +77,8 @@
 		07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurClient.swift; sourceTree = "<group>"; };
 		07B42AE219AB75D500A6349D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		07B42AE619AB75DA00A6349D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesWindowController.xib; sourceTree = "<group>"; };
-		07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
+		07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImgurAuthWindow.xib; sourceTree = "<group>"; };
+		07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurAuthWindowController.swift; sourceTree = "<group>"; };
 		07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUpload.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,8 +145,8 @@
 				02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */,
 				02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */,
 				02FDC2CE194DF89D00E8CBC9 /* Supporting Files */,
-				07E0DDA719AABAA200D8ACC6 /* PreferencesWindowController.xib */,
-				07E0DDA919AABB1300D8ACC6 /* PreferencesWindowController.swift */,
+				07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */,
+				07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */,
 				07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */,
 				028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */,
 				07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */,
@@ -269,7 +269,7 @@
 				02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */,
 				02FDC310194E0C1900E8CBC9 /* StatusIcon@2x.png in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
-				07E0DDA819AABAA200D8ACC6 /* PreferencesWindowController.xib in Resources */,
+				07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */,
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
 				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
 				022321CE19A7042D00048626 /* dsa_pub.pem in Resources */,
@@ -307,7 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07E0DDAA19AABB1300D8ACC6 /* PreferencesWindowController.swift in Sources */,
+				07E0DDAA19AABB1300D8ACC6 /* ImgurAuthWindowController.swift in Sources */,
 				02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */,
 				07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */,
 				028DC13D19FBBF6200833F97 /* ImgurUploadController.swift in Sources */,
