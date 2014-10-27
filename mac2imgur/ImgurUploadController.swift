@@ -24,14 +24,14 @@ class ImgurUploadController {
     
     init(imgurClient: ImgurClient) {
         self.client = imgurClient
-        self.uploadQueue = [ImgurUpload]()
+        self.uploadQueue = []
         self.authenticationInProgress = false
     }
     
     func addToQueue(upload: ImgurUpload) {
         uploadQueue.append(upload)
         
-        if client.loggedIn {
+        if client.authenticated {
             // If necessary, request a new access token
             if client.isAccessTokenValid() {
                 processQueue(true)
@@ -57,5 +57,4 @@ class ImgurUploadController {
         // Clear queue
         uploadQueue.removeAll(keepCapacity: false)
     }
-    
 }

@@ -117,7 +117,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     @IBAction func accountAction(sender: NSMenuItem) {
-        if imgurClient.loggedIn {
+        if imgurClient.authenticated {
             imgurClient.deleteCredentials()
             updateAccountItemTitle()
         } else {
@@ -179,6 +179,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func updateAccountItemTitle() {
-        accountItem.title = imgurClient.loggedIn ? "Sign out (\(imgurClient.username!))" : "Sign in"
+        accountItem.title = imgurClient.authenticated ? "Sign out (\(imgurClient.username!))" : "Sign in"
     }
 }
