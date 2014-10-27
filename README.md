@@ -3,7 +3,7 @@ mac2imgur
 
 ###Installation Instructions###
 
-[Download a release](https://github.com/rauix/mac2imgur/releases) then simply drop the application into your 'Applications' folder.
+[Download a release](http://mac2imgur.rauix.net/latest) then simply drop the application into your 'Applications' folder.
 
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
