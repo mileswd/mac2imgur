@@ -36,15 +36,13 @@ class ImgurAuthWindowController: NSWindowController {
     }
     
     @IBAction func onSaveButtonClick(sender: AnyObject) {
-        
         if pinCodeField.stringValue != "" {
-            imgurClient.getTokenFromPin(pinCodeField.stringValue, callback: { username in
+            imgurClient.getTokenFromPin(pinCodeField.stringValue, callback: {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.callback()
-                    self.window?.close()
                 }
+                self.window?.close()
             })
         }
     }
-    
 }
