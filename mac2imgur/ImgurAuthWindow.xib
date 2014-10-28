@@ -17,33 +17,40 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-            <rect key="contentRect" x="548" y="401" width="300" height="100"/>
+            <rect key="contentRect" x="548" y="401" width="370" height="116"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="300" height="100"/>
+                <rect key="frame" x="0.0" y="0.0" width="370" height="116"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pX9-ik-K1x">
-                        <rect key="frame" x="180" y="20" width="86" height="19"/>
-                        <buttonCell key="cell" type="roundRect" title="Save" bezelStyle="roundedRect" image="NSLockUnlockedTemplate" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NNQ-6v-PMh">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="cellTitle"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="onSaveButtonClick:" target="-2" id="jte-RR-Spi"/>
-                        </connections>
-                    </button>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="39S-hc-U6b">
-                        <rect key="frame" x="35" y="19" width="137" height="22"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="2. Enter PIN code" bezelStyle="round" id="vbD-AX-tyQ">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txn-VD-lmd">
+                        <rect key="frame" x="18" y="66" width="75" height="29"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="71" id="n9F-Sy-pxi"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Step 1" id="EJk-cF-Fe7">
+                            <font key="font" size="24" name="HelveticaNeue-Thin"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZAf-d1-jN7">
-                        <rect key="frame" x="29" y="54" width="243" height="32"/>
-                        <buttonCell key="cell" type="push" title="1. Sign in" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HvP-6w-OYv">
+                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="s5R-9l-6yl">
+                        <rect key="frame" x="12" y="55" width="346" height="5"/>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="system"/>
+                    </box>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-FW-99r">
+                        <rect key="frame" x="18" y="20" width="75" height="29"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Step 2" id="dSw-1f-YQy">
+                            <font key="font" size="24" name="HelveticaNeue-Thin"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZAf-d1-jN7">
+                        <rect key="frame" x="113" y="63" width="243" height="32"/>
+                        <buttonCell key="cell" type="push" title="Sign in" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HvP-6w-OYv">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -51,9 +58,48 @@
                             <action selector="signInButtonClick:" target="-2" id="exg-5q-bY1"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pX9-ik-K1x">
+                        <rect key="frame" x="264" y="24" width="86" height="19"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="86" id="9pj-Rs-l2P"/>
+                        </constraints>
+                        <buttonCell key="cell" type="roundRect" title="Save" bezelStyle="roundedRect" image="NSLockUnlockedTemplate" imagePosition="right" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NNQ-6v-PMh">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="cellTitle"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="onSaveButtonClick:" target="-2" id="jte-RR-Spi"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="39S-hc-U6b">
+                        <rect key="frame" x="119" y="23" width="137" height="22"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Enter PIN code" bezelStyle="round" id="vbD-AX-tyQ">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="QTq-FW-99r" firstAttribute="top" secondItem="s5R-9l-6yl" secondAttribute="bottom" constant="8" symbolic="YES" id="0NE-1a-s1i"/>
+                    <constraint firstItem="ZAf-d1-jN7" firstAttribute="centerY" secondItem="txn-VD-lmd" secondAttribute="centerY" id="5YO-Jf-BQm"/>
+                    <constraint firstItem="pX9-ik-K1x" firstAttribute="leading" secondItem="39S-hc-U6b" secondAttribute="trailing" constant="8" symbolic="YES" id="AYm-In-TyO"/>
+                    <constraint firstItem="ZAf-d1-jN7" firstAttribute="leading" secondItem="39S-hc-U6b" secondAttribute="leading" id="EeS-KW-0t6"/>
+                    <constraint firstItem="txn-VD-lmd" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="ODo-tJ-NGu"/>
+                    <constraint firstItem="QTq-FW-99r" firstAttribute="trailing" secondItem="txn-VD-lmd" secondAttribute="trailing" id="PRd-yN-7TW"/>
+                    <constraint firstItem="pX9-ik-K1x" firstAttribute="trailing" secondItem="ZAf-d1-jN7" secondAttribute="trailing" id="Pow-2n-TAX"/>
+                    <constraint firstItem="s5R-9l-6yl" firstAttribute="top" secondItem="txn-VD-lmd" secondAttribute="bottom" constant="8" symbolic="YES" id="RD3-bZ-l7y"/>
+                    <constraint firstAttribute="trailing" secondItem="s5R-9l-6yl" secondAttribute="trailing" constant="12" id="RHN-3k-J5P"/>
+                    <constraint firstItem="QTq-FW-99r" firstAttribute="centerY" secondItem="39S-hc-U6b" secondAttribute="centerY" id="d9l-tx-dgc"/>
+                    <constraint firstItem="pX9-ik-K1x" firstAttribute="centerY" secondItem="39S-hc-U6b" secondAttribute="centerY" id="eSE-Yo-IvO"/>
+                    <constraint firstAttribute="trailing" secondItem="ZAf-d1-jN7" secondAttribute="trailing" constant="20" symbolic="YES" id="gEy-oB-D5c"/>
+                    <constraint firstItem="ZAf-d1-jN7" firstAttribute="leading" secondItem="txn-VD-lmd" secondAttribute="trailing" constant="28" id="hcq-Gz-Tpw"/>
+                    <constraint firstItem="QTq-FW-99r" firstAttribute="leading" secondItem="txn-VD-lmd" secondAttribute="leading" id="kK8-Mb-0ng"/>
+                    <constraint firstAttribute="bottom" secondItem="QTq-FW-99r" secondAttribute="bottom" constant="20" symbolic="YES" id="pwe-hx-H6k"/>
+                    <constraint firstItem="s5R-9l-6yl" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="12" id="rZl-Qv-IZW"/>
+                </constraints>
             </view>
-            <point key="canvasLocation" x="101" y="112"/>
+            <point key="canvasLocation" x="-27" y="38"/>
         </window>
     </objects>
     <resources>

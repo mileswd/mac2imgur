@@ -39,9 +39,11 @@ class ImgurAuthWindowController: NSWindowController {
         if pinCodeField.stringValue != "" {
             imgurClient.getTokenFromPin(pinCodeField.stringValue, callback: {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.callback()
+                    if let authWindow = self.window {
+                        authWindow.close()
+                    }
                 }
-                self.window?.close()
+                self.callback()
             })
         }
     }
