@@ -125,6 +125,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             authController.imgurClient = imgurClient
             authController.prefs = prefs
             authController.callback = {
+                self.displayNotification("Signed in as \(self.imgurClient.username!)", informativeText: "")
                 self.updateAccountItemTitle()
             }
             authController.showWindow(self)
