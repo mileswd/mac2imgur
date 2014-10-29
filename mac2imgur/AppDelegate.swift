@@ -150,6 +150,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             paused = true
             sender.state = NSOnState
         }
+        statusItem.button?.appearsDisabled = paused
     }
     
     // Utility methods
