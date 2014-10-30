@@ -20,9 +20,11 @@ class ScreenshotMonitor {
     
     var query: NSMetadataQuery
     var delegate: ScreenshotMonitorDelegate
+    var blacklist: [String]
     
     init(delegate: ScreenshotMonitorDelegate) {
         self.delegate = delegate
+        self.blacklist = []
         
         query = NSMetadataQuery()
         
@@ -44,11 +46,13 @@ class ScreenshotMonitor {
                     
                     // Get the path to the screenshot
                     let screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
+                    let screenshotName: String = screenshotPath.lastPathComponent.stringByDeletingPathExtension
                     
-                    // Ensure that the screenshot detected is from the right folder
-                    if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == getScreenshotDirectory().stringByStandardizingPath {
+                    // Ensure that the screenshot detected is from the right folder and isn't blacklisted
+                    if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == getScreenshotDirectory().stringByStandardizingPath && !contains(blacklist, screenshotName) {
                         println("Screenshot file event detected @ \(screenshotPath)")
                         delegate.screenshotDetected(screenshotPath)
+                        blacklist.append(screenshotName)
                     }
                 }
             }
