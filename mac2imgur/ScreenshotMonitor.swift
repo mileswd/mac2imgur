@@ -61,7 +61,10 @@ class ScreenshotMonitor {
     
     func getScreenshotDirectory() -> String {
         if let dir = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
-            return dir
+            var isDir: ObjCBool = false
+            if NSFileManager.defaultManager().fileExistsAtPath(dir, isDirectory: &isDir) {
+                return dir
+            }
         }
         return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0] as String
     }
