@@ -57,6 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         statusItem.menu = menu
         statusItem.button?.image = statusIcon
         statusItem.button?.toolTip = "mac2imgur"
+        updateStatusIcon(false)
         
         // Start monitoring for screenshots
         monitor = ScreenshotMonitor(delegate: self)
@@ -68,12 +69,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func screenshotDetected(pathToImage: String) {
         if !paused {
+            updateStatusIcon(true)
             let upload = ImgurUpload(pathToImage: pathToImage, isScreenshot: true, client: imgurClient, delegate: self)
             uploadController.addToQueue(upload)
         }
     }
     
     func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, pathToImage: String) {
+        updateStatusIcon(false)
         let type = isScreenshot ? "Screenshot" : "Image"
         if successful {
             lastLink = link
@@ -107,6 +110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 if let path = (imageURL as NSURL).path? {
                     let upload = ImgurUpload(pathToImage: path, isScreenshot: false, client: imgurClient, delegate: self)
                     uploadController.addToQueue(upload)
+                    updateStatusIcon(true)
                 }
             }
         }
@@ -150,7 +154,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             paused = true
             sender.state = NSOnState
         }
-        statusItem.button?.appearsDisabled = paused
     }
     
     // Utility methods
@@ -178,6 +181,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         notification.title = title
         notification.informativeText = informativeText
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+    }
+    
+    func updateStatusIcon(isActive: Bool) {
+        statusItem.button?.appearsDisabled = !isActive
     }
     
     func updateAccountItemTitle() {
