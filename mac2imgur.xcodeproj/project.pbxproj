@@ -10,8 +10,9 @@
 		0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220B2AA19F4104A0064E9FE /* AppDelegate.swift */; };
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		022321CE19A7042D00048626 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 022321CC19A7042D00048626 /* dsa_pub.pem */; };
-		028DC13919F92E0000833F97 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; };
-		028DC13A19F92E0000833F97 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE219AB75D500A6349D /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
+		024130DE1A05175E0062E9D3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; };
+		024130DF1A0517640062E9D3 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		028DC13D19FBBF6200833F97 /* ImgurUploadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */; };
 		02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B00A7419CE388800F924D6 /* PreferencesManager.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
@@ -19,25 +20,13 @@
 		02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2D0194DF89D00E8CBC9 /* main.swift */; };
 		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
 		02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
-		02FDC2E4194DF89D00E8CBC9 /* mac2imgurTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */; };
 		02FDC30D194E0C1900E8CBC9 /* StatusIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC309194E0C1800E8CBC9 /* StatusIcon.png */; };
 		02FDC310194E0C1900E8CBC9 /* StatusIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */; };
 		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
-		07B42AE719AB75DA00A6349D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
 		07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */; };
 		07E0DDAA19AABB1300D8ACC6 /* ImgurAuthWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */; };
 		07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		02FDC2DE194DF89D00E8CBC9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02FDC2C3194DF89D00E8CBC9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 02FDC2CA194DF89D00E8CBC9;
-			remoteInfo = mac2imgur;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		028DC13B19F92E0000833F97 /* Embed Frameworks */ = {
@@ -46,7 +35,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				028DC13A19F92E0000833F97 /* Sparkle.framework in Embed Frameworks */,
+				024130DF1A0517640062E9D3 /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,6 +49,7 @@
 		022321C219A6FDCD00048626 /* version.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.txt; sourceTree = "<group>"; };
 		022321CC19A7042D00048626 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		022321D019A7066000048626 /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
+		024130DD1A05175E0062E9D3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUploadController.swift; sourceTree = "<group>"; };
 		02B00A7419CE388800F924D6 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -69,13 +59,9 @@
 		02FDC2D0194DF89D00E8CBC9 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		02FDC2D7194DF89D00E8CBC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = mac2imgurTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		02FDC2E2194DF89D00E8CBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mac2imgurTests.swift; sourceTree = "<group>"; };
 		02FDC309194E0C1800E8CBC9 /* StatusIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StatusIcon.png; sourceTree = "<group>"; };
 		02FDC30C194E0C1800E8CBC9 /* StatusIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "StatusIcon@2x.png"; sourceTree = "<group>"; };
 		07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurClient.swift; sourceTree = "<group>"; };
-		07B42AE219AB75D500A6349D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		07B42AE619AB75DA00A6349D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImgurAuthWindow.xib; sourceTree = "<group>"; };
 		07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurAuthWindowController.swift; sourceTree = "<group>"; };
@@ -87,15 +73,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07B42AE719AB75DA00A6349D /* AppKit.framework in Frameworks */,
-				028DC13919F92E0000833F97 /* Sparkle.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		02FDC2DA194DF89D00E8CBC9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */,
+				024130DE1A05175E0062E9D3 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,17 +90,24 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		024130D71A0515440062E9D3 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				024130DD1A05175E0062E9D3 /* Sparkle.framework */,
+				07B42AE619AB75DA00A6349D /* AppKit.framework */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
 		02FDC2C2194DF89D00E8CBC9 = {
 			isa = PBXGroup;
 			children = (
-				07B42AE619AB75DA00A6349D /* AppKit.framework */,
-				07B42AE219AB75D500A6349D /* Sparkle.framework */,
+				024130D71A0515440062E9D3 /* Dependencies */,
 				022321CB19A7042D00048626 /* Resources */,
 				022321C219A6FDCD00048626 /* version.txt */,
 				022321C019A6F57E00048626 /* README.md */,
 				022321BE19A6959500048626 /* LICENSE */,
 				02FDC2CD194DF89D00E8CBC9 /* mac2imgur */,
-				02FDC2E0194DF89D00E8CBC9 /* mac2imgurTests */,
 				02FDC2CC194DF89D00E8CBC9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,7 +117,6 @@
 			isa = PBXGroup;
 			children = (
 				02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */,
-				02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,23 +151,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		02FDC2E0194DF89D00E8CBC9 /* mac2imgurTests */ = {
-			isa = PBXGroup;
-			children = (
-				02FDC2E3194DF89D00E8CBC9 /* mac2imgurTests.swift */,
-				02FDC2E1194DF89D00E8CBC9 /* Supporting Files */,
-			);
-			path = mac2imgurTests;
-			sourceTree = "<group>";
-		};
-		02FDC2E1194DF89D00E8CBC9 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				02FDC2E2194DF89D00E8CBC9 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -205,24 +173,6 @@
 			productReference = 02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */;
 			productType = "com.apple.product-type.application";
 		};
-		02FDC2DC194DF89D00E8CBC9 /* mac2imgurTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 02FDC2EA194DF89D00E8CBC9 /* Build configuration list for PBXNativeTarget "mac2imgurTests" */;
-			buildPhases = (
-				02FDC2D9194DF89D00E8CBC9 /* Sources */,
-				02FDC2DA194DF89D00E8CBC9 /* Frameworks */,
-				02FDC2DB194DF89D00E8CBC9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				02FDC2DF194DF89D00E8CBC9 /* PBXTargetDependency */,
-			);
-			name = mac2imgurTests;
-			productName = mac2imgurTests;
-			productReference = 02FDC2DD194DF89D00E8CBC9 /* mac2imgurTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -234,10 +184,6 @@
 				TargetAttributes = {
 					02FDC2CA194DF89D00E8CBC9 = {
 						CreatedOnToolsVersion = 6.0;
-					};
-					02FDC2DC194DF89D00E8CBC9 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 02FDC2CA194DF89D00E8CBC9;
 					};
 				};
 			};
@@ -255,7 +201,6 @@
 			projectRoot = "";
 			targets = (
 				02FDC2CA194DF89D00E8CBC9 /* mac2imgur */,
-				02FDC2DC194DF89D00E8CBC9 /* mac2imgurTests */,
 			);
 		};
 /* End PBXProject section */
@@ -273,13 +218,6 @@
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
 				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
 				022321CE19A7042D00048626 /* dsa_pub.pem in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		02FDC2DB194DF89D00E8CBC9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,23 +256,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		02FDC2D9194DF89D00E8CBC9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				02FDC2E4194DF89D00E8CBC9 /* mac2imgurTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		02FDC2DF194DF89D00E8CBC9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 02FDC2CA194DF89D00E8CBC9 /* mac2imgur */;
-			targetProxy = 02FDC2DE194DF89D00E8CBC9 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */ = {
@@ -435,6 +357,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/mac2imgur",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Dependencies",
 				);
 				INFOPLIST_FILE = mac2imgur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -455,6 +378,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/mac2imgur",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Dependencies",
 				);
 				INFOPLIST_FILE = mac2imgur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -462,46 +386,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
-			};
-			name = Release;
-		};
-		02FDC2EB194DF89D00E8CBC9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mac2imgur.app/Contents/MacOS/mac2imgur";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = mac2imgurTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				METAL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-			};
-			name = Debug;
-		};
-		02FDC2EC194DF89D00E8CBC9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/mac2imgur.app/Contents/MacOS/mac2imgur";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = mac2imgurTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				METAL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;
 		};
@@ -522,15 +406,6 @@
 			buildConfigurations = (
 				02FDC2E8194DF89D00E8CBC9 /* Debug */,
 				02FDC2E9194DF89D00E8CBC9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		02FDC2EA194DF89D00E8CBC9 /* Build configuration list for PBXNativeTarget "mac2imgurTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				02FDC2EB194DF89D00E8CBC9 /* Debug */,
-				02FDC2EC194DF89D00E8CBC9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
