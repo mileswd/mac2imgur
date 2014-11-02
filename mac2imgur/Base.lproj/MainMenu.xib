@@ -61,6 +61,18 @@
                     </menu>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="e83-b6-pER"/>
+                <menuItem title="About mac2imgur" id="7QY-eq-IdC">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="about:" target="Voe-Tx-rLC" id="GSv-ss-7kU"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Quit" id="nTb-az-bhw">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="quit:" target="Voe-Tx-rLC" id="hLk-un-qoP"/>
+                    </connections>
+                </menuItem>
             </items>
             <point key="canvasLocation" x="382.5" y="359.5"/>
         </menu>
