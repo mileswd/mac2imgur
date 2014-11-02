@@ -27,35 +27,32 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var uploadController: ImgurUploadController!
     var authController: ImgurAuthWindowController!
     var statusItem: NSStatusItem!
+    var activeIcon: NSImage!
+    var inactiveIcon: NSImage!
     var lastLink: String = ""
     var paused = false
     
     // Delegate methods
     
     func applicationDidFinishLaunching(aNotification: NSNotification?) {
-        NSApp.activateIgnoringOtherApps(true)
-        
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
         prefs = PreferencesManager()
         imgurClient = ImgurClient(preferences: prefs)
         uploadController = ImgurUploadController(imgurClient: imgurClient)
         
-        // Create status bar icon
-        let statusIcon = NSImage(named: "StatusIcon")!
-        statusIcon.setTemplate(true)
+        // Create status bar icons
+        inactiveIcon = NSImage(named: "InactiveIcon")!
+        inactiveIcon.setTemplate(true)
+        activeIcon = NSImage(named: "ActiveIcon")!
+        activeIcon.setTemplate(true)
         
         // Set account menu item to relevant title
         updateAccountItemTitle()
         
-        // Add about and quit items to menu
-        menu.addItemWithTitle("About mac2imgur", action: NSSelectorFromString("orderFrontStandardAboutPanel:"), keyEquivalent: "")
-        menu.addItemWithTitle("Quit", action: NSSelectorFromString("terminate:"), keyEquivalent: "")
-        
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
         statusItem.menu = menu
-        statusItem.button?.image = statusIcon
         statusItem.button?.toolTip = "mac2imgur"
         updateStatusIcon(false)
         
@@ -64,6 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func applicationWillTerminate(aNotification: NSNotification?) {
+        NSStatusBar.systemStatusBar().removeStatusItem(statusItem)
         monitor.query.stopQuery()
     }
     
@@ -132,6 +130,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 self.displayNotification("Signed in as \(self.imgurClient.username!)", informativeText: "")
                 self.updateAccountItemTitle()
             }
+            NSApplication.sharedApplication().activateIgnoringOtherApps(true)
             authController.showWindow(self)
         }
     }
@@ -154,6 +153,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             paused = true
             sender.state = NSOnState
         }
+    }
+    
+    @IBAction func about(sender: NSMenuItem) {
+        NSApplication.sharedApplication().orderFrontStandardAboutPanel(sender)
+        NSApplication.sharedApplication().activateIgnoringOtherApps(true)
+    }
+    
+    @IBAction func quit(sender: NSMenuItem) {
+        NSApplication.sharedApplication().terminate(sender)
     }
     
     // Utility methods
@@ -184,7 +192,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func updateStatusIcon(isActive: Bool) {
-        statusItem.button?.appearsDisabled = !isActive
+        statusItem.button?.image = isActive ? activeIcon : inactiveIcon
     }
     
     func updateAccountItemTitle() {

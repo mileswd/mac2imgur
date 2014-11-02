@@ -25,11 +25,6 @@ class ImgurAuthWindowController: NSWindowController {
     @IBOutlet weak var signInButton: NSButton!
     @IBOutlet weak var pinCodeField: NSTextField!
     @IBOutlet weak var saveButton: NSButton!
-    
-    override func showWindow(sender: AnyObject!) {
-        super.showWindow(sender)
-        window?.makeKeyAndOrderFront(self)
-    }
 
     @IBAction func signInButtonClick(sender: AnyObject) {
         imgurClient.openBrowserForAuth()
