@@ -20,20 +20,6 @@
                ReferencedContainer = "container:mac2imgur.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "02FDC2DC194DF89D00E8CBC9"
-               BuildableName = "mac2imgurTests.xctest"
-               BlueprintName = "mac2imgurTests"
-               ReferencedContainer = "container:mac2imgur.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
