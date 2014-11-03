@@ -1,4 +1,3 @@
 language: objective-c
-xcode_project: mac2imgur.xcodeproj
 xcode_scheme: mac2imgur
 osx_image: xcode61
