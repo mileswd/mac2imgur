@@ -13,6 +13,7 @@
 		024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
 		024130DE1A05175E0062E9D3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; };
 		024130DF1A0517640062E9D3 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		026E43D81A07E87300A08FC3 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 026E43D71A07E87300A08FC3 /* .travis.yml */; };
 		028DC13D19FBBF6200833F97 /* ImgurUploadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */; };
 		02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B00A7419CE388800F924D6 /* PreferencesManager.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
@@ -52,6 +53,7 @@
 		022321CC19A7042D00048626 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		022321D019A7066000048626 /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
 		024130DD1A05175E0062E9D3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		026E43D71A07E87300A08FC3 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUploadController.swift; sourceTree = "<group>"; };
 		02B00A7419CE388800F924D6 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		02FDC2C2194DF89D00E8CBC9 = {
 			isa = PBXGroup;
 			children = (
+				026E43D71A07E87300A08FC3 /* .travis.yml */,
 				024130D71A0515440062E9D3 /* Dependencies */,
 				022321CB19A7042D00048626 /* Resources */,
 				022321C219A6FDCD00048626 /* version.txt */,
@@ -221,6 +224,7 @@
 				02FDC310194E0C1900E8CBC9 /* InactiveIcon@2x.png in Resources */,
 				02C2DBC31A0589E200CFFDEF /* ActiveIcon.png in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
+				026E43D81A07E87300A08FC3 /* .travis.yml in Resources */,
 				07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */,
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
 				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
