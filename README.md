@@ -7,7 +7,7 @@ mac2imgur
 
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
-![mac2imgur system tray icon](https://i.imgur.com/wDMODwz.png "mac2imgur system tray icon")
+![mac2imgur system tray icon](https://i.imgur.com/6mrLpxe.png "mac2imgur system tray icon")
 
 ---
 
