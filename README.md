@@ -23,7 +23,7 @@ After you've taken a screenshot, you'll receive a notification via the Mac OS X 
 
 If the upload was successful, then your screenshot has been uploaded and the link has been copied to your clipboard.
 
-![mac2imgur upload notification](https://i.imgur.com/z2Ki9cg.png "mac2imgur upload notification")
+![mac2imgur upload notification](https://i.imgur.com/GdAZQo3.png "mac2imgur upload notification")
 
 ---
 
