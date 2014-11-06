@@ -53,7 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
         statusItem.menu = menu
-        statusItem.button?.toolTip = "mac2imgur"
+        statusItem.toolTip = "mac2imgur"
         updateStatusIcon(false)
         
         // Start monitoring for screenshots
@@ -192,7 +192,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func updateStatusIcon(isActive: Bool) {
-        statusItem.button?.image = isActive ? activeIcon : inactiveIcon
+        statusItem.image = isActive ? activeIcon : inactiveIcon
     }
     
     func updateAccountItemTitle() {
