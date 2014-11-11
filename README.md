@@ -1,4 +1,4 @@
-mac2imgur
+mac2imgur [![Build Status](https://travis-ci.org/rauix/mac2imgur.svg?branch=master)](https://travis-ci.org/rauix/mac2imgur)
 ========
 
 ###Installation Instructions###
