@@ -131,4 +131,12 @@ class ImgurClient {
         preferences.deleteKey(PreferencesConstant.refreshToken.rawValue)
         authenticated = false
     }
+    
+    // little static function to convert the imgur link given by the api into an HTTPS link
+    class func updateLinkToSSL(original_link: String) -> String {
+        if (original_link.substringToIndex(advance(original_link.startIndex, 5)) == "http:") {
+            return "https" + original_link.substringFromIndex(advance(original_link.startIndex, 4))
+        }
+        return original_link
+    }
 }
