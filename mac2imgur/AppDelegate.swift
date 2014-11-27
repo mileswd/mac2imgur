@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         updateStatusIcon(false)
         let type = isScreenshot ? "Screenshot" : "Image"
         if successful {
-            lastLink = link
+            lastLink = ImgurClient.updateLinkToSSL(link)
             copyToClipboard(lastLink)
             displayNotification("\(type) uploaded successfully!", informativeText: self.lastLink)
             
