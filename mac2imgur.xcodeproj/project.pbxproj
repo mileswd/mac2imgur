@@ -248,7 +248,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "revisionNumber=$(git rev-list HEAD --count)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $revisionNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+			shellScript = "revision=$(git rev-list HEAD --count)\nif [ -n \"$revision\" ]; then\necho \"Bumping CFBundleVersion to $revision\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $revision\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
