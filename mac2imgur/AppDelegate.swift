@@ -100,6 +100,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     @IBAction func selectImages(sender: NSMenuItem) {
         var panel = NSOpenPanel()
+        panel.title = "Select Images"
+        panel.prompt = "Upload"
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
         panel.allowedFileTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
