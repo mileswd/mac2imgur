@@ -43,6 +43,6 @@ On the same note, pull requests to fix issues, add features or simply to improve
 
 ###Legal###
 
-mac2imgur is a nonprofit, open source application that is not affiliated with Imgur - however they sure do a fine job over there!
+mac2imgur is a nonprofit, open source application that is not affiliated with Imgur LLC- however they sure do a fine job over there!
 
 mac2imgur is released under a GPLv3 license. See [LICENSE](https://github.com/rauix/mac2imgur/blob/master/LICENSE) for more information.

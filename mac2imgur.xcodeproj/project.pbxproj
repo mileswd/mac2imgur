@@ -9,12 +9,11 @@
 /* Begin PBXBuildFile section */
 		0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220B2AA19F4104A0064E9FE /* AppDelegate.swift */; };
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
-		022321CE19A7042D00048626 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 022321CC19A7042D00048626 /* dsa_pub.pem */; };
 		024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
 		024130DE1A05175E0062E9D3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; };
 		024130DF1A0517640062E9D3 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		026E43D81A07E87300A08FC3 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 026E43D71A07E87300A08FC3 /* .travis.yml */; };
 		028DC13D19FBBF6200833F97 /* ImgurUploadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */; };
+		02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 02933D051A2A7CDA001FB628 /* dsa_pub.pem */; };
 		02B00A7519CE388800F924D6 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B00A7419CE388800F924D6 /* PreferencesManager.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02C2DBC31A0589E200CFFDEF /* ActiveIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 02C2DBC11A0589E200CFFDEF /* ActiveIcon.png */; };
@@ -22,7 +21,6 @@
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
 		02FDC2D1194DF89D00E8CBC9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FDC2D0194DF89D00E8CBC9 /* main.swift */; };
 		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
-		02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
 		02FDC30D194E0C1900E8CBC9 /* InactiveIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC309194E0C1800E8CBC9 /* InactiveIcon.png */; };
 		02FDC310194E0C1900E8CBC9 /* InactiveIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC30C194E0C1800E8CBC9 /* InactiveIcon@2x.png */; };
 		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
@@ -49,12 +47,10 @@
 		0220B2AA19F4104A0064E9FE /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		022321BE19A6959500048626 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		022321C019A6F57E00048626 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		022321C219A6FDCD00048626 /* version.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version.txt; sourceTree = "<group>"; };
-		022321CC19A7042D00048626 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
-		022321D019A7066000048626 /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
 		024130DD1A05175E0062E9D3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		026E43D71A07E87300A08FC3 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		028DC13C19FBBF6200833F97 /* ImgurUploadController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUploadController.swift; sourceTree = "<group>"; };
+		02933D051A2A7CDA001FB628 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		02B00A7419CE388800F924D6 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		02C2DBC11A0589E200CFFDEF /* ActiveIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ActiveIcon.png; sourceTree = "<group>"; };
@@ -87,15 +83,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		022321CB19A7042D00048626 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				022321CC19A7042D00048626 /* dsa_pub.pem */,
-				022321D019A7066000048626 /* appcast.xml */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		024130D71A0515440062E9D3 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,8 +97,6 @@
 			children = (
 				026E43D71A07E87300A08FC3 /* .travis.yml */,
 				024130D71A0515440062E9D3 /* Dependencies */,
-				022321CB19A7042D00048626 /* Resources */,
-				022321C219A6FDCD00048626 /* version.txt */,
 				022321C019A6F57E00048626 /* README.md */,
 				022321BE19A6959500048626 /* LICENSE */,
 				02FDC2CD194DF89D00E8CBC9 /* mac2imgur */,
@@ -153,6 +138,7 @@
 		02FDC2CE194DF89D00E8CBC9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				02933D051A2A7CDA001FB628 /* dsa_pub.pem */,
 				02FDC2CF194DF89D00E8CBC9 /* Info.plist */,
 				02FDC2D0194DF89D00E8CBC9 /* main.swift */,
 				02B00A7619CE38AF00F924D6 /* Credits.rtf */,
@@ -169,7 +155,7 @@
 			buildPhases = (
 				02FDC2C7194DF89D00E8CBC9 /* Sources */,
 				02FDC2C8194DF89D00E8CBC9 /* Frameworks */,
-				02236F3719D85668000CEAC3 /* Run Script */,
+				02236F3719D85668000CEAC3 /* Update CFBundleVersion */,
 				02FDC2C9194DF89D00E8CBC9 /* Resources */,
 				028DC13B19F92E0000833F97 /* Embed Frameworks */,
 			);
@@ -223,12 +209,10 @@
 				02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */,
 				02FDC310194E0C1900E8CBC9 /* InactiveIcon@2x.png in Resources */,
 				02C2DBC31A0589E200CFFDEF /* ActiveIcon.png in Resources */,
+				02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
-				026E43D81A07E87300A08FC3 /* .travis.yml in Resources */,
 				07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */,
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
-				02FDC2D8194DF89D00E8CBC9 /* MainMenu.xib in Resources */,
-				022321CE19A7042D00048626 /* dsa_pub.pem in Resources */,
 				02C2DBC41A0589E200CFFDEF /* ActiveIcon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -236,14 +220,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02236F3719D85668000CEAC3 /* Run Script */ = {
+		02236F3719D85668000CEAC3 /* Update CFBundleVersion */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Run Script";
+			name = "Update CFBundleVersion";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
