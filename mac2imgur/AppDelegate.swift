@@ -42,9 +42,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         uploadController = ImgurUploadController(imgurClient: imgurClient)
         
         // Create status bar icons
-        inactiveIcon = NSImage(named: "InactiveIcon")!
+        inactiveIcon = NSImage(named: "StatusInactive")!
         inactiveIcon.setTemplate(true)
-        activeIcon = NSImage(named: "ActiveIcon")!
+        activeIcon = NSImage(named: "StatusActive")!
         activeIcon.setTemplate(true)
         
         // Set account menu item to relevant title
