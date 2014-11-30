@@ -1,9 +1,9 @@
-mac2imgur [![Build Status](https://travis-ci.org/rauix/mac2imgur.svg?branch=master)](https://travis-ci.org/rauix/mac2imgur)
+mac2imgur [![Build Status](https://travis-ci.org/mileswd/mac2imgur.svg?branch=master)](https://travis-ci.org/mileswd/mac2imgur)
 ========
 
 ###Installation Instructions###
 
-[Download a release](http://mac2imgur.mileswd.com/latest) then simply drop the application into your 'Applications' folder.
+[Download a release](https://mac2imgur.mileswd.com/latest) then simply drop the application into your 'Applications' folder.
 
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
@@ -35,9 +35,9 @@ mac2imgur works by "listening" for new screenshots taken by the [built in screen
 
 ###Issues & Pull Requests###
 
-If something isn't working as expected or you have an idea for a new feature, feel free to [submit an issue](https://github.com/rauix/mac2imgur/issues).
+If something isn't working as expected or you have an idea for a new feature, feel free to [submit an issue](https://github.com/mileswd/mac2imgur/issues).
 
-On the same note, pull requests to fix issues, add features or simply to improve the codebase are greatly appreciated - [fork](https://github.com/rauix/mac2imgur/fork) away!
+On the same note, pull requests to fix issues, add features or simply to improve the codebase are greatly appreciated - [fork](https://github.com/mileswd/fork) away!
 
 ---
 
@@ -45,4 +45,4 @@ On the same note, pull requests to fix issues, add features or simply to improve
 
 mac2imgur is a nonprofit, open source application that is not affiliated with Imgur LLC- however they sure do a fine job over there!
 
-mac2imgur is released under a GPLv3 license. See [LICENSE](https://github.com/rauix/mac2imgur/blob/master/LICENSE) for more information.
+mac2imgur is released under a GPLv3 license. See [LICENSE](https://github.com/mileswd/mac2imgur/blob/master/LICENSE) for more information.
