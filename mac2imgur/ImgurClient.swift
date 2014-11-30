@@ -24,7 +24,7 @@ class ImgurClient {
     
     let imgurClientId = "5867856c9027819"
     let imgurClientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"
-    let projectUrl = "https://github.com/rauix/mac2imgur"
+    let projectUrl = "https://mac2imgur.mileswd.com"
     
     var preferences: PreferencesManager
     var session: NSURLSession
