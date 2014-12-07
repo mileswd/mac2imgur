@@ -1,3 +1,2 @@
 language: objective-c
-osx_image: xcode61
 script: xctool -project mac2imgur.xcodeproj -scheme mac2imgur build
