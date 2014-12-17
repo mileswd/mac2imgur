@@ -7,7 +7,7 @@ mac2imgur [![Build Status](https://travis-ci.org/mileswd/mac2imgur.svg?branch=ma
 
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
-![mac2imgur system tray icon](https://i.imgur.com/6mrLpxe.png "mac2imgur system tray icon")
+![mac2imgur system tray icon](https://i.imgur.com/ljnNsOK.png "mac2imgur system tray icon")
 
 ---
 
@@ -23,7 +23,7 @@ After you've taken a screenshot, you will receive a notification via the Mac OS 
 
 If the upload was successful, the link to the screenshot has been copied to your clipboard.
 
-![mac2imgur upload notification](https://i.imgur.com/GdAZQo3.png "mac2imgur upload notification")
+![mac2imgur upload notification](https://i.imgur.com/P2VIijt.png "mac2imgur upload notification")
 
 ---
 
@@ -43,6 +43,6 @@ On the same note, pull requests to fix issues, add features or simply to improve
 
 ###Legal###
 
-mac2imgur is a nonprofit, open source application that is not affiliated with Imgur LLC- however they sure do a fine job over there!
+mac2imgur is a nonprofit, open source application that is not affiliated with Imgur LLC - however they sure do a fine job over there!
 
-mac2imgur is released under a GPLv3 license. See [LICENSE](https://github.com/mileswd/mac2imgur/blob/master/LICENSE) for more information.
+This software is released under a GPLv3 license. See [LICENSE](https://github.com/mileswd/mac2imgur/blob/master/LICENSE) for more information.
