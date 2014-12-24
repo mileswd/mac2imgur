@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindowController" customModule="mac2imgur" customModuleProvider="target">
@@ -17,14 +17,14 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
-            <rect key="contentRect" x="548" y="401" width="370" height="116"/>
+            <rect key="contentRect" x="548" y="401" width="370" height="112"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="370" height="116"/>
+                <rect key="frame" x="0.0" y="0.0" width="370" height="112"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txn-VD-lmd">
-                        <rect key="frame" x="18" y="66" width="75" height="29"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="txn-VD-lmd">
+                        <rect key="frame" x="18" y="65" width="75" height="29"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="71" id="n9F-Sy-pxi"/>
                         </constraints>
@@ -34,22 +34,22 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="s5R-9l-6yl">
-                        <rect key="frame" x="12" y="55" width="346" height="5"/>
+                    <box verticalHuggingPriority="750" misplaced="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="s5R-9l-6yl">
+                        <rect key="frame" x="12" y="54" width="346" height="5"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-FW-99r">
-                        <rect key="frame" x="18" y="20" width="75" height="29"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QTq-FW-99r">
+                        <rect key="frame" x="18" y="19" width="75" height="29"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Step 2" id="dSw-1f-YQy">
                             <font key="font" size="24" name="HelveticaNeue-Thin"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZAf-d1-jN7">
-                        <rect key="frame" x="113" y="63" width="243" height="32"/>
+                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZAf-d1-jN7">
+                        <rect key="frame" x="113" y="62" width="243" height="32"/>
                         <buttonCell key="cell" type="push" title="Sign in" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HvP-6w-OYv">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -58,8 +58,8 @@
                             <action selector="signInButtonClick:" target="-2" id="exg-5q-bY1"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pX9-ik-K1x">
-                        <rect key="frame" x="264" y="24" width="86" height="19"/>
+                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pX9-ik-K1x">
+                        <rect key="frame" x="264" y="23" width="86" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="86" id="9pj-Rs-l2P"/>
                         </constraints>
@@ -71,8 +71,8 @@
                             <action selector="onSaveButtonClick:" target="-2" id="jte-RR-Spi"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="39S-hc-U6b">
-                        <rect key="frame" x="119" y="23" width="137" height="22"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="39S-hc-U6b">
+                        <rect key="frame" x="119" y="22" width="137" height="22"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Enter PIN code" bezelStyle="round" id="vbD-AX-tyQ">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -99,7 +99,7 @@
                     <constraint firstItem="s5R-9l-6yl" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="12" id="rZl-Qv-IZW"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="-27" y="38"/>
+            <point key="canvasLocation" x="-27" y="36"/>
         </window>
     </objects>
     <resources>
