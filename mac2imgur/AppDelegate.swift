@@ -20,6 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     @IBOutlet weak var menu: NSMenu!
     @IBOutlet weak var accountItem: NSMenuItem!
+    @IBOutlet weak var deleteAfterUploadOption: NSMenuItem!
+    @IBOutlet weak var disableDetectionOption: NSMenuItem!
     
     var prefs: PreferencesManager!
     var imgurClient: ImgurClient!
@@ -30,7 +32,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var activeIcon: NSImage!
     var inactiveIcon: NSImage!
     var lastLink: String = ""
-    var paused = false
     
     // Delegate methods
     
@@ -50,6 +51,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Set account menu item to relevant title
         updateAccountItemTitle()
         
+        // Update option menu items to correct state
+        deleteAfterUploadOption.state = prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false) ? NSOnState : NSOffState
+        disableDetectionOption.state = prefs.getBool(PreferencesConstant.disableScreenshotDetection.rawValue, def: false) ? NSOnState : NSOffState
+        
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
         statusItem.menu = menu
@@ -66,7 +71,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func screenshotDetected(pathToImage: String) {
-        if !paused {
+        // Check that screenshot detection has not been disabled
+        if !prefs.getBool(PreferencesConstant.disableScreenshotDetection.rawValue, def: false) {
             updateStatusIcon(true)
             let upload = ImgurUpload(pathToImage: pathToImage, isScreenshot: true, client: imgurClient, delegate: self)
             uploadController.addToQueue(upload)
@@ -147,12 +153,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
-    @IBAction func pauseDetectionOption(sender: NSMenuItem) {
+    @IBAction func disableDetectionOption(sender: NSMenuItem) {
         if sender.state == NSOnState {
-            paused = false
+            prefs.setBool(PreferencesConstant.disableScreenshotDetection.rawValue, value: false)
             sender.state = NSOffState
         } else {
-            paused = true
+            prefs.setBool(PreferencesConstant.disableScreenshotDetection.rawValue, value: true)
             sender.state = NSOnState
         }
     }

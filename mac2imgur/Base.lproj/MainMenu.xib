@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -15,6 +15,8 @@
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="mac2imgur" customModuleProvider="target">
             <connections>
                 <outlet property="accountItem" destination="oDJ-vp-azL" id="CP9-rD-GYd"/>
+                <outlet property="deleteAfterUploadOption" destination="Hcu-OJ-uxu" id="98E-oH-ADe"/>
+                <outlet property="disableDetectionOption" destination="8W0-Wi-U05" id="64P-RJ-rUk"/>
                 <outlet property="menu" destination="Qba-hr-jWV" id="gnm-M9-Vwq"/>
             </connections>
         </customObject>
@@ -51,10 +53,10 @@
                                     <action selector="deleteAfterUploadOption:" target="Voe-Tx-rLC" id="eJM-fm-RvG"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Pause screenshot detection" id="8W0-Wi-U05">
+                            <menuItem title="Disable screenshot detection" id="8W0-Wi-U05">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="pauseDetectionOption:" target="Voe-Tx-rLC" id="AjQ-Lh-ufl"/>
+                                    <action selector="disableDetectionOption:" target="Voe-Tx-rLC" id="xT1-5v-rZ9"/>
                                 </connections>
                             </menuItem>
                         </items>

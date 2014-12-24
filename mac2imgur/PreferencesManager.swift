@@ -17,7 +17,7 @@
 import Foundation
 
 enum PreferencesConstant: String {
-    case refreshToken = "RefreshToken", username = "ImgurUsername", deleteScreenshotAfterUpload = "DeleteScreenshotAfterUpload"
+    case refreshToken = "RefreshToken", username = "ImgurUsername", deleteScreenshotAfterUpload = "DeleteScreenshotAfterUpload", disableScreenshotDetection = "DisableScreenshotDetection"
 }
 
 class PreferencesManager {
