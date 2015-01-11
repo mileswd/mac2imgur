@@ -82,25 +82,21 @@ class ImgurUpload {
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
             if error != nil {
                 NSLog(error!.localizedDescription);
-                self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", pathToImage: self.pathToImage)
+                self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", deleteHash: "", pathToImage: self.pathToImage)
             } else {
                 if let responseDict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary {
                     println("Received response: \(responseDict)")
                     if responseDict.valueForKey("status") != nil && responseDict.valueForKey("status")?.integerValue == 200 {
-                        self.delegate.uploadAttemptCompleted(true, isScreenshot: self.isScreenshot, link: responseDict.valueForKey("data")!.valueForKey("link") as String, pathToImage: self.pathToImage)
+                        self.delegate.uploadAttemptCompleted(true, isScreenshot: self.isScreenshot, link: responseDict.valueForKey("data")!.valueForKey("link") as String, deleteHash: responseDict.valueForKey("data")!.valueForKey("deletehash") as String, pathToImage: self.pathToImage)
                     } else {
                         NSLog("An error occurred: %@", responseDict);
-                        self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", pathToImage: self.pathToImage)
+                        self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", deleteHash: "", pathToImage: self.pathToImage)
                     }
                 } else {
                     NSLog("An error occurred - the response was invalid: %@", response)
-                    self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", pathToImage: self.pathToImage)
+                    self.delegate.uploadAttemptCompleted(false, isScreenshot: self.isScreenshot, link: "", deleteHash: "", pathToImage: self.pathToImage)
                 }
             }
         })
     }
-}
-
-protocol UploadControllerDelegate {
-    func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, pathToImage: String)
 }

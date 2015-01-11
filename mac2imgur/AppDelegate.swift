@@ -23,6 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var accountItem: NSMenuItem!
     @IBOutlet weak var deleteAfterUploadOption: NSMenuItem!
     @IBOutlet weak var disableDetectionOption: NSMenuItem!
+    @IBOutlet weak var requireConfirmationOption: NSMenuItem!
+    @IBOutlet weak var recentUploadsItem: NSMenuItem!
+    @IBOutlet weak var recentUploadsMenu: NSMenu!
     
     var prefs: PreferencesManager!
     var imgurClient: ImgurClient!
@@ -55,6 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Update option menu items to correct state
         deleteAfterUploadOption.state = prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false) ? NSOnState : NSOffState
         disableDetectionOption.state = prefs.getBool(PreferencesConstant.disableScreenshotDetection.rawValue, def: false) ? NSOnState : NSOffState
+        requireConfirmationOption.state = prefs.getBool(PreferencesConstant.requiresUploadConfirmation.rawValue, def: false) ? NSOnState : NSOffState
         
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
@@ -74,13 +78,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func screenshotDetected(pathToImage: String) {
         // Check that screenshot detection has not been disabled
         if !prefs.getBool(PreferencesConstant.disableScreenshotDetection.rawValue, def: false) {
+            if prefs.getBool(PreferencesConstant.requiresUploadConfirmation.rawValue, def: false) {
+                let alert = NSAlert()
+                alert.messageText = "Do you want to upload this screenshot?"
+                alert.informativeText = "\"\(pathToImage.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur, where it is publicly accessible."
+                alert.addButtonWithTitle("Upload")
+                alert.addButtonWithTitle("Cancel")
+                if alert.runModal() == NSAlertSecondButtonReturn {
+                    return
+                }
+            }
             updateStatusIcon(true)
             let upload = ImgurUpload(pathToImage: pathToImage, isScreenshot: true, client: imgurClient, delegate: self)
             uploadController.addToQueue(upload)
         }
     }
     
-    func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, pathToImage: String) {
+    func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, deleteHash: String, pathToImage: String) {
         updateStatusIcon(false)
         let type = isScreenshot ? "Screenshot" : "Image"
         if successful {
@@ -91,6 +105,31 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             if isScreenshot && prefs.getBool(PreferencesConstant.deleteScreenshotAfterUpload.rawValue, def: false) {
                 println("Deleting screenshot @ \(pathToImage)")
                 deleteFile(pathToImage)
+            }
+            
+            let upload = NSMenuItem()
+            upload.title = lastLink
+            
+            let openItem = NSMenuItem()
+            openItem.title = "Open in browser"
+            // Probably not the best use for toolTips, but it works :)
+            openItem.toolTip = lastLink
+            openItem.action = "openURLWithMenuItem:"
+            
+            let deleteItem = NSMenuItem()
+            deleteItem.title = "Delete from imgur"
+            deleteItem.toolTip = "https://imgur.com/delete/\(deleteHash)"
+            deleteItem.action = "openURLWithMenuItem:"
+            
+            let options = NSMenu()
+            options.addItem(openItem)
+            options.addItem(deleteItem)
+            
+            upload.submenu = options
+            recentUploadsMenu.addItem(upload)
+            
+            if !recentUploadsItem.enabled {
+                recentUploadsItem.enabled = true
             }
         } else {
             displayNotification("\(type) upload failed...", informativeText: "")
@@ -164,6 +203,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    @IBAction func requireConfirmationOption(sender: NSMenuItem) {
+        if sender.state == NSOnState {
+            prefs.setBool(PreferencesConstant.requiresUploadConfirmation.rawValue, value: false)
+            sender.state = NSOffState
+        } else {
+            prefs.setBool(PreferencesConstant.requiresUploadConfirmation.rawValue, value: true)
+            sender.state = NSOnState
+        }
+    }
+    
     @IBAction func about(sender: NSMenuItem) {
         NSApplication.sharedApplication().orderFrontStandardAboutPanel(sender)
         NSApplication.sharedApplication().activateIgnoringOtherApps(true)
@@ -191,6 +240,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func openURL(url: String) {
         NSWorkspace.sharedWorkspace().openURL(NSURL(string: url)!)
+    }
+    
+    func openURLWithMenuItem(sender: NSMenuItem) {
+        if let url = sender.toolTip {
+            openURL(url)
+        }
     }
     
     func displayNotification(title: String, informativeText: String) {

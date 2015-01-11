@@ -58,3 +58,7 @@ class ImgurUploadController {
         uploadQueue.removeAll(keepCapacity: false)
     }
 }
+
+protocol UploadControllerDelegate {
+    func uploadAttemptCompleted(successful: Bool, isScreenshot: Bool, link: String, deleteHash: String, pathToImage: String)
+}
