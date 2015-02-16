@@ -218,10 +218,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSApplication.sharedApplication().activateIgnoringOtherApps(true)
     }
     
-    @IBAction func quit(sender: NSMenuItem) {
-        NSApplication.sharedApplication().terminate(sender)
-    }
-    
     // Utility methods
     
     func copyToClipboard(string: String) {
