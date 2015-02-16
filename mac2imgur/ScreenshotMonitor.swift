@@ -31,22 +31,36 @@ class ScreenshotMonitor {
         // Only accept screenshots
         query.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1", argumentArray: nil)
         
-        // Add observer
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("eventOccurred:"), name: NSMetadataQueryDidUpdateNotification, object: query)
+        // Add observers
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("initialPhaseComplete"), name: NSMetadataQueryDidFinishGatheringNotification, object: query)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("liveUpdatePhaseEvent:"), name: NSMetadataQueryDidUpdateNotification, object: query)
         
         // Start query
         query.startQuery()
     }
     
-    @objc func eventOccurred(notification: NSNotification) {
-        if let info = notification.userInfo {
-            if let itemsAdded = info["kMDQueryUpdateAddedItems"] as? NSArray {
-                for item in itemsAdded {
-                    let metadataItem = item as NSMetadataItem
+    @objc func initialPhaseComplete() {
+        if let itemsAdded = query.results as? [NSMetadataItem] {
+            for item in itemsAdded {
+                // Get the path to the screenshot
+                if let screenshotPath = item.valueForAttribute(NSMetadataItemPathKey) as? String {
+                    let screenshotName = screenshotPath.lastPathComponent.stringByDeletingPathExtension
                     
-                    // Get the path to the screenshot
-                    let screenshotPath: String = metadataItem.valueForKey(NSMetadataItemPathKey) as String
-                    let screenshotName: String = screenshotPath.lastPathComponent.stringByDeletingPathExtension
+                    // Blacklist the screenshot if it hasn't already been blacklisted
+                    if !contains(blacklist, screenshotName) {
+                        blacklist.append(screenshotName)
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func liveUpdatePhaseEvent(notification: NSNotification) {
+        if let itemsAdded = notification.userInfo?["kMDQueryUpdateAddedItems"] as? [NSMetadataItem] {
+            for item in itemsAdded {
+                // Get the path to the screenshot
+                if let screenshotPath = item.valueForAttribute(NSMetadataItemPathKey) as? String {
+                    let screenshotName = screenshotPath.lastPathComponent.stringByDeletingPathExtension
                     
                     // Ensure that the screenshot detected is from the right folder and isn't blacklisted
                     if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == getScreenshotDirectory().stringByStandardizingPath && !contains(blacklist, screenshotName) {
@@ -66,7 +80,7 @@ class ScreenshotMonitor {
                 return dir
             }
         }
-        return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0] as String
+        return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0] as! String
     }
 }
 
