@@ -14,24 +14,13 @@
 * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Foundation
+// NSUserDefaults keys
+let kRefreshToken = "RefreshToken"
+let kUsername = "ImgurUsername"
+let kDeleteScreeenshotAfterUpload = "DeleteScreenshotAfterUpload"
+let kDisableScreenshotDetection = "DisableScreenshotDetection"
+let kRequiresUploadConfirmation = "RequiresUploadConfirmation"
 
-class ImgurUpload {
-    
-    let imagePath: String
-    let imageUrl: NSURL
-    let isScreenshot: Bool
-    let callback: (upload: ImgurUpload) -> ()
-    
-    var link: String?
-    var successful: Bool {
-        return link != nil
-    }
-    
-    init(imagePath: String, isScreenshot: Bool, callback: (upload: ImgurUpload) -> ()) {
-        self.imagePath = imagePath
-        self.imageUrl = NSURL(fileURLWithPath: imagePath)!
-        self.isScreenshot = isScreenshot
-        self.callback = callback
-    }
-}
+// API keys
+let imgurClientId = "5867856c9027819"
+let imgurClientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"

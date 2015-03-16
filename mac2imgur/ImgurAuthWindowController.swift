@@ -18,28 +18,19 @@ import Cocoa
 
 class ImgurAuthWindowController: NSWindowController {
     
-    var imgurClient: ImgurClient!
-    var prefs: PreferencesManager!
+    var client: ImgurClient!
     var callback: (() -> ())!
     
-    @IBOutlet weak var signInButton: NSButton!
     @IBOutlet weak var pinCodeField: NSTextField!
-    @IBOutlet weak var saveButton: NSButton!
 
     @IBAction func signInButtonClick(sender: AnyObject) {
-        imgurClient.openBrowserForAuth()
+        // Open imgur authentication page in web browser
+        NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://api.imgur.com/oauth2/authorize?client_id=\(imgurClientId)&response_type=pin&state=active")!)
     }
     
     @IBAction func onSaveButtonClick(sender: AnyObject) {
         if pinCodeField.stringValue != "" {
-            imgurClient.getTokenFromPin(pinCodeField.stringValue, callback: {
-                dispatch_async(dispatch_get_main_queue()) {
-                    if let authWindow = self.window {
-                        authWindow.close()
-                    }
-                }
-                self.callback()
-            })
+            client.getTokensFromPin(pinCodeField.stringValue, callback: callback)
         }
     }
 }

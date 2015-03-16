@@ -18,12 +18,12 @@ import Foundation
 
 class ScreenshotMonitor {
     
+    let callback: (screenshotPath: String) -> ()
     var query: NSMetadataQuery
-    var delegate: ScreenshotMonitorDelegate
     var blacklist: [String]
     
-    init(delegate: ScreenshotMonitorDelegate) {
-        self.delegate = delegate
+    init(callback: (screenshotPath: String) -> ()) {
+        self.callback = callback
         self.blacklist = []
         
         query = NSMetadataQuery()
@@ -63,9 +63,9 @@ class ScreenshotMonitor {
                     let screenshotName = screenshotPath.lastPathComponent.stringByDeletingPathExtension
                     
                     // Ensure that the screenshot detected is from the right folder and isn't blacklisted
-                    if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == getScreenshotDirectory().stringByStandardizingPath && !contains(blacklist, screenshotName) {
+                    if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == screenshotLocationPath.stringByStandardizingPath && !contains(blacklist, screenshotName) {
                         println("Screenshot file event detected @ \(screenshotPath)")
-                        delegate.screenshotDetected(screenshotPath)
+                        callback(screenshotPath: screenshotPath)
                         blacklist.append(screenshotName)
                     }
                 }
@@ -73,7 +73,7 @@ class ScreenshotMonitor {
         }
     }
     
-    func getScreenshotDirectory() -> String {
+    var screenshotLocationPath: String {
         if let dir = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
             var isDir: ObjCBool = false
             if NSFileManager.defaultManager().fileExistsAtPath(dir, isDirectory: &isDir) {
@@ -82,8 +82,4 @@ class ScreenshotMonitor {
         }
         return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0] as! String
     }
-}
-
-protocol ScreenshotMonitorDelegate {
-    func screenshotDetected(pathToImage: String)
 }

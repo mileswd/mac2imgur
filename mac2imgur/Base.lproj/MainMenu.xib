@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14D72i" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7525" systemVersion="14D105g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7525"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -18,8 +18,6 @@
                 <outlet property="deleteAfterUploadOption" destination="Hcu-OJ-uxu" id="98E-oH-ADe"/>
                 <outlet property="disableDetectionOption" destination="8W0-Wi-U05" id="64P-RJ-rUk"/>
                 <outlet property="menu" destination="Qba-hr-jWV" id="gnm-M9-Vwq"/>
-                <outlet property="recentUploadsItem" destination="ep4-BL-hhA" id="coy-z1-tzK"/>
-                <outlet property="recentUploadsMenu" destination="IWH-Jl-pWX" id="Go5-OA-CkZ"/>
                 <outlet property="requireConfirmationOption" destination="Kns-ic-LDa" id="ve0-w4-tX8"/>
             </connections>
         </customObject>
@@ -31,16 +29,6 @@
                     <connections>
                         <action selector="selectImages:" target="Voe-Tx-rLC" id="cfe-EI-jrC"/>
                     </connections>
-                </menuItem>
-                <menuItem title="Copy last link" id="fLq-E7-ss8">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="copyLastLink:" target="Voe-Tx-rLC" id="luD-E6-dqE"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Recent Uploads" enabled="NO" id="ep4-BL-hhA">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" id="IWH-Jl-pWX"/>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="m8J-uo-3rd"/>
                 <menuItem title="Options" id="End-bd-yda">
@@ -56,21 +44,12 @@
                             <menuItem isSeparatorItem="YES" id="ANL-Dj-7co"/>
                             <menuItem title="Delete screenshot after upload" id="Hcu-OJ-uxu">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="deleteAfterUploadOption:" target="Voe-Tx-rLC" id="eJM-fm-RvG"/>
-                                </connections>
                             </menuItem>
                             <menuItem title="Disable screenshot detection" id="8W0-Wi-U05">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="disableDetectionOption:" target="Voe-Tx-rLC" id="xT1-5v-rZ9"/>
-                                </connections>
                             </menuItem>
                             <menuItem title="Require upload confirmation" id="Kns-ic-LDa">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="requireConfirmationOption:" target="Voe-Tx-rLC" id="A2J-y9-P3c"/>
-                                </connections>
                             </menuItem>
                         </items>
                     </menu>

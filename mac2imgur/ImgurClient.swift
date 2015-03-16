@@ -18,125 +18,188 @@ import Cocoa
 
 class ImgurClient {
     
-    let apiUrl = NSURL(string: "https://api.imgur.com/oauth2/token")!
-    let urlStart = "https://api.imgur.com/oauth2/authorize?client_id="
-    let urlEnd = "&response_type=pin&state=active"
-    
-    let imgurClientId = "5867856c9027819"
-    let imgurClientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"
+    let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
     let projectUrl = "https://mac2imgur.mileswd.com"
+    let apiUrl = "https://api.imgur.com/"
     
-    var preferences: PreferencesManager
-    var session: NSURLSession
-    
-    var authenticated: Bool = false
+    var uploadQueue = [ImgurUpload]()
+    var authenticationInProgress: Bool = false
     var lastTokenExpiry: NSDate?
     
-    var username: String?
-    var accessToken: String?
-    var refreshToken: String?
-    
-    init (preferences: PreferencesManager) {
-        self.preferences = preferences
-        session = NSURLSession.sharedSession()
-        username = preferences.getString(PreferencesConstant.username.rawValue, def: nil)
-        refreshToken = preferences.getString(PreferencesConstant.refreshToken.rawValue, def: nil)
-        if username != nil && refreshToken != nil {
-            authenticated = true
+    var username: String? {
+        get {
+            return NSUserDefaults.standardUserDefaults().stringForKey(kUsername)
+        }
+        set {
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: kUsername)
         }
     }
     
-    func openBrowserForAuth() {
-        NSWorkspace.sharedWorkspace().openURL(NSURL(string: urlStart + imgurClientId + urlEnd)!)
+    var refreshToken: String? {
+        get {
+            return NSUserDefaults.standardUserDefaults().stringForKey(kRefreshToken)
+        }
+        set {
+            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: kRefreshToken)
+        }
     }
     
-    func getTokenFromPin(pin: String, callback: () -> ()) {
-        let request = NSMutableURLRequest(URL: apiUrl)
-        request.HTTPMethod = "POST"
-        
-        let params = ["client_id":imgurClientId, "client_secret":imgurClientSecret, "grant_type":"pin", "pin":pin]
-        
-        var err: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
-        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> Void in
-            if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
-                if err != nil {
-                    NSLog(err!.localizedDescription)
-                } else {
-                    if let token = json["refresh_token"] as? String {
-                        self.setAccessToken(json["access_token"] as String)
-                        self.username = json["account_username"] as? String
-                        self.authenticated = true
-                        
-                        self.preferences.setString(PreferencesConstant.refreshToken.rawValue, value: token)
-                        self.preferences.setString(PreferencesConstant.username.rawValue, value: self.username!)
-                        
-                        callback()
-                        println("Success: \(token)")
-                    } else {
-                        NSLog("An error occurred - the response was invalid: %@", response)
-                    }
-                }
-            }
-        })
-        task.resume()
+    var accessToken: String? {
+        didSet {
+            // Update token expiry date
+            let secondsInAnHour: NSTimeInterval = 1 * 60 * 60
+            let now: NSDate = NSDate()
+            lastTokenExpiry = now.dateByAddingTimeInterval(secondsInAnHour)
+        }
     }
     
-    func requestNewAccessToken(callback: () -> ()) {
-        let request = NSMutableURLRequest(URL: apiUrl)
-        request.HTTPMethod = "POST"
-        
-        println("Refresh token \(refreshToken!)")
-        
-        let params = ["client_id":imgurClientId, "client_secret":imgurClientSecret, "grant_type":"refresh_token", "refresh_token":self.refreshToken!]
-        
-        var err: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &err)
-        let task = session.dataTaskWithRequest(request, completionHandler: {data, response, error -> () in
-            if let json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableLeaves, error: &err) as? NSDictionary {
-                if err != nil {
-                    NSLog(err!.localizedDescription)
-                } else {
-                    if let access = json["access_token"] as? String {
-                        self.setAccessToken(access)
-                        callback()
-                    } else {
-                        NSLog("An error occurred - the response was invalid: %@", response)
-                    }
-                }
-            }
-        })
-        task.resume()
+    var isAuthenticated: Bool {
+        return username != nil && refreshToken != nil
     }
     
-    func isAccessTokenValid() -> Bool {
+    var accessTokenIsValid: Bool {
         if accessToken != nil {
-            let now: NSDate! = NSDate()
-            let comparison: NSComparisonResult = lastTokenExpiry!.compare(now)
+            let comparison: NSComparisonResult = lastTokenExpiry!.compare(NSDate())
             return comparison == NSComparisonResult.OrderedDescending
         }
         return false
     }
     
-    func setAccessToken(token: String) {
-        accessToken = token
-        let secondsInAnHour: NSTimeInterval = 1 * 60 * 60
-        let now: NSDate = NSDate()
-        lastTokenExpiry = now.dateByAddingTimeInterval(secondsInAnHour)
+    var authenticationHeader: String {
+        return isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(imgurClientId)"
+    }
+    
+    func getTokensFromPin(pin: String, callback: () -> ()) {
+        let parameters = [
+            "client_id": imgurClientId,
+            "client_secret": imgurClientSecret,
+            "grant_type": "pin",
+            "pin": pin
+        ]
+        
+        request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
+            .validate()
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, JSON, error) -> Void in
+                if let refreshToken = JSON?["refresh_token"] as? String {
+                    self.accessToken = JSON?["access_token"] as? String
+                    self.username = JSON?["account_username"] as? String
+                    self.refreshToken = refreshToken
+                    callback()
+                } else {
+                    NSLog("An error occurred while attempting to obtain tokens from a pin: \(error)\nRequest: \(request)\nResponse: \(response)")
+                }
+        }
+    }
+    
+    func requestAccessToken(callback: () -> ()) {
+        let parameters = [
+            "client_id": imgurClientId,
+            "client_secret": imgurClientSecret,
+            "grant_type": "refresh_token",
+            "refresh_token": self.refreshToken!
+        ]
+        
+        request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
+            .validate()
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, JSON, error) -> Void in
+            if let access = JSON?["access_token"] as? String {
+                self.accessToken = access
+                callback()
+            } else {
+                NSLog("An error occurred while requesting a new access token: \(error)\nRequest: \(request)\nResponse: \(response)")
+            }
+        }
     }
     
     func deleteCredentials() {
         // Delete username and refresh token from defaults
-        preferences.deleteKey(PreferencesConstant.username.rawValue)
-        preferences.deleteKey(PreferencesConstant.refreshToken.rawValue)
-        authenticated = false
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(kUsername)
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(kRefreshToken)
     }
     
-    // little static function to convert the imgur link given by the api into an HTTPS link
-    class func updateLinkToSSL(original_link: String) -> String {
-        if (original_link.substringToIndex(advance(original_link.startIndex, 5)) == "http:") {
-            return "https" + original_link.substringFromIndex(advance(original_link.startIndex, 4))
+    func addToQueue(upload: ImgurUpload) {
+        uploadQueue.append(upload)
+        
+        if isAuthenticated {
+            // If necessary, request a new access token
+            if accessTokenIsValid {
+                processQueue()
+            } else {
+                if !authenticationInProgress {
+                    authenticationInProgress = true
+                    requestAccessToken({ () -> () in
+                        self.authenticationInProgress = false
+                        self.processQueue()
+                    })
+                }
+            }
+        } else {
+            processQueue()
         }
-        return original_link
+    }
+    
+    func processQueue() {
+        // Upload all images in queue
+        for upload in uploadQueue {
+            attemptUpload(upload)
+        }
+        // Clear queue
+        uploadQueue.removeAll(keepCapacity: false)
+    }
+    
+    func attemptUpload(uploadRequest: ImgurUpload) {
+        let url: NSURL = NSURL(fileURLWithPath: uploadRequest.imagePath)!
+        let imageData: NSData = NSData(contentsOfURL: url, options: nil, error: nil)!
+        
+        let request = NSMutableURLRequest()
+        request.URL = NSURL(string: "\(apiUrl)3/upload")
+        request.HTTPMethod = Method.POST.rawValue
+        
+        let requestBody = NSMutableData()
+        let contentType = "multipart/form-data; boundary=\(boundary)"
+        request.addValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        // Add authorization
+        request.addValue(authenticationHeader, forHTTPHeaderField: "Authorization")
+        
+        // Add image data
+        requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Content-Disposition: attachment; name=\"image\"; filename=\".\(uploadRequest.imagePath.pathExtension)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData(imageData)
+        requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        // Add title
+        requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Content-Disposition: form-data; name=\"title\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData(uploadRequest.imagePath.lastPathComponent.stringByDeletingPathExtension.dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        // Add description
+        requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Uploaded by mac2imgur! (\(projectUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        requestBody.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+        
+        // Send request
+        upload(request, requestBody)
+            .validate()
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, JSON, error) -> Void in
+                if var link = JSON?.objectForKey("data")?.objectForKey("link") as? String {
+                    // Update link provided by API to HTTPS if necessary
+                    if link.substringToIndex(advance(link.startIndex, 5)) == "http:" {
+                        link = "https" + link.substringFromIndex(advance(link.startIndex, 4))
+                    }
+                    uploadRequest.link = link
+                } else {
+                    NSLog("An error occurred while attempting to upload an image: \(error)\nRequest: \(request)\nResponse: \(response)")
+                }
+                uploadRequest.callback(upload: uploadRequest)
+        }
     }
 }
