@@ -3,7 +3,7 @@ mac2imgur [![Build Status](https://travis-ci.org/mileswd/mac2imgur.svg?branch=ma
 
 ###Installation Instructions###
 
-[Download a release](https://mac2imgur.mileswd.com/latest) then simply drop the application into your 'Applications' folder.
+[Download a release](https://mac2imgur.mileswd.com/latest) then simply drop the application into your "Applications" folder.
 
 After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
 
@@ -19,7 +19,7 @@ After opening it, you'll notice a small (hopefully unobtrusive) system tray icon
 
 #####Press **CMD + SHIFT + 4 + SPACE** to take screenshot a specific window, menu or dialog#####
 
-After you've taken a screenshot, you will receive a notification via the Mac OS X Notification Center notifying you whether the upload was successful or not.
+After you've taken a screenshot, you will receive a notification via the OS X Notification Center notifying you whether the upload was successful or not.
 
 If the upload was successful, the link to the screenshot has been copied to your clipboard.
 
