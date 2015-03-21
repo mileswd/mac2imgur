@@ -69,17 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func screenshotDetected(imagePath: String) {
         // Check that screenshot detection has not been disabled
-        if !defaults.boolForKey(kDisableScreenshotDetection) {
-            if defaults.boolForKey(kRequiresUploadConfirmation) {
-                let alert = NSAlert()
-                alert.messageText = "Do you want to upload this screenshot?"
-                alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur, where it is publicly accessible."
-                alert.addButtonWithTitle("Upload")
-                alert.addButtonWithTitle("Cancel")
-                if alert.runModal() == NSAlertSecondButtonReturn {
-                    return
-                }
-            }
+        if !defaults.boolForKey(kDisableScreenshotDetection) && getUploadConfirmation(imagePath) {
             updateStatusIcon(true)
             let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true, callback: uploadAttemptCompleted)
             imgurClient.addToQueue(upload)
@@ -179,5 +169,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func updateAccountItemTitle() {
         accountItem.title = imgurClient.isAuthenticated ? "Sign out (\(imgurClient.username!))" : "Sign in"
+    }
+    
+    func getUploadConfirmation(imagePath: String) -> Bool {
+        if defaults.boolForKey(kRequiresUploadConfirmation) {
+            let alert = NSAlert()
+            alert.messageText = "Do you want to upload this screenshot?"
+            alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur, where it is publicly accessible."
+            alert.addButtonWithTitle("Upload")
+            alert.addButtonWithTitle("Cancel")
+            if alert.runModal() == NSAlertSecondButtonReturn {
+                return false
+            }
+        }
+        return true
     }
 }

@@ -14,7 +14,7 @@
 * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Cocoa
+import Foundation
 
 class ImgurClient {
     
@@ -65,10 +65,6 @@ class ImgurClient {
         return false
     }
     
-    var authenticationHeader: String {
-        return isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(imgurClientId)"
-    }
-    
     func getTokensFromPin(pin: String, callback: () -> ()) {
         let parameters = [
             "client_id": imgurClientId,
@@ -76,7 +72,6 @@ class ImgurClient {
             "grant_type": "pin",
             "pin": pin
         ]
-        
         request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
             .validate()
             .validate(contentType: ["application/json"])
@@ -99,7 +94,6 @@ class ImgurClient {
             "grant_type": "refresh_token",
             "refresh_token": self.refreshToken!
         ]
-        
         request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
             .validate()
             .validate(contentType: ["application/json"])
@@ -162,7 +156,7 @@ class ImgurClient {
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
         // Add authorization
-        request.addValue(authenticationHeader, forHTTPHeaderField: "Authorization")
+        request.addValue(isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(imgurClientId)", forHTTPHeaderField: "Authorization")
         
         // Add image data
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
