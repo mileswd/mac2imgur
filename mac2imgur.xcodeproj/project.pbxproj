@@ -11,13 +11,14 @@
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		023ACBEA1A2A9ABF008510AC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
 		024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
-		024130DE1A05175E0062E9D3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; };
-		024130DF1A0517640062E9D3 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 024130DD1A05175E0062E9D3 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 02933D051A2A7CDA001FB628 /* dsa_pub.pem */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02C8A9BD1AB4BA0900E8C704 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9BC1AB4BA0900E8C704 /* Constants.swift */; };
 		02C8A9D81AB50E4B00E8C704 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
+		02F3D20A1AC3577A007252D4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F3D2091AC3577A007252D4 /* Sparkle.framework */; };
+		02F3D20B1AC3577E007252D4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F3D2091AC3577A007252D4 /* Sparkle.framework */; };
+		02F3D20C1AC3577E007252D4 /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 02F3D2091AC3577A007252D4 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
 		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
 		07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */; };
@@ -32,7 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				024130DF1A0517640062E9D3 /* Sparkle.framework in Embed Frameworks */,
+				02F3D20C1AC3577E007252D4 /* Sparkle.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -43,13 +44,13 @@
 		0220B2AA19F4104A0064E9FE /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		022321BE19A6959500048626 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		022321C019A6F57E00048626 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		024130DD1A05175E0062E9D3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		026E43D71A07E87300A08FC3 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		02933D051A2A7CDA001FB628 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		02C8A9BC1AB4BA0900E8C704 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
 		02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotMonitor.swift; sourceTree = "<group>"; };
+		02F3D2091AC3577A007252D4 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mac2imgur.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02FDC2CF194DF89D00E8CBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -67,7 +68,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */,
-				024130DE1A05175E0062E9D3 /* Sparkle.framework in Frameworks */,
+				02F3D20B1AC3577E007252D4 /* Sparkle.framework in Frameworks */,
+				02F3D20A1AC3577A007252D4 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +79,7 @@
 		024130D71A0515440062E9D3 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				024130DD1A05175E0062E9D3 /* Sparkle.framework */,
+				02F3D2091AC3577A007252D4 /* Sparkle.framework */,
 				07B42AE619AB75DA00A6349D /* AppKit.framework */,
 				02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */,
 			);
