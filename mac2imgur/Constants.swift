@@ -21,6 +21,7 @@ let kDeleteScreeenshotAfterUpload = "DeleteScreenshotAfterUpload"
 let kDisableScreenshotDetection = "DisableScreenshotDetection"
 let kRequiresUploadConfirmation = "RequiresUploadConfirmation"
 
-// API keys
+// Imgur specific
 let imgurClientId = "5867856c9027819"
 let imgurClientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"
+let imgurAllowedFileTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]

@@ -17,7 +17,7 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate {
     
     @IBOutlet weak var menu: NSMenu!
     @IBOutlet weak var accountItem: NSMenuItem!
@@ -58,6 +58,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         statusItem.toolTip = "mac2imgur"
         updateStatusIcon(false)
         
+        if NSAppKitVersionNumber >= Double(NSAppKitVersionNumber10_10) {
+            statusItem.button?.window?.registerForDraggedTypes([NSFilenamesPboardType])
+            statusItem.button?.window?.delegate = self
+        }
+        
         // Start monitoring for screenshots
         monitor = ScreenshotMonitor(callback: screenshotDetected)
     }
@@ -69,7 +74,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func screenshotDetected(imagePath: String) {
         // Check that screenshot detection has not been disabled
-        if !defaults.boolForKey(kDisableScreenshotDetection) && getUploadConfirmation(imagePath) {
+        if !defaults.boolForKey(kDisableScreenshotDetection) && hasUploadConfirmation(imagePath) {
             updateStatusIcon(true)
             let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true, callback: uploadAttemptCompleted)
             imgurClient.addToQueue(upload)
@@ -98,6 +103,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {
+        // Ensure that the dragged files are images
+        if let files = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
+            for file in files {
+                if !contains(imgurAllowedFileTypes, file.pathExtension) {
+                    return NSDragOperation.None
+                }
+            }
+        }
+        return NSDragOperation.Copy
+    }
+    
+    func performDragOperation(sender: NSDraggingInfo) -> Bool {
+        if let filePaths = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
+            for filePath in filePaths {
+                let upload = ImgurUpload(imagePath: filePath, isScreenshot: false, callback: uploadAttemptCompleted)
+                imgurClient.addToQueue(upload)
+                updateStatusIcon(true)
+            }
+            return true
+        }
+        return false
+    }
+    
     // Selector methods
     
     @IBAction func selectImages(sender: NSMenuItem) {
@@ -106,7 +135,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         panel.prompt = "Upload"
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
-        panel.allowedFileTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
+        panel.allowedFileTypes = imgurAllowedFileTypes
         if panel.runModal() == NSOKButton {
             for imageURL in panel.URLs {
                 if let imagePath = (imageURL as! NSURL).path {
@@ -171,7 +200,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         accountItem.title = imgurClient.isAuthenticated ? "Sign out (\(imgurClient.username!))" : "Sign in"
     }
     
-    func getUploadConfirmation(imagePath: String) -> Bool {
+    func hasUploadConfirmation(imagePath: String) -> Bool {
         if defaults.boolForKey(kRequiresUploadConfirmation) {
             let alert = NSAlert()
             alert.messageText = "Do you want to upload this screenshot?"

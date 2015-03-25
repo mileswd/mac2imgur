@@ -19,9 +19,8 @@ import Foundation
 class ImgurClient {
     
     let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
-    let projectUrl = "https://mac2imgur.mileswd.com"
     let apiUrl = "https://api.imgur.com/"
-    
+
     var uploadQueue = [ImgurUpload]()
     var authenticationInProgress: Bool = false
     var lastTokenExpiry: NSDate?
@@ -174,7 +173,7 @@ class ImgurClient {
         // Add description
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        requestBody.appendData("Uploaded by mac2imgur! (\(projectUrl))".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Uploaded by mac2imgur! (\"https://mac2imgur.mileswd.com\")".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         requestBody.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
