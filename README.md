@@ -1,4 +1,4 @@
-mac2imgur [![Build Status](https://travis-ci.org/mileswd/mac2imgur.svg?branch=master)](https://travis-ci.org/mileswd/mac2imgur)
+mac2imgur
 ========
 
 ###Installation Instructions###
