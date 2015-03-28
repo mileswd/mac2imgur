@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7525" systemVersion="14D105g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7528.3" systemVersion="14D113c" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7525"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7528.3"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -42,6 +42,13 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ANL-Dj-7co"/>
+                            <menuItem title="Check for updates..." id="uHT-IY-qeG">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="checkForUpdates:" target="uIM-P4-40h" id="MyP-vP-9TH"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="CgW-6L-lVT"/>
                             <menuItem title="Delete screenshot after upload" id="Hcu-OJ-uxu">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
