@@ -93,7 +93,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 deleteFile(upload.imagePath)
             }
         } else {
-            displayNotification("\(type) upload failed...", informativeText: "")
+            displayNotification("\(type) upload failed...", informativeText: upload.error ?? "")
         }
     }
     

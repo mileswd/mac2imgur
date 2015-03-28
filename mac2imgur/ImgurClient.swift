@@ -190,6 +190,11 @@ class ImgurClient {
                     }
                     uploadRequest.link = link
                 } else {
+                    if var error = JSON?.objectForKey("data")?.objectForKey("error") as? String {
+                        uploadRequest.error = "Imgur responded with the following error: \"\(error)\""
+                    } else {
+                        uploadRequest.error = error?.localizedDescription
+                    }
                     NSLog("An error occurred while attempting to upload an image: \(error)\nRequest: \(request)\nResponse: \(response)")
                 }
                 uploadRequest.callback(upload: uploadRequest)

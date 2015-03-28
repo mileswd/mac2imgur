@@ -23,6 +23,7 @@ class ImgurUpload {
     let isScreenshot: Bool
     let callback: (upload: ImgurUpload) -> ()
     
+    var error: String?
     var link: String?
     var successful: Bool {
         return link != nil
