@@ -89,7 +89,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             displayNotification("\(type) uploaded successfully!", informativeText: upload.link!)
             
             if upload.isScreenshot && defaults.boolForKey(kDeleteScreeenshotAfterUpload) {
-                println("Deleting screenshot @ \(upload.imagePath)")
                 deleteFile(upload.imagePath)
             }
         } else {

@@ -64,7 +64,6 @@ class ScreenshotMonitor {
                     
                     // Ensure that the screenshot detected is from the right folder and isn't blacklisted
                     if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == screenshotLocationPath.stringByStandardizingPath && !contains(blacklist, screenshotName) {
-                        println("Screenshot file event detected @ \(screenshotPath)")
                         callback(screenshotPath: screenshotPath)
                         blacklist.append(screenshotName)
                     }
@@ -75,7 +74,7 @@ class ScreenshotMonitor {
     
     var screenshotLocationPath: String {
         if let dir = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
-            var isDir: ObjCBool = false
+            var isDir = ObjCBool(false)
             if NSFileManager.defaultManager().fileExistsAtPath(dir, isDirectory: &isDir) {
                 return dir
             }

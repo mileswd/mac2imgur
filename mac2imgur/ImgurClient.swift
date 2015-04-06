@@ -173,7 +173,7 @@ class ImgurClient {
         // Add description
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        requestBody.appendData("Uploaded by mac2imgur! (https://mac2imgur.mileswd.com)".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData("Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         requestBody.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
