@@ -29,7 +29,7 @@ class ScreenshotMonitor {
         query = NSMetadataQuery()
         
         // Only accept screenshots
-        query.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1", argumentArray: nil)
+        query.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1")
         
         // Add observers
         NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("initialPhaseComplete"), name: NSMetadataQueryDidFinishGatheringNotification, object: query)
@@ -40,6 +40,7 @@ class ScreenshotMonitor {
     }
     
     @objc func initialPhaseComplete() {
+        // Blacklist all screenshots that already exist
         if let itemsAdded = query.results as? [NSMetadataItem] {
             for item in itemsAdded {
                 // Get the path to the screenshot
@@ -73,12 +74,15 @@ class ScreenshotMonitor {
     }
     
     var screenshotLocationPath: String {
-        if let dir = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
+        // Check for custom screenshot location chosen by user
+        if let customLocation = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
+            // Check that the chosen directory exists, otherwise screencapture will not use it
             var isDir = ObjCBool(false)
-            if NSFileManager.defaultManager().fileExistsAtPath(dir, isDirectory: &isDir) {
-                return dir
+            if NSFileManager.defaultManager().fileExistsAtPath(customLocation, isDirectory: &isDir) && isDir {
+                return customLocation
             }
         }
+        // If a custom location is not defined (or invalid) return the default screenshot location (~/Desktop)
         return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0] as! String
     }
 }
