@@ -25,8 +25,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var disableDetectionOption: NSMenuItem!
     @IBOutlet weak var requireConfirmationOption: NSMenuItem!
     
-    var defaults = NSUserDefaults.standardUserDefaults()
-    var imgurClient = ImgurClient()
+    let defaults = NSUserDefaults.standardUserDefaults()
+    let imgurClient = ImgurClient()
     var monitor: ScreenshotMonitor!
     var authController: ImgurAuthWindowController!
     var statusItem: NSStatusItem!
@@ -129,7 +129,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     // Selector methods
     
     @IBAction func selectImages(sender: NSMenuItem) {
-        var panel = NSOpenPanel()
+        let panel = NSOpenPanel()
         panel.title = "Select Images"
         panel.prompt = "Upload"
         panel.canChooseDirectories = false
