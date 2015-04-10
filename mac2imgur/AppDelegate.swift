@@ -25,24 +25,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var disableDetectionOption: NSMenuItem!
     @IBOutlet weak var requireConfirmationOption: NSMenuItem!
     
+    let activeIcon = NSImage(named: "StatusActive")!
+    let inactiveIcon = NSImage(named: "StatusInactive")!
     let defaults = NSUserDefaults.standardUserDefaults()
     let imgurClient = ImgurClient()
     var monitor: ScreenshotMonitor!
     var authController: ImgurAuthWindowController!
     var statusItem: NSStatusItem!
-    var activeIcon: NSImage!
-    var inactiveIcon: NSImage!
     
     // Delegate methods
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
-        
-        // Create status bar icons
-        inactiveIcon = NSImage(named: "StatusInactive")!
-        inactiveIcon.setTemplate(true)
-        activeIcon = NSImage(named: "StatusActive")!
-        activeIcon.setTemplate(true)
         
         // Set account menu item to relevant title
         updateAccountItemTitle()
