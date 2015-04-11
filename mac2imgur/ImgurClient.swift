@@ -45,10 +45,8 @@ class ImgurClient {
     
     var accessToken: String? {
         didSet {
-            // Update token expiry date
-            let secondsInAnHour: NSTimeInterval = 1 * 60 * 60
-            let now: NSDate = NSDate()
-            lastTokenExpiry = now.dateByAddingTimeInterval(secondsInAnHour)
+            // Update token expiry date (imgur access tokens are valid for 1 hour)
+            lastTokenExpiry = NSDate().dateByAddingTimeInterval(1 * 60 * 60)
         }
     }
     
@@ -74,7 +72,7 @@ class ImgurClient {
         request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
             .validate()
             .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, JSON, error) -> Void in
+            .responseJSON { (request, response, JSON, error) -> () in
                 if let refreshToken = JSON?["refresh_token"] as? String {
                     self.accessToken = JSON?["access_token"] as? String
                     self.username = JSON?["account_username"] as? String
@@ -96,7 +94,7 @@ class ImgurClient {
         request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
             .validate()
             .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, JSON, error) -> Void in
+            .responseJSON { (request, response, JSON, error) -> () in
             if let access = JSON?["access_token"] as? String {
                 self.accessToken = access
                 callback()
@@ -115,18 +113,14 @@ class ImgurClient {
     func addToQueue(upload: ImgurUpload) {
         uploadQueue.append(upload)
         
-        if isAuthenticated {
-            // If necessary, request a new access token
-            if accessTokenIsValid {
-                processQueue()
-            } else {
-                if !authenticationInProgress {
-                    authenticationInProgress = true
-                    requestAccessToken({ () -> () in
-                        self.authenticationInProgress = false
-                        self.processQueue()
-                    })
-                }
+        // If necessary, request a new access token
+        if isAuthenticated && !accessTokenIsValid {
+            if !authenticationInProgress {
+                authenticationInProgress = true
+                requestAccessToken({ () -> () in
+                    self.authenticationInProgress = false
+                    self.processQueue()
+                })
             }
         } else {
             processQueue()
