@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var deleteAfterUploadOption: NSMenuItem!
     @IBOutlet weak var disableDetectionOption: NSMenuItem!
     @IBOutlet weak var requireConfirmationOption: NSMenuItem!
+    @IBOutlet weak var resizeScreenshotsOption: NSMenuItem!
     
     let activeIcon = NSImage(named: "StatusActive")!
     let inactiveIcon = NSImage(named: "StatusInactive")!
@@ -45,6 +46,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         disableDetectionOption.bind("value", toObject: defaults, withKeyPath: kDisableScreenshotDetection, options: nil)
         deleteAfterUploadOption.bind("value", toObject: defaults, withKeyPath: kDeleteScreeenshotAfterUpload, options: nil)
         requireConfirmationOption.bind("value", toObject: defaults, withKeyPath: kRequiresUploadConfirmation, options: nil)
+        resizeScreenshotsOption.bind("value", toObject: defaults, withKeyPath: kResizeScreenshots, options: nil)
+        
+        // Hide screenshot resizing option if a retina display is not detected
+        resizeScreenshotsOption.hidden = NSScreen.mainScreen()?.backingScaleFactor == 1
         
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
@@ -71,6 +76,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if !defaults.boolForKey(kDisableScreenshotDetection) && hasUploadConfirmation(imagePath) {
             updateStatusIcon(true)
             let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true, callback: uploadAttemptCompleted)
+            // Resize the screenshot if necessary
+            if defaults.boolForKey(kResizeScreenshots) {
+                upload.resizeImage()
+            }
             imgurClient.addToQueue(upload)
         }
     }

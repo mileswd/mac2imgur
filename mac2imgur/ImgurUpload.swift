@@ -14,7 +14,7 @@
 * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Foundation
+import Cocoa
 
 class ImgurUpload {
     
@@ -22,6 +22,7 @@ class ImgurUpload {
     let imageUrl: NSURL
     let isScreenshot: Bool
     let callback: (upload: ImgurUpload) -> ()
+    var imageData: NSData
     
     var error: String?
     var link: String?
@@ -32,7 +33,22 @@ class ImgurUpload {
     init(imagePath: String, isScreenshot: Bool, callback: (upload: ImgurUpload) -> ()) {
         self.imagePath = imagePath
         self.imageUrl = NSURL(fileURLWithPath: imagePath)!
+        self.imageData = NSData(contentsOfURL: imageUrl, options: nil, error: nil)!
         self.isScreenshot = isScreenshot
         self.callback = callback
+    }
+    
+    func resizeImage() {
+        let retinaScaleDownFactor = 1 / NSScreen.mainScreen()!.backingScaleFactor
+        let image = NSImage(data: imageData)!
+        let resizedBounds = NSRect(x: 0, y: 0, width: Int(round(image.size.width * retinaScaleDownFactor)), height: Int(round(image.size.height * retinaScaleDownFactor)))
+        let resizedImage = NSImage(size: resizedBounds.size)
+        let imageRep = image.bestRepresentationForRect(resizedBounds, context: nil, hints: nil)
+        
+        resizedImage.lockFocus()
+        image.drawInRect(resizedBounds)
+        resizedImage.unlockFocus()
+        
+        imageData = resizedImage.TIFFRepresentation!
     }
 }

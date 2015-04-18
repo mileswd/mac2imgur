@@ -137,9 +137,6 @@ class ImgurClient {
     }
     
     func attemptUpload(uploadRequest: ImgurUpload) {
-        let url: NSURL = NSURL(fileURLWithPath: uploadRequest.imagePath)!
-        let imageData: NSData = NSData(contentsOfURL: url, options: nil, error: nil)!
-        
         let request = NSMutableURLRequest()
         request.URL = NSURL(string: "\(apiUrl)3/upload")
         request.HTTPMethod = Method.POST.rawValue
@@ -155,7 +152,7 @@ class ImgurClient {
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: attachment; name=\"image\"; filename=\".\(uploadRequest.imagePath.pathExtension)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Type: application/octet-stream\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        requestBody.appendData(imageData)
+        requestBody.appendData(uploadRequest.imageData)
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         // Add title
