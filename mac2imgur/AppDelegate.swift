@@ -78,7 +78,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true, callback: uploadAttemptCompleted)
             // Resize the screenshot if necessary
             if defaults.boolForKey(kResizeScreenshots) {
-                upload.resizeImage()
+                upload.resizeImage(1 / NSScreen.mainScreen()!.backingScaleFactor)
             }
             imgurClient.addToQueue(upload)
         }

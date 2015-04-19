@@ -38,15 +38,14 @@ class ImgurUpload {
         self.callback = callback
     }
     
-    func resizeImage() {
-        let retinaScaleDownFactor = 1 / NSScreen.mainScreen()!.backingScaleFactor
+    func resizeImage(scaleFactor: CGFloat) {
         let image = NSImage(data: imageData)!
-        let resizedBounds = NSRect(x: 0, y: 0, width: Int(round(image.size.width * retinaScaleDownFactor)), height: Int(round(image.size.height * retinaScaleDownFactor)))
+        let resizedBounds = NSRect(x: 0, y: 0, width: round(image.size.width * scaleFactor), height: round(image.size.height * scaleFactor))
         let resizedImage = NSImage(size: resizedBounds.size)
-        let imageRep = image.bestRepresentationForRect(resizedBounds, context: nil, hints: nil)
+        let imageRep = image.bestRepresentationForRect(resizedBounds, context: nil, hints: nil)!
         
         resizedImage.lockFocus()
-        image.drawInRect(resizedBounds)
+        imageRep.drawInRect(resizedBounds)
         resizedImage.unlockFocus()
         
         imageData = resizedImage.TIFFRepresentation!
