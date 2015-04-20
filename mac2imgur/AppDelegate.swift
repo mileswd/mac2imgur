@@ -57,6 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         statusItem.toolTip = "mac2imgur"
         updateStatusIcon(false)
         
+        // Enable drag and drop upload if OS X >= OS X 10.10
         if NSAppKitVersionNumber >= Double(NSAppKitVersionNumber10_10) {
             statusItem.button?.window?.registerForDraggedTypes([NSFilenamesPboardType])
             statusItem.button?.window?.delegate = self
@@ -178,9 +179,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSPasteboard.generalPasteboard().setString(string, forType: NSStringPboardType)
     }
     
-    func deleteFile(pathToFile: String) {
+    func deleteFile(filePath: String) {
         var error: NSError?
-        NSFileManager.defaultManager().removeItemAtPath(pathToFile, error: &error)
+        NSFileManager.defaultManager().removeItemAtPath(filePath, error: &error)
         if error != nil {
             NSLog("An error occurred while attempting to delete a file: %@", error!)
         }
@@ -206,7 +207,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if defaults.boolForKey(kRequiresUploadConfirmation) {
             let alert = NSAlert()
             alert.messageText = "Do you want to upload this screenshot?"
-            alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur, where it is publicly accessible."
+            alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur.com, where it is publicly accessible."
             alert.addButtonWithTitle("Upload")
             alert.addButtonWithTitle("Cancel")
             if alert.runModal() == NSAlertSecondButtonReturn {

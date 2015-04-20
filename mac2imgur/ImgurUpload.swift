@@ -39,15 +39,23 @@ class ImgurUpload {
     }
     
     func resizeImage(scaleFactor: CGFloat) {
-        let image = NSImage(data: imageData)!
-        let resizedBounds = NSRect(x: 0, y: 0, width: round(image.size.width * scaleFactor), height: round(image.size.height * scaleFactor))
-        let resizedImage = NSImage(size: resizedBounds.size)
-        let imageRep = image.bestRepresentationForRect(resizedBounds, context: nil, hints: nil)!
-        
-        resizedImage.lockFocus()
-        imageRep.drawInRect(resizedBounds)
-        resizedImage.unlockFocus()
-        
-        imageData = resizedImage.TIFFRepresentation!
+        if let image = NSImage(data: imageData) {
+            let resizedBounds = NSRect(x: 0, y: 0, width: round(image.size.width * scaleFactor), height: round(image.size.height * scaleFactor))
+            
+            // Only resize the image if a change in size will occur
+            if !NSEqualSizes(resizedBounds.size, image.size) {
+                let resizedImage = NSImage(size: resizedBounds.size)
+                let imageRep = image.bestRepresentationForRect(resizedBounds, context: nil, hints: nil)!
+                
+                resizedImage.lockFocus()
+                imageRep.drawInRect(resizedBounds)
+                resizedImage.unlockFocus()
+                
+                // Use a PNG representation of the resized image
+                imageData = NSBitmapImageRep(data: resizedImage.TIFFRepresentation!)!.representationUsingType(NSBitmapImageFileType.NSPNGFileType, properties: [:])!
+            }
+        } else {
+            NSLog("An error occurred while attempting to resize %@", imagePath)
+        }
     }
 }
