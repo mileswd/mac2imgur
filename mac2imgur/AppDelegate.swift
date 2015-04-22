@@ -15,6 +15,8 @@
 */
 
 import Cocoa
+import Fabric
+import Crashlytics
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate {
@@ -37,6 +39,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     // Delegate methods
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        Fabric.with([Crashlytics()])
+
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
         // Set account menu item to relevant title
