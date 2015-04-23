@@ -39,6 +39,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     // Delegate methods
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        defaults.registerDefaults(["NSApplicationCrashOnExceptions": true])
+        
+        // Crashlytics integration
         Fabric.with([Crashlytics()])
 
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
