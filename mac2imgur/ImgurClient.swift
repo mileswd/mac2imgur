@@ -19,7 +19,7 @@ import Foundation
 class ImgurClient {
     
     let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
-    let apiUrl = "https://api.imgur.com/"
+    let apiURL = "https://api.imgur.com/"
 
     var uploadQueue = [ImgurUpload]()
     var authenticationInProgress: Bool = false
@@ -62,14 +62,14 @@ class ImgurClient {
         return false
     }
     
-    func getTokensFromPin(pin: String, callback: () -> ()) {
+    func requestRefreshTokens(code: String, callback: () -> ()) {
         let parameters = [
             "client_id": imgurClientId,
             "client_secret": imgurClientSecret,
-            "grant_type": "pin",
-            "pin": pin
+            "grant_type": "authorization_code",
+            "code": code
         ]
-        request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
+        request(.POST, "\(apiURL)oauth2/token", parameters: parameters, encoding: .JSON)
             .validate()
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, JSON, error) -> () in
@@ -79,7 +79,7 @@ class ImgurClient {
                     self.refreshToken = refreshToken
                     callback()
                 } else {
-                    NSLog("An error occurred while attempting to obtain tokens from a pin: \(error)\nRequest: \(request)\nResponse: \(response)")
+                    NSLog("An error occurred while attempting to obtain tokens from a pin: \(error)\nRequest: \(request)\nResponse: \(response)\nJSON: \(JSON)")
                 }
         }
     }
@@ -91,7 +91,7 @@ class ImgurClient {
             "grant_type": "refresh_token",
             "refresh_token": self.refreshToken!
         ]
-        request(.POST, "\(apiUrl)oauth2/token", parameters: parameters, encoding: .JSON)
+        request(.POST, "\(apiURL)oauth2/token", parameters: parameters, encoding: .JSON)
             .validate()
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, JSON, error) -> () in
@@ -99,7 +99,7 @@ class ImgurClient {
                 self.accessToken = access
                 callback()
             } else {
-                NSLog("An error occurred while requesting a new access token: \(error)\nRequest: \(request)\nResponse: \(response)")
+                NSLog("An error occurred while requesting a new access token: \(error)\nRequest: \(request)\nResponse: \(response)\nJSON: \(JSON)")
             }
         }
     }
@@ -138,7 +138,7 @@ class ImgurClient {
     
     func attemptUpload(uploadRequest: ImgurUpload) {
         let request = NSMutableURLRequest()
-        request.URL = NSURL(string: "\(apiUrl)3/upload")
+        request.URL = NSURL(string: "\(apiURL)3/upload")
         request.HTTPMethod = Method.POST.rawValue
         
         let requestBody = NSMutableData()
@@ -186,7 +186,7 @@ class ImgurClient {
                     } else {
                         uploadRequest.error = error?.localizedDescription
                     }
-                    NSLog("An error occurred while attempting to upload an image: \(error)\nRequest: \(request)\nResponse: \(response)")
+                    NSLog("An error occurred while attempting to upload an image: \(error)\nRequest: \(request)\nResponse: \(response)\nJSON: \(JSON)")
                 }
                 uploadRequest.callback(upload: uploadRequest)
         }

@@ -33,7 +33,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     let defaults = NSUserDefaults.standardUserDefaults()
     let imgurClient = ImgurClient()
     var monitor: ScreenshotMonitor!
-    var authController: ImgurAuthWindowController!
     var statusItem: NSStatusItem!
     
     // Delegate methods
@@ -45,6 +44,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         Fabric.with([Crashlytics()])
 
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
+        
+        NSAppleEventManager.sharedAppleEventManager().setEventHandler(self, andSelector: "handleURLEvent:withReplyEvent:", forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
         
         // Set account menu item to relevant title
         updateAccountItemTitle()
@@ -108,8 +109,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
-        if let url = NSURL(string: notification.informativeText!) {
-            NSWorkspace.sharedWorkspace().openURL(url)
+        if let URL = NSURL(string: notification.informativeText!) {
+            NSWorkspace.sharedWorkspace().openURL(URL)
         }
     }
     
@@ -137,6 +138,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         return false
     }
     
+    func handleURLEvent(event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        // Attempt to parse response URL
+        if let URLString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue {
+            let URL = NSURL(string: URLString)!
+            if let query = URL.query?.componentsSeparatedByString("&") {
+                var params = [String: String]()
+                for param in query {
+                    let elts = param.componentsSeparatedByString("=")
+                    if elts.count == 2 {
+                        params[elts[0]] = elts[1]
+                    }
+                }
+                if let code = params["code"] {
+                    imgurClient.requestRefreshTokens(code, callback: { () -> () in
+                        self.updateAccountItemTitle()
+                        self.displayNotification("Authentication successful", informativeText: "Signed in as \(self.imgurClient.username!)")
+                    })
+                }
+            }
+        }
+    }
+    
     // Selector methods
     
     @IBAction func selectImages(sender: NSMenuItem) {
@@ -162,15 +185,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             imgurClient.deleteCredentials()
             updateAccountItemTitle()
         } else {
-            authController = ImgurAuthWindowController(windowNibName: "ImgurAuthWindow")
-            authController.client = imgurClient
-            authController.callback = {
-                self.displayNotification("Signed in as \(self.imgurClient.username!)", informativeText: "")
-                self.updateAccountItemTitle()
-                self.authController.close()
-            }
-            NSApplication.sharedApplication().activateIgnoringOtherApps(true)
-            authController.showWindow(self)
+            NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://api.imgur.com/oauth2/authorize?client_id=\(imgurClientId)&response_type=code")!)
         }
     }
     

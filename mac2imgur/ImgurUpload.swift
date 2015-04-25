@@ -19,7 +19,7 @@ import Cocoa
 class ImgurUpload {
     
     let imagePath: String
-    let imageUrl: NSURL
+    let imageURL: NSURL
     let isScreenshot: Bool
     let callback: (upload: ImgurUpload) -> ()
     var imageData: NSData
@@ -32,8 +32,8 @@ class ImgurUpload {
     
     init(imagePath: String, isScreenshot: Bool, callback: (upload: ImgurUpload) -> ()) {
         self.imagePath = imagePath
-        self.imageUrl = NSURL(fileURLWithPath: imagePath)!
-        self.imageData = NSData(contentsOfURL: imageUrl, options: nil, error: nil)!
+        self.imageURL = NSURL(fileURLWithPath: imagePath)!
+        self.imageData = NSData(contentsOfURL: imageURL, options: nil, error: nil)!
         self.isScreenshot = isScreenshot
         self.callback = callback
     }

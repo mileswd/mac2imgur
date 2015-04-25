@@ -32,8 +32,8 @@ class ScreenshotMonitor {
         query.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1")
         
         // Add observers
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("initialPhaseComplete"), name: NSMetadataQueryDidFinishGatheringNotification, object: query)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: NSSelectorFromString("liveUpdatePhaseEvent:"), name: NSMetadataQueryDidUpdateNotification, object: query)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "initialPhaseComplete", name: NSMetadataQueryDidFinishGatheringNotification, object: query)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "liveUpdatePhaseEvent:", name: NSMetadataQueryDidUpdateNotification, object: query)
         
         // Start query
         query.startQuery()

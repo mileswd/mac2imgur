@@ -22,8 +22,6 @@
 		02E4E98D1AE822C3001EB7EB /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 02F3D2091AC3577A007252D4 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
 		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
-		07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */; };
-		07E0DDAA19AABB1300D8ACC6 /* ImgurAuthWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */; };
 		07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,8 +58,6 @@
 		02FDC2D7194DF89D00E8CBC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurClient.swift; sourceTree = "<group>"; };
 		07B42AE619AB75DA00A6349D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImgurAuthWindow.xib; sourceTree = "<group>"; };
-		07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurAuthWindowController.swift; sourceTree = "<group>"; };
 		07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUpload.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,8 +115,6 @@
 				02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */,
 				02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */,
 				02FDC2CE194DF89D00E8CBC9 /* Supporting Files */,
-				07E0DDA719AABAA200D8ACC6 /* ImgurAuthWindow.xib */,
-				07E0DDA919AABB1300D8ACC6 /* ImgurAuthWindowController.swift */,
 				07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */,
 				07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */,
 				02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */,
@@ -204,7 +198,6 @@
 				02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */,
 				02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
-				07E0DDA819AABAA200D8ACC6 /* ImgurAuthWindow.xib in Resources */,
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,7 +239,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07E0DDAA19AABB1300D8ACC6 /* ImgurAuthWindowController.swift in Sources */,
 				02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */,
 				02C8A9D81AB50E4B00E8C704 /* Alamofire.swift in Sources */,
 				07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */,
