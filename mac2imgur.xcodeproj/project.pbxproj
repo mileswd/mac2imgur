@@ -145,8 +145,8 @@
 				02FDC2C8194DF89D00E8CBC9 /* Frameworks */,
 				02236F3719D85668000CEAC3 /* Update CFBundleVersion */,
 				02FDC2C9194DF89D00E8CBC9 /* Resources */,
-				02E4E9831AE81E95001EB7EB /* ShellScript */,
 				02E4E98E1AE822C3001EB7EB /* Embed Frameworks */,
+				02E4E9831AE81E95001EB7EB /* Run Fabric Integration */,
 			);
 			buildRules = (
 			);
@@ -219,13 +219,14 @@
 			shellPath = /bin/sh;
 			shellScript = "revision=$(git rev-list HEAD --count)\nif [ -n \"$revision\" ]; then\necho \"Bumping CFBundleVersion to $revision\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $revision\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\nfi";
 		};
-		02E4E9831AE81E95001EB7EB /* ShellScript */ = {
+		02E4E9831AE81E95001EB7EB /* Run Fabric Integration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Fabric Integration";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

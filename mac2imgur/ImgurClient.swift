@@ -22,7 +22,7 @@ class ImgurClient {
     let apiURL = "https://api.imgur.com/"
 
     var uploadQueue = [ImgurUpload]()
-    var authenticationInProgress: Bool = false
+    var authenticationInProgress = false
     var lastTokenExpiry: NSDate?
     
     var username: String? {
