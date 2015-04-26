@@ -114,6 +114,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
+        return true
+    }
+    
     func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {
         // Ensure that the dragged files are images
         if let files = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
