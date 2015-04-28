@@ -31,17 +31,20 @@ class ScreenshotMonitor {
         // Only accept screenshots
         query.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1")
         
+        // Limit scope to local mounted volumes
+        query.searchScopes = [NSMetadataQueryLocalComputerScope]
+        
         // Add observers
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "initialPhaseComplete", name: NSMetadataQueryDidFinishGatheringNotification, object: query)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "liveUpdatePhaseEvent:", name: NSMetadataQueryDidUpdateNotification, object: query)
+        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidFinishGatheringNotification, object: query, queue: NSOperationQueue.mainQueue(), usingBlock: initialPhaseComplete)
+        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidUpdateNotification, object: query, queue: NSOperationQueue.mainQueue(), usingBlock: liveUpdatePhaseEvent)
         
         // Start query
         query.startQuery()
     }
     
-    @objc func initialPhaseComplete() {
+    func initialPhaseComplete(notification: NSNotification!) {
         // Blacklist all screenshots that already exist
-        if let itemsAdded = query.results as? [NSMetadataItem] {
+        if let itemsAdded = notification.object?.results as? [NSMetadataItem] {
             for item in itemsAdded {
                 // Get the path to the screenshot
                 if let screenshotPath = item.valueForAttribute(NSMetadataItemPathKey) as? String {
@@ -56,7 +59,7 @@ class ScreenshotMonitor {
         }
     }
     
-    @objc func liveUpdatePhaseEvent(notification: NSNotification) {
+    func liveUpdatePhaseEvent(notification: NSNotification!) {
         if let itemsAdded = notification.userInfo?["kMDQueryUpdateAddedItems"] as? [NSMetadataItem] {
             for item in itemsAdded {
                 // Get the path to the screenshot
