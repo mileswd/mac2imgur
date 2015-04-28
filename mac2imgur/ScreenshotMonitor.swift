@@ -33,13 +33,18 @@ class ScreenshotMonitor {
         
         // Limit scope to local mounted volumes
         query.searchScopes = [NSMetadataQueryLocalComputerScope]
-        
-        // Add observers
+    }
+    
+    func startMonitoring() {
         NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidFinishGatheringNotification, object: query, queue: NSOperationQueue.mainQueue(), usingBlock: initialPhaseComplete)
         NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidUpdateNotification, object: query, queue: NSOperationQueue.mainQueue(), usingBlock: liveUpdatePhaseEvent)
-        
-        // Start query
         query.startQuery()
+    }
+    
+    func stopMonitoring() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NSMetadataQueryDidFinishGatheringNotification, object: query)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NSMetadataQueryDidUpdateNotification, object: query)
+        query.stopQuery()
     }
     
     func initialPhaseComplete(notification: NSNotification!) {

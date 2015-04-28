@@ -57,7 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         resizeScreenshotsOption.bind("value", toObject: defaults, withKeyPath: kResizeScreenshots, options: nil)
         
         // Hide screenshot resizing option if a retina display is not detected
-        resizeScreenshotsOption.hidden = NSScreen.mainScreen()?.backingScaleFactor == 1
+        resizeScreenshotsOption.hidden = NSScreen.mainScreen()?.backingScaleFactor <= 1
         
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
@@ -73,11 +73,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         // Start monitoring for screenshots
         monitor = ScreenshotMonitor(callback: screenshotDetected)
+        monitor.startMonitoring()
     }
     
     func applicationWillTerminate(aNotification: NSNotification) {
+        monitor.stopMonitoring()
         NSStatusBar.systemStatusBar().removeStatusItem(statusItem)
-        monitor.query.stopQuery()
     }
     
     func screenshotDetected(imagePath: String) {
