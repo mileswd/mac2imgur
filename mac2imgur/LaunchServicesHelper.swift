@@ -16,36 +16,46 @@
 
 import Foundation
 
+// Refined version of http://stackoverflow.com/a/26953667
 class LaunchServicesHelper {
 
     static private let applicationURL = NSURL(fileURLWithPath: NSBundle.mainBundle().bundlePath)!
 
-    static private var loginItems: LSSharedFileList? {
-        if let loginItems = LSSharedFileListCreate(CFAllocatorGetDefault().takeUnretainedValue(), kLSSharedFileListSessionLoginItems.takeUnretainedValue(), nil) {
-            return loginItems.takeRetainedValue()
-        }
-        return nil
+    static var applicationIsInStartUpItems: Bool {
+        return itemReferencesInLoginItems.existingReference != nil
     }
-
-    static private var loginItem: LSSharedFileListItem? {
-        for item in LSSharedFileListCopySnapshot(loginItems, nil).takeRetainedValue() as NSArray {
-            if (LSSharedFileListItemCopyResolvedURL(item as! LSSharedFileListItem, 0, nil).takeRetainedValue() as NSURL).isEqual(applicationURL) {
-                return (item as! LSSharedFileListItem)
+    
+    static var itemReferencesInLoginItems: (existingReference: LSSharedFileListItemRef?, lastReference: LSSharedFileListItemRef?) {
+        var itemURL = UnsafeMutablePointer<Unmanaged<CFURL>?>.alloc(1)
+        if let loginItemsRef = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileListRef? {
+            let loginItems = LSSharedFileListCopySnapshot(loginItemsRef, nil).takeRetainedValue() as NSArray
+            let lastItemRef = loginItems.lastObject as! LSSharedFileListItemRef
+            for loginItem in loginItems {
+                let currentItemRef = loginItem as! LSSharedFileListItemRef
+                if LSSharedFileListItemResolve(currentItemRef, 0, itemURL, nil) == noErr {
+                    if let URLRef = itemURL.memory?.takeRetainedValue() as? NSURL {
+                        if URLRef.isEqual(applicationURL) {
+                            return (currentItemRef, lastItemRef)
+                        }
+                    }
+                }
             }
+            // The application was not found in the startup list
+            return (nil, lastItemRef)
         }
-        return nil
+        return (nil, nil)
     }
-
-    static var shouldLaunchAtLogin: Bool {
-        set {
-            if shouldLaunchAtLogin && !newValue {
-                LSSharedFileListItemRemove(loginItems, loginItem!)
-            } else if !shouldLaunchAtLogin && newValue {
-                LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst.takeUnretainedValue(), nil, nil, applicationURL as CFURL, nil, nil)
+    
+    static func toggleLaunchAtStartup() {
+        let itemReferences = itemReferencesInLoginItems
+        if let loginItemsRef = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileListRef? {
+            if let existingRef = itemReferences.existingReference {
+                // Remove application from login items
+                LSSharedFileListItemRemove(loginItemsRef, existingRef)
+            } else {
+                // Add application to login items
+                LSSharedFileListInsertItemURL(loginItemsRef, itemReferences.lastReference, nil, nil, applicationURL, nil, nil)
             }
-        }
-        get {
-            return loginItem != nil
         }
     }
 }

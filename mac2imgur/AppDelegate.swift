@@ -51,6 +51,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Set account menu item to relevant title
         updateAccountItemTitle()
         
+        // Set launch at login menu option to current state
+        updateLaunchItemState()
+        
         // Bind menu items to user defaults controller
         disableDetectionOption.bind("value", toObject: defaults, withKeyPath: kDisableScreenshotDetection, options: nil)
         deleteAfterUploadOption.bind("value", toObject: defaults, withKeyPath: kDeleteScreeenshotAfterUpload, options: nil)
@@ -66,14 +69,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         statusItem.toolTip = "mac2imgur"
         updateStatusIcon(false)
         
-        // Enable drag and drop upload and launch item if OS X >= OS X 10.10
+        // Enable drag and drop upload if OS X >= 10.10
         if NSAppKitVersionNumber >= Double(NSAppKitVersionNumber10_10) {
             statusItem.button?.window?.registerForDraggedTypes([NSFilenamesPboardType])
             statusItem.button?.window?.delegate = self
-            // Set launch at login menu option to current state
-            updateLaunchItemState()
-        } else {
-            launchAtLoginOption.hidden = true
         }
         
         // Start monitoring for screenshots
@@ -200,7 +199,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     @IBAction func launchAtLoginAction(sender: NSMenuItem) {
-        LaunchServicesHelper.shouldLaunchAtLogin = !LaunchServicesHelper.shouldLaunchAtLogin
+        LaunchServicesHelper.toggleLaunchAtStartup()
         updateLaunchItemState()
     }
     
@@ -241,7 +240,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func updateLaunchItemState() {
-        launchAtLoginOption.state = LaunchServicesHelper.shouldLaunchAtLogin ? NSOnState : NSOffState
+        launchAtLoginOption.state = LaunchServicesHelper.applicationIsInStartUpItems ? NSOnState : NSOffState
     }
     
     func hasUploadConfirmation(imagePath: String) -> Bool {
