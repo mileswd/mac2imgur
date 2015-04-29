@@ -44,7 +44,6 @@
 		0220B2AA19F4104A0064E9FE /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		022321BE19A6959500048626 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		022321C019A6F57E00048626 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		026E43D71A07E87300A08FC3 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		02933D051A2A7CDA001FB628 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchServicesHelper.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -96,7 +95,6 @@
 				024130D71A0515440062E9D3 /* Dependencies */,
 				02FDC2CD194DF89D00E8CBC9 /* mac2imgur */,
 				02FDC2CC194DF89D00E8CBC9 /* Products */,
-				026E43D71A07E87300A08FC3 /* .travis.yml */,
 				022321BE19A6959500048626 /* LICENSE */,
 				022321C019A6F57E00048626 /* README.md */,
 			);
