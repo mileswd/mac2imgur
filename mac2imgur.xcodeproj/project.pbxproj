@@ -14,6 +14,7 @@
 		026688ED1AE8231E009B45D9 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E4E9841AE81EC4001EB7EB /* Crashlytics.framework */; };
 		026688EE1AE8231E009B45D9 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02E4E9851AE81EC4001EB7EB /* Fabric.framework */; };
 		02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 02933D051A2A7CDA001FB628 /* dsa_pub.pem */; };
+		029FAD891AF032E5002F17E1 /* LaunchServicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02C8A9BD1AB4BA0900E8C704 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9BC1AB4BA0900E8C704 /* Constants.swift */; };
 		02C8A9D81AB50E4B00E8C704 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */; };
@@ -45,6 +46,7 @@
 		022321C019A6F57E00048626 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		026E43D71A07E87300A08FC3 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		02933D051A2A7CDA001FB628 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchServicesHelper.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		02C8A9BC1AB4BA0900E8C704 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */,
 				0220B2AA19F4104A0064E9FE /* AppDelegate.swift */,
 				02C8A9BC1AB4BA0900E8C704 /* Constants.swift */,
+				029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */,
 			);
 			path = mac2imgur;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				02C8A9D81AB50E4B00E8C704 /* Alamofire.swift in Sources */,
 				07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */,
 				07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */,
+				029FAD891AF032E5002F17E1 /* LaunchServicesHelper.swift in Sources */,
 				0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */,
 				02C8A9BD1AB4BA0900E8C704 /* Constants.swift in Sources */,
 			);

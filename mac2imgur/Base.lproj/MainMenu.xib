@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E11f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
@@ -17,6 +17,7 @@
                 <outlet property="accountItem" destination="oDJ-vp-azL" id="CP9-rD-GYd"/>
                 <outlet property="deleteAfterUploadOption" destination="Hcu-OJ-uxu" id="98E-oH-ADe"/>
                 <outlet property="disableDetectionOption" destination="8W0-Wi-U05" id="64P-RJ-rUk"/>
+                <outlet property="launchAtLoginOption" destination="Yco-bQ-8xr" id="LZw-2P-zh4"/>
                 <outlet property="menu" destination="Qba-hr-jWV" id="gnm-M9-Vwq"/>
                 <outlet property="requireConfirmationOption" destination="Kns-ic-LDa" id="ve0-w4-tX8"/>
                 <outlet property="resizeScreenshotsOption" destination="Soj-EO-nCr" id="rn4-hT-d6x"/>
@@ -25,7 +26,7 @@
         <customObject id="uIM-P4-40h" customClass="SUUpdater"/>
         <menu id="Qba-hr-jWV">
             <items>
-                <menuItem title="Select images..." id="d5R-Ji-SH4">
+                <menuItem title="Select Images..." id="d5R-Ji-SH4">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="selectImages:" target="Voe-Tx-rLC" id="cfe-EI-jrC"/>
@@ -43,23 +44,29 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ANL-Dj-7co"/>
-                            <menuItem title="Check for updates..." id="uHT-IY-qeG">
+                            <menuItem title="Check for Updates..." id="uHT-IY-qeG">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="checkForUpdates:" target="uIM-P4-40h" id="MyP-vP-9TH"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Start mac2imgur at Login" id="Yco-bQ-8xr">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="launchAtLoginAction:" target="Voe-Tx-rLC" id="zv4-BU-Ajr"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="CgW-6L-lVT"/>
-                            <menuItem title="Delete screenshot after upload" id="Hcu-OJ-uxu">
+                            <menuItem title="Delete Screenshots After Upload" id="Hcu-OJ-uxu">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="Disable screenshot detection" id="8W0-Wi-U05">
+                            <menuItem title="Disable Screenshot Detection" id="8W0-Wi-U05">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="Require upload confirmation" id="Kns-ic-LDa">
+                            <menuItem title="Require Upload Confirmation" id="Kns-ic-LDa">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
-                            <menuItem title="Resize screenshots" id="Soj-EO-nCr">
+                            <menuItem title="Resize Screenshots" id="Soj-EO-nCr">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
                         </items>

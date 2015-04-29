@@ -27,6 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var disableDetectionOption: NSMenuItem!
     @IBOutlet weak var requireConfirmationOption: NSMenuItem!
     @IBOutlet weak var resizeScreenshotsOption: NSMenuItem!
+    @IBOutlet weak var launchAtLoginOption: NSMenuItem!
     
     let activeIcon = NSImage(named: "StatusActive")!
     let inactiveIcon = NSImage(named: "StatusInactive")!
@@ -49,6 +50,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         // Set account menu item to relevant title
         updateAccountItemTitle()
+        
+        // Set launch at login menu option to current state
+        updateLaunchItemState()
         
         // Bind menu items to user defaults controller
         disableDetectionOption.bind("value", toObject: defaults, withKeyPath: kDisableScreenshotDetection, options: nil)
@@ -194,6 +198,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    @IBAction func launchAtLoginAction(sender: NSMenuItem) {
+        LaunchServicesHelper.shouldLaunchAtLogin = !LaunchServicesHelper.shouldLaunchAtLogin
+        updateLaunchItemState()
+    }
+    
     @IBAction func about(sender: NSMenuItem) {
         NSApplication.sharedApplication().orderFrontStandardAboutPanel(sender)
         NSApplication.sharedApplication().activateIgnoringOtherApps(true)
@@ -227,7 +236,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func updateAccountItemTitle() {
-        accountItem.title = imgurClient.isAuthenticated ? "Sign out (\(imgurClient.username!))" : "Sign in"
+        accountItem.title = imgurClient.isAuthenticated ? "Sign Out (\(imgurClient.username!))" : "Sign in..."
+    }
+    
+    func updateLaunchItemState() {
+        launchAtLoginOption.state = LaunchServicesHelper.shouldLaunchAtLogin ? NSOnState : NSOffState
     }
     
     func hasUploadConfirmation(imagePath: String) -> Bool {
