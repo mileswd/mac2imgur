@@ -23,7 +23,7 @@ class ImgurClient {
 
     var uploadQueue = [ImgurUpload]()
     var authenticationInProgress = false
-    var lastTokenExpiry: NSDate?
+    var tokenExpiryDate: NSDate?
     
     var username: String? {
         get {
@@ -46,7 +46,7 @@ class ImgurClient {
     var accessToken: String? {
         didSet {
             // Update token expiry date (imgur access tokens are valid for 1 hour)
-            lastTokenExpiry = NSDate().dateByAddingTimeInterval(1 * 60 * 60)
+            tokenExpiryDate = NSDate(timeIntervalSinceNow: 1 * 60 * 60)
         }
     }
     
@@ -56,8 +56,7 @@ class ImgurClient {
     
     var accessTokenIsValid: Bool {
         if accessToken != nil {
-            let comparison: NSComparisonResult = lastTokenExpiry!.compare(NSDate())
-            return comparison == NSComparisonResult.OrderedDescending
+            return tokenExpiryDate!.timeIntervalSinceReferenceDate > NSDate().timeIntervalSinceReferenceDate
         }
         return false
     }
