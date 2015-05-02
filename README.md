@@ -1,48 +1,45 @@
-mac2imgur
-========
+# mac2imgur
 
-###Installation Instructions###
+A simple and minimalistic Mac application designed to make uploading images to [imgur.com](https://imgur.com) quick and effortless.
 
-[Download a release](https://mac2imgur.mileswd.com/latest) then simply drop the application into your "Applications" folder.
+## Installation
 
-After opening it, you'll notice a small (hopefully unobtrusive) system tray icon:
+[Download the latest release](https://mileswd.com/mac2imgur/latest) and move the application to your "Applications" folder.
 
-![mac2imgur system tray icon](https://i.imgur.com/ljnNsOK.png "mac2imgur system tray icon")
+OS X 10.9 and above is supported, however the latest version of OS X is recommended.
 
----
+![mac2imgur on OS X Yosemite](http://i.imgur.com/WrMhzbe.png)
 
-###Usage###
+## Usage
 
-#####Press **CMD + SHIFT + 3** to take a full-screen screenshot#####
+The application will listen for new screenshots taken by the [built in screenshot functionality of OS X](http://support.apple.com/kb/ht5775), so you can use the following shortcuts to capture your screen:
 
-#####Press **CMD + SHIFT + 4** to take a selection of the screen#####
+- Press **[CMD ⌘] - [SHIFT ⇧] - [3]** to take a full-screen screenshot
 
-#####Press **CMD + SHIFT + 4 + SPACE** to take screenshot a specific window, menu or dialog#####
+- Press **[CMD ⌘] - [SHIFT ⇧] - [4]** to take a rectangular selection of the screen
 
-After you've taken a screenshot, you will receive a notification via the OS X Notification Center notifying you whether the upload was successful or not.
+- Press **[CMD ⌘] - [SHIFT ⇧] - [4] - [SPACE]** to capture a specific window, menu or dialog
 
-If the upload was successful, the link to the screenshot has been copied to your clipboard.
+Disabling this feature and changing other related settings is possible through the options menu, however to modify options such as the directory where screenshots are stored, please refer to the relevant [terminal commands](http://secrets.blacktree.com/?showapp=com.apple.screencapture).
 
-![mac2imgur upload notification](https://i.imgur.com/P2VIijt.png "mac2imgur upload notification")
+In addition, images can be uploaded manually by either:
 
----
+- Dragging and dropping an image on the status bar icon
+- Clicking the "Select Images..." option in the status bar menu
 
-###About###
+As soon as an image is uploaded, the link is copied to your clipboard and a notification is sent:
+![mac2imgur upload notification](https://i.imgur.com/V2PTN1l.png)
 
-mac2imgur works by "listening" for new screenshots taken by the [built in screenshot functionality of Mac OS X](http://support.apple.com/kb/ht5775). To modify settings such as the directory where screenshots are stored or what format the screenshots are saved as, please refer to the relevant [terminal commands](http://secrets.blacktree.com/?showapp=com.apple.screencapture).
+## Support
 
----
+If you encounter any problems or have an idea for a new feature, don't hesitate to [file an issue](https://github.com/mileswd/mac2imgur/issues) - but please be as descriptive as possible! 
 
-###Issues & Pull Requests###
+On the same note, pull requests to fix bugs, add features or simply to improve the codebase are greatly appreciated.
 
-If something isn't working as expected or you have an idea for a new feature, feel free to [submit an issue](https://github.com/mileswd/mac2imgur/issues).
+If you need help or would just like to say hello, I am also contactable via [Twitter](https://twitter.com/_mileswd) and email ([me@mileswd.com](mailto:me@mileswd.com))
 
-On the same note, pull requests to fix issues, add features or simply to improve the codebase are greatly appreciated - [fork](https://github.com/mileswd/fork) away!
+## Legal
 
----
+mac2imgur is not affiliated with Imgur LLC, but this application would not be possible without the awesome service they offer - so feel free to show them some appreciation! :+1:
 
-###Legal###
-
-mac2imgur is a nonprofit, open source application that is not affiliated with Imgur LLC - however they sure do a fine job over there!
-
-This software is released under a GPLv3 license. See [LICENSE](https://github.com/mileswd/mac2imgur/blob/master/LICENSE) for more information.
+This application is released under a GPLv3 license. See [LICENSE](https://github.com/mileswd/mac2imgur/blob/master/LICENSE) for more information.
