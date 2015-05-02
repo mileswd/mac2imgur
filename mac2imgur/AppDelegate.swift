@@ -78,6 +78,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Start monitoring for screenshots
         monitor = ScreenshotMonitor(callback: screenshotDetected)
         monitor.startMonitoring()
+        
+        // Handle the notification supplied if the application has been launched from the notification center
+        if let userNotification = aNotification.userInfo?[NSApplicationLaunchUserNotificationKey] as? NSUserNotification {
+            userNotificationCenter(NSUserNotificationCenter.defaultUserNotificationCenter(), didActivateNotification: userNotification)
+        }
     }
     
     func applicationWillTerminate(aNotification: NSNotification) {
