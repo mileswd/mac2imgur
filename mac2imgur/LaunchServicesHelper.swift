@@ -29,7 +29,7 @@ class LaunchServicesHelper {
         var itemURL = UnsafeMutablePointer<Unmanaged<CFURL>?>.alloc(1)
         if let loginItemsRef = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileListRef? {
             let loginItems = LSSharedFileListCopySnapshot(loginItemsRef, nil).takeRetainedValue() as NSArray
-            let lastItemRef = loginItems.lastObject as! LSSharedFileListItemRef
+            let lastItemRef = loginItems.lastObject as! LSSharedFileListItemRef?
             for loginItem in loginItems {
                 let currentItemRef = loginItem as! LSSharedFileListItemRef
                 if LSSharedFileListItemResolve(currentItemRef, 0, itemURL, nil) == noErr {
@@ -41,7 +41,7 @@ class LaunchServicesHelper {
                 }
             }
             // The application was not found in the startup list
-            return (nil, lastItemRef)
+            return (nil, lastItemRef ?? kLSSharedFileListItemBeforeFirst.takeRetainedValue())
         }
         return (nil, nil)
     }
