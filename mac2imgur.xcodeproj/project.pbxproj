@@ -232,7 +232,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Dependencies/Fabric.framework/run 201173d14ba047cb8e25b8c79bb8a3c983faeab3 f01da3295d3d2ed83578d441d186d8187c4f3f7107081cc2b241fc85f3a1bd58";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    ./Dependencies/Fabric.framework/run 201173d14ba047cb8e25b8c79bb8a3c983faeab3 f01da3295d3d2ed83578d441d186d8187c4f3f7107081cc2b241fc85f3a1bd58\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -19,7 +19,7 @@ import Fabric
 import Crashlytics
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate, NSMenuDelegate {
     
     @IBOutlet weak var menu: NSMenu!
     @IBOutlet weak var accountItem: NSMenuItem!
@@ -48,12 +48,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         NSAppleEventManager.sharedAppleEventManager().setEventHandler(self, andSelector: "handleURLEvent:withReplyEvent:", forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
         
-        // Set account menu item to relevant title
-        updateAccountItemTitle()
-        
-        // Set launch at login menu option to current state
-        updateLaunchItemState()
-        
         // Bind menu items to user defaults controller
         disableDetectionOption.bind("value", toObject: defaults, withKeyPath: kDisableScreenshotDetection, options: nil)
         deleteAfterUploadOption.bind("value", toObject: defaults, withKeyPath: kDeleteScreeenshotAfterUpload, options: nil)
@@ -61,7 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         resizeScreenshotsOption.bind("value", toObject: defaults, withKeyPath: kResizeScreenshots, options: nil)
         
         // Hide screenshot resizing option if a retina display is not detected
-        resizeScreenshotsOption.hidden = NSScreen.mainScreen()?.backingScaleFactor <= 1
+        resizeScreenshotsOption.hidden = !hasRetinaDisplay
         
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
@@ -96,7 +90,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             updateStatusIcon(true)
             let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true, callback: uploadAttemptCompleted)
             // Resize the screenshot if necessary
-            if defaults.boolForKey(kResizeScreenshots) {
+            if defaults.boolForKey(kResizeScreenshots) && hasRetinaDisplay {
                 upload.resizeImage(1 / NSScreen.mainScreen()!.backingScaleFactor)
             }
             imgurClient.addToQueue(upload)
@@ -126,6 +120,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
         return true
+    }
+    
+    func menuWillOpen(menu: NSMenu) {
+        // Set account menu item to relevant title
+        accountItem.title = imgurClient.isAuthenticated ? "Sign Out (\(imgurClient.username!))" : "Sign in..."
+        
+        // Set launch at login menu option to current state
+        launchAtLoginOption.state = LaunchServicesHelper.applicationIsInStartUpItems ? NSOnState : NSOffState
     }
     
     func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {
@@ -166,7 +168,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 }
                 if let code = params["code"] {
                     imgurClient.requestRefreshTokens(code, callback: { () -> () in
-                        self.updateAccountItemTitle()
                         self.displayNotification("Authentication successful", informativeText: "Signed in as \(self.imgurClient.username!)")
                     })
                 }
@@ -197,7 +198,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBAction func accountAction(sender: NSMenuItem) {
         if imgurClient.isAuthenticated {
             imgurClient.deleteCredentials()
-            updateAccountItemTitle()
         } else {
             NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://api.imgur.com/oauth2/authorize?client_id=\(imgurClientId)&response_type=code")!)
         }
@@ -205,7 +205,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     @IBAction func launchAtLoginAction(sender: NSMenuItem) {
         LaunchServicesHelper.toggleLaunchAtStartup()
-        updateLaunchItemState()
     }
     
     @IBAction func about(sender: NSMenuItem) {
@@ -240,14 +239,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         statusItem.image = isActive ? activeIcon : inactiveIcon
     }
     
-    func updateAccountItemTitle() {
-        accountItem.title = imgurClient.isAuthenticated ? "Sign Out (\(imgurClient.username!))" : "Sign in..."
-    }
-    
-    func updateLaunchItemState() {
-        launchAtLoginOption.state = LaunchServicesHelper.applicationIsInStartUpItems ? NSOnState : NSOffState
-    }
-    
     func hasUploadConfirmation(imagePath: String) -> Bool {
         if defaults.boolForKey(kRequiresUploadConfirmation) {
             let alert = NSAlert()
@@ -260,5 +251,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             }
         }
         return true
+    }
+    
+    var hasRetinaDisplay: Bool {
+        return NSScreen.mainScreen()?.backingScaleFactor > 1
     }
 }

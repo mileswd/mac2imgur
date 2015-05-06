@@ -86,6 +86,9 @@
                     </connections>
                 </menuItem>
             </items>
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="xI5-oF-LsD"/>
+            </connections>
             <point key="canvasLocation" x="382.5" y="359.5"/>
         </menu>
     </objects>

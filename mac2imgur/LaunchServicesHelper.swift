@@ -16,7 +16,7 @@
 
 import Foundation
 
-// Refined version of http://stackoverflow.com/a/26953667
+// Refined version of http://stackoverflow.com/a/27442962
 class LaunchServicesHelper {
 
     static private let applicationURL = NSURL(fileURLWithPath: NSBundle.mainBundle().bundlePath)!
