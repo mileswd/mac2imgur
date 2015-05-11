@@ -163,9 +163,10 @@ public class ImgurClient {
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         // Add description
+        let description =  uploadRequest.description.isEmpty ?"Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)" : uploadRequest.description
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
-        requestBody.appendData("Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)".dataUsingEncoding(NSUTF8StringEncoding)!)
+        requestBody.appendData(description.dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         requestBody.appendData("--\(boundary)--\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)

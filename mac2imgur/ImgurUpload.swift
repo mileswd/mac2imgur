@@ -21,6 +21,7 @@ public class ImgurUpload {
     public let imagePath: String
     public let imageURL: NSURL
     public let isScreenshot: Bool
+    public let description: String
     let callback: (upload: ImgurUpload) -> ()
     var imageData: NSData
     
@@ -30,13 +31,19 @@ public class ImgurUpload {
         return link != nil
     }
     
-    public init(imagePath: String, isScreenshot: Bool, callback: (upload: ImgurUpload) -> ()) {
+    public convenience init(imagePath: String, isScreenshot: Bool,callback: (upload: ImgurUpload) -> ()) {
+        self.init(imagePath: imagePath, isScreenshot:isScreenshot, description:"", callback: callback)
+    }
+    
+    public init (imagePath: String, isScreenshot: Bool, description:String, callback: (upload: ImgurUpload) -> ()){
         self.imagePath = imagePath
         self.imageURL = NSURL(fileURLWithPath: imagePath)!
         self.imageData = NSData(contentsOfURL: imageURL, options: nil, error: nil)!
         self.isScreenshot = isScreenshot
+        self.description = description
         self.callback = callback
     }
+
     
     public  func resizeImage(scaleFactor: CGFloat) {
         if let image = NSImage(data: imageData) {
