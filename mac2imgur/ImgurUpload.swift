@@ -16,29 +16,36 @@
 
 import Cocoa
 
-class ImgurUpload {
+public class ImgurUpload {
     
-    let imagePath: String
-    let imageURL: NSURL
-    let isScreenshot: Bool
+    public let imagePath: String
+    public let imageURL: NSURL
+    public let isScreenshot: Bool
+    public let description: String
     let callback: (upload: ImgurUpload) -> ()
     var imageData: NSData
     
-    var error: String?
-    var link: String?
-    var successful: Bool {
+    public var error: String?
+    public var link: String?
+    public var successful: Bool {
         return link != nil
     }
     
-    init(imagePath: String, isScreenshot: Bool, callback: (upload: ImgurUpload) -> ()) {
+    public convenience init(imagePath: String, isScreenshot: Bool,callback: (upload: ImgurUpload) -> ()) {
+        self.init(imagePath: imagePath, isScreenshot:isScreenshot, description:"", callback: callback)
+    }
+    
+    public init (imagePath: String, isScreenshot: Bool, description:String, callback: (upload: ImgurUpload) -> ()){
         self.imagePath = imagePath
         self.imageURL = NSURL(fileURLWithPath: imagePath)!
         self.imageData = NSData(contentsOfURL: imageURL, options: nil, error: nil)!
         self.isScreenshot = isScreenshot
+        self.description = description
         self.callback = callback
     }
+
     
-    func resizeImage(scaleFactor: CGFloat) {
+    public  func resizeImage(scaleFactor: CGFloat) {
         if let image = NSImage(data: imageData) {
             let resizedBounds = NSRect(x: 0, y: 0, width: round(image.size.width * scaleFactor), height: round(image.size.height * scaleFactor))
             

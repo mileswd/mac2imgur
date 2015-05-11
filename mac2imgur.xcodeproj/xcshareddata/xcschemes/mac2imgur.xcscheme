@@ -20,6 +20,20 @@
                ReferencedContainer = "container:mac2imgur.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DA366D841B0094340043093A"
+               BuildableName = "ImgurFxTests.xctest"
+               BlueprintName = "ImgurFxTests"
+               ReferencedContainer = "container:mac2imgur.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -28,6 +42,16 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DA366D841B0094340043093A"
+               BuildableName = "ImgurFxTests.xctest"
+               BlueprintName = "ImgurFxTests"
+               ReferencedContainer = "container:mac2imgur.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
