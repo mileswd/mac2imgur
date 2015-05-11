@@ -16,15 +16,44 @@
 		02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 02933D051A2A7CDA001FB628 /* dsa_pub.pem */; };
 		029FAD891AF032E5002F17E1 /* LaunchServicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
-		02C8A9BD1AB4BA0900E8C704 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9BC1AB4BA0900E8C704 /* Constants.swift */; };
-		02C8A9D81AB50E4B00E8C704 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
 		02E4E98C1AE822C3001EB7EB /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F3D2091AC3577A007252D4 /* Sparkle.framework */; };
 		02E4E98D1AE822C3001EB7EB /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 02F3D2091AC3577A007252D4 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */; };
-		07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
-		07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */; };
+		DA366DA41B0094BB0043093A /* ImgurFx.h in Headers */ = {isa = PBXBuildFile; fileRef = DA366DA31B0094BB0043093A /* ImgurFx.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DA366DAA1B0094BB0043093A /* ImgurFx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA366D9F1B0094BB0043093A /* ImgurFx.framework */; };
+		DA366DB31B0094BB0043093A /* ImgurFxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA366DB21B0094BB0043093A /* ImgurFxTests.swift */; };
+		DA366DB61B0094BB0043093A /* ImgurFx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA366D9F1B0094BB0043093A /* ImgurFx.framework */; };
+		DA366DB71B0094BB0043093A /* ImgurFx.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DA366D9F1B0094BB0043093A /* ImgurFx.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DA366DBE1B0095740043093A /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */; };
+		DA366DC01B0096D90043093A /* ImgurClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */; };
+		DA366DC11B0096D90043093A /* ImgurUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */; };
+		DA366DC21B0096D90043093A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9BC1AB4BA0900E8C704 /* Constants.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA366DAB1B0094BB0043093A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02FDC2C3194DF89D00E8CBC9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA366D9E1B0094BB0043093A;
+			remoteInfo = ImgurFx;
+		};
+		DA366DAD1B0094BB0043093A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02FDC2C3194DF89D00E8CBC9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02FDC2CA194DF89D00E8CBC9;
+			remoteInfo = mac2imgur;
+		};
+		DA366DB41B0094BB0043093A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02FDC2C3194DF89D00E8CBC9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA366D9E1B0094BB0043093A;
+			remoteInfo = ImgurFx;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		02E4E98E1AE822C3001EB7EB /* Embed Frameworks */ = {
@@ -34,6 +63,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				02E4E98D1AE822C3001EB7EB /* Sparkle.framework in Embed Frameworks */,
+				DA366DB71B0094BB0043093A /* ImgurFx.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,8 +77,8 @@
 		02933D051A2A7CDA001FB628 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchServicesHelper.swift; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
-		02C8A9BC1AB4BA0900E8C704 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
+		02C8A9BC1AB4BA0900E8C704 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = ../mac2imgur/Constants.swift; sourceTree = "<group>"; };
+		02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = ../Dependencies/Alamofire.swift; sourceTree = "<group>"; };
 		02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotMonitor.swift; sourceTree = "<group>"; };
 		02E4E9841AE81EC4001EB7EB /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		02E4E9851AE81EC4001EB7EB /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -57,9 +87,15 @@
 		02FDC2CF194DF89D00E8CBC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		02FDC2D7194DF89D00E8CBC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurClient.swift; sourceTree = "<group>"; };
+		07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImgurClient.swift; path = ../mac2imgur/ImgurClient.swift; sourceTree = "<group>"; };
 		07B42AE619AB75DA00A6349D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurUpload.swift; sourceTree = "<group>"; };
+		07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImgurUpload.swift; path = ../mac2imgur/ImgurUpload.swift; sourceTree = "<group>"; };
+		DA366D9F1B0094BB0043093A /* ImgurFx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ImgurFx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA366DA21B0094BB0043093A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA366DA31B0094BB0043093A /* ImgurFx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgurFx.h; sourceTree = "<group>"; };
+		DA366DA91B0094BB0043093A /* ImgurFxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImgurFxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA366DB11B0094BB0043093A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DA366DB21B0094BB0043093A /* ImgurFxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurFxTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +107,22 @@
 				02E4E98C1AE822C3001EB7EB /* Sparkle.framework in Frameworks */,
 				026688ED1AE8231E009B45D9 /* Crashlytics.framework in Frameworks */,
 				026688EE1AE8231E009B45D9 /* Fabric.framework in Frameworks */,
+				DA366DB61B0094BB0043093A /* ImgurFx.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA366D9B1B0094BB0043093A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA366DA61B0094BB0043093A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA366DAA1B0094BB0043093A /* ImgurFx.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +136,6 @@
 				02E4E9851AE81EC4001EB7EB /* Fabric.framework */,
 				02F3D2091AC3577A007252D4 /* Sparkle.framework */,
 				07B42AE619AB75DA00A6349D /* AppKit.framework */,
-				02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -94,6 +145,8 @@
 			children = (
 				024130D71A0515440062E9D3 /* Dependencies */,
 				02FDC2CD194DF89D00E8CBC9 /* mac2imgur */,
+				DA366DA01B0094BB0043093A /* ImgurFx */,
+				DA366DAF1B0094BB0043093A /* ImgurFxTests */,
 				02FDC2CC194DF89D00E8CBC9 /* Products */,
 				022321BE19A6959500048626 /* LICENSE */,
 				022321C019A6F57E00048626 /* README.md */,
@@ -105,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */,
+				DA366D9F1B0094BB0043093A /* ImgurFx.framework */,
+				DA366DA91B0094BB0043093A /* ImgurFxTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,11 +170,8 @@
 				02FDC2D4194DF89D00E8CBC9 /* Images.xcassets */,
 				02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */,
 				02FDC2CE194DF89D00E8CBC9 /* Supporting Files */,
-				07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */,
-				07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */,
 				02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */,
 				0220B2AA19F4104A0064E9FE /* AppDelegate.swift */,
-				02C8A9BC1AB4BA0900E8C704 /* Constants.swift */,
 				029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */,
 			);
 			path = mac2imgur;
@@ -135,7 +187,56 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DA366DA01B0094BB0043093A /* ImgurFx */ = {
+			isa = PBXGroup;
+			children = (
+				07ACC69A19AB6CEB0073E014 /* ImgurClient.swift */,
+				07F6F73A19ABE6A600BDEB11 /* ImgurUpload.swift */,
+				02C8A9BC1AB4BA0900E8C704 /* Constants.swift */,
+				02C8A9D71AB50E4B00E8C704 /* Alamofire.swift */,
+				DA366DA31B0094BB0043093A /* ImgurFx.h */,
+				DA366DA11B0094BB0043093A /* Supporting Files */,
+			);
+			path = ImgurFx;
+			sourceTree = "<group>";
+		};
+		DA366DA11B0094BB0043093A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA366DA21B0094BB0043093A /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DA366DAF1B0094BB0043093A /* ImgurFxTests */ = {
+			isa = PBXGroup;
+			children = (
+				DA366DB21B0094BB0043093A /* ImgurFxTests.swift */,
+				DA366DB01B0094BB0043093A /* Supporting Files */,
+			);
+			path = ImgurFxTests;
+			sourceTree = "<group>";
+		};
+		DA366DB01B0094BB0043093A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA366DB11B0094BB0043093A /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DA366D9C1B0094BB0043093A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA366DA41B0094BB0043093A /* ImgurFx.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		02FDC2CA194DF89D00E8CBC9 /* mac2imgur */ = {
@@ -152,11 +253,49 @@
 			buildRules = (
 			);
 			dependencies = (
+				DA366DB51B0094BB0043093A /* PBXTargetDependency */,
 			);
 			name = mac2imgur;
 			productName = mac2imgur;
 			productReference = 02FDC2CB194DF89D00E8CBC9 /* mac2imgur.app */;
 			productType = "com.apple.product-type.application";
+		};
+		DA366D9E1B0094BB0043093A /* ImgurFx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA366DB81B0094BB0043093A /* Build configuration list for PBXNativeTarget "ImgurFx" */;
+			buildPhases = (
+				DA366D9A1B0094BB0043093A /* Sources */,
+				DA366D9B1B0094BB0043093A /* Frameworks */,
+				DA366D9C1B0094BB0043093A /* Headers */,
+				DA366D9D1B0094BB0043093A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ImgurFx;
+			productName = ImgurFx;
+			productReference = DA366D9F1B0094BB0043093A /* ImgurFx.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DA366DA81B0094BB0043093A /* ImgurFxTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA366DBB1B0094BB0043093A /* Build configuration list for PBXNativeTarget "ImgurFxTests" */;
+			buildPhases = (
+				DA366DA51B0094BB0043093A /* Sources */,
+				DA366DA61B0094BB0043093A /* Frameworks */,
+				DA366DA71B0094BB0043093A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA366DAC1B0094BB0043093A /* PBXTargetDependency */,
+				DA366DAE1B0094BB0043093A /* PBXTargetDependency */,
+			);
+			name = ImgurFxTests;
+			productName = ImgurFxTests;
+			productReference = DA366DA91B0094BB0043093A /* ImgurFxTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -169,6 +308,13 @@
 				TargetAttributes = {
 					02FDC2CA194DF89D00E8CBC9 = {
 						CreatedOnToolsVersion = 6.0;
+					};
+					DA366D9E1B0094BB0043093A = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					DA366DA81B0094BB0043093A = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = 02FDC2CA194DF89D00E8CBC9;
 					};
 				};
 			};
@@ -186,6 +332,8 @@
 			projectRoot = "";
 			targets = (
 				02FDC2CA194DF89D00E8CBC9 /* mac2imgur */,
+				DA366D9E1B0094BB0043093A /* ImgurFx */,
+				DA366DA81B0094BB0043093A /* ImgurFxTests */,
 			);
 		};
 /* End PBXProject section */
@@ -200,6 +348,20 @@
 				02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */,
 				022321BF19A6959500048626 /* LICENSE in Resources */,
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA366D9D1B0094BB0043093A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA366DA71B0094BB0043093A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,16 +404,49 @@
 			buildActionMask = 2147483647;
 			files = (
 				02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */,
-				02C8A9D81AB50E4B00E8C704 /* Alamofire.swift in Sources */,
-				07F6F73B19ABE6A600BDEB11 /* ImgurUpload.swift in Sources */,
-				07ACC69B19AB6CEB0073E014 /* ImgurClient.swift in Sources */,
 				029FAD891AF032E5002F17E1 /* LaunchServicesHelper.swift in Sources */,
 				0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */,
-				02C8A9BD1AB4BA0900E8C704 /* Constants.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA366D9A1B0094BB0043093A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA366DC01B0096D90043093A /* ImgurClient.swift in Sources */,
+				DA366DC11B0096D90043093A /* ImgurUpload.swift in Sources */,
+				DA366DC21B0096D90043093A /* Constants.swift in Sources */,
+				DA366DBE1B0095740043093A /* Alamofire.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA366DA51B0094BB0043093A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA366DB31B0094BB0043093A /* ImgurFxTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DA366DAC1B0094BB0043093A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA366D9E1B0094BB0043093A /* ImgurFx */;
+			targetProxy = DA366DAB1B0094BB0043093A /* PBXContainerItemProxy */;
+		};
+		DA366DAE1B0094BB0043093A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02FDC2CA194DF89D00E8CBC9 /* mac2imgur */;
+			targetProxy = DA366DAD1B0094BB0043093A /* PBXContainerItemProxy */;
+		};
+		DA366DB51B0094BB0043093A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA366D9E1B0094BB0043093A /* ImgurFx */;
+			targetProxy = DA366DB41B0094BB0043093A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */ = {
@@ -385,6 +580,100 @@
 			};
 			name = Release;
 		};
+		DA366DB91B0094BB0043093A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ImgurFx/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DA366DBA1B0094BB0043093A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ImgurFx/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DA366DBC1B0094BB0043093A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ImgurFxTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mac2imgur.app/Contents/MacOS/mac2imgur";
+			};
+			name = Debug;
+		};
+		DA366DBD1B0094BB0043093A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ImgurFxTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/mac2imgur.app/Contents/MacOS/mac2imgur";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -405,6 +694,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		DA366DB81B0094BB0043093A /* Build configuration list for PBXNativeTarget "ImgurFx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA366DB91B0094BB0043093A /* Debug */,
+				DA366DBA1B0094BB0043093A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		DA366DBB1B0094BB0043093A /* Build configuration list for PBXNativeTarget "ImgurFxTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA366DBC1B0094BB0043093A /* Debug */,
+				DA366DBD1B0094BB0043093A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

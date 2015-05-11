@@ -17,6 +17,7 @@
 import Cocoa
 import Fabric
 import Crashlytics
+import ImgurFx
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate, NSMenuDelegate {

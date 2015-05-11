@@ -16,21 +16,21 @@
 
 import Cocoa
 
-class ImgurUpload {
+public class ImgurUpload {
     
-    let imagePath: String
-    let imageURL: NSURL
-    let isScreenshot: Bool
+    public let imagePath: String
+    public let imageURL: NSURL
+    public let isScreenshot: Bool
     let callback: (upload: ImgurUpload) -> ()
     var imageData: NSData
     
-    var error: String?
-    var link: String?
-    var successful: Bool {
+    public var error: String?
+    public var link: String?
+    public var successful: Bool {
         return link != nil
     }
     
-    init(imagePath: String, isScreenshot: Bool, callback: (upload: ImgurUpload) -> ()) {
+    public init(imagePath: String, isScreenshot: Bool, callback: (upload: ImgurUpload) -> ()) {
         self.imagePath = imagePath
         self.imageURL = NSURL(fileURLWithPath: imagePath)!
         self.imageData = NSData(contentsOfURL: imageURL, options: nil, error: nil)!
@@ -38,7 +38,7 @@ class ImgurUpload {
         self.callback = callback
     }
     
-    func resizeImage(scaleFactor: CGFloat) {
+    public  func resizeImage(scaleFactor: CGFloat) {
         if let image = NSImage(data: imageData) {
             let resizedBounds = NSRect(x: 0, y: 0, width: round(image.size.width * scaleFactor), height: round(image.size.height * scaleFactor))
             

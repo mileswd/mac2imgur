@@ -16,7 +16,9 @@
 
 import Foundation
 
-class ImgurClient {
+public class ImgurClient {
+    
+    public init () {}
     
     let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
     let apiURL = "https://api.imgur.com/"
@@ -25,7 +27,7 @@ class ImgurClient {
     var authenticationInProgress = false
     var tokenExpiryDate: NSDate?
     
-    var username: String? {
+    public var username: String? {
         get {
             return NSUserDefaults.standardUserDefaults().stringForKey(kUsername)
         }
@@ -50,7 +52,7 @@ class ImgurClient {
         }
     }
     
-    var isAuthenticated: Bool {
+    public var isAuthenticated: Bool {
         return username != nil && refreshToken != nil
     }
     
@@ -61,7 +63,7 @@ class ImgurClient {
         return false
     }
     
-    func requestRefreshTokens(code: String, callback: () -> ()) {
+    public func requestRefreshTokens(code: String, callback: () -> ()) {
         let parameters = [
             "client_id": imgurClientId,
             "client_secret": imgurClientSecret,
@@ -83,7 +85,7 @@ class ImgurClient {
         }
     }
     
-    func requestAccessToken(callback: () -> ()) {
+    public func requestAccessToken(callback: () -> ()) {
         let parameters = [
             "client_id": imgurClientId,
             "client_secret": imgurClientSecret,
@@ -103,13 +105,13 @@ class ImgurClient {
         }
     }
     
-    func deleteCredentials() {
+    public func deleteCredentials() {
         // Delete username and refresh token from defaults
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kUsername)
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kRefreshToken)
     }
     
-    func addToQueue(upload: ImgurUpload) {
+    public func addToQueue(upload: ImgurUpload) {
         uploadQueue.append(upload)
         
         // If necessary, request a new access token
@@ -126,7 +128,7 @@ class ImgurClient {
         }
     }
     
-    func processQueue() {
+    public func processQueue() {
         // Upload all images in queue
         for upload in uploadQueue {
             attemptUpload(upload)
@@ -135,7 +137,7 @@ class ImgurClient {
         uploadQueue.removeAll(keepCapacity: false)
     }
     
-    func attemptUpload(uploadRequest: ImgurUpload) {
+    public func attemptUpload(uploadRequest: ImgurUpload) {
         let request = NSMutableURLRequest()
         request.URL = NSURL(string: "\(apiURL)3/upload")
         request.HTTPMethod = Method.POST.rawValue
