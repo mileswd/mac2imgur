@@ -18,15 +18,27 @@ import Foundation
 
 public class ImgurClient {
     
-    public init () {}
+    /// All file types accepted by the Imgur API
+    public let allowedFileTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
     
+    let kRefreshToken = "RefreshToken"
+    let kUsername = "ImgurUsername"
     let boundary: String = "---------------------\(arc4random())\(arc4random())" // Random boundary
     let apiURL = "https://api.imgur.com/"
-
+    
+    let clientId: String
+    let clientSecret: String
+    
     var uploadQueue = [ImgurUpload]()
     var authenticationInProgress = false
     var tokenExpiryDate: NSDate?
     
+    public init(clientId: String, clientSecret: String) {
+        self.clientId = clientId
+        self.clientSecret = clientSecret
+    }
+    
+    /// The username of the currently authenticated user, if any
     public var username: String? {
         get {
             return NSUserDefaults.standardUserDefaults().stringForKey(kUsername)
@@ -63,10 +75,17 @@ public class ImgurClient {
         return false
     }
     
-    public func requestRefreshTokens(code: String, callback: () -> ()) {
+    /**
+    Authenticate with the Imgur API
+    
+    :param: code The authorization code obtained from the Imgur API
+    
+    :callback: The code to be executed upon a successful authentication attempt
+    */
+    public func authenticate(code: String, callback: () -> ()) {
         let parameters = [
-            "client_id": imgurClientId,
-            "client_secret": imgurClientSecret,
+            "client_id": clientId,
+            "client_secret": clientSecret,
             "grant_type": "authorization_code",
             "code": code
         ]
@@ -85,10 +104,10 @@ public class ImgurClient {
         }
     }
     
-    public func requestAccessToken(callback: () -> ()) {
+    func requestAccessToken(callback: () -> ()) {
         let parameters = [
-            "client_id": imgurClientId,
-            "client_secret": imgurClientSecret,
+            "client_id": clientId,
+            "client_secret": clientSecret,
             "grant_type": "refresh_token",
             "refresh_token": self.refreshToken!
         ]
@@ -105,8 +124,8 @@ public class ImgurClient {
         }
     }
     
+    /// Delete Imgur authentication credentials from NSUserDefaults
     public func deleteCredentials() {
-        // Delete username and refresh token from defaults
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kUsername)
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kRefreshToken)
     }
@@ -128,7 +147,7 @@ public class ImgurClient {
         }
     }
     
-    public func processQueue() {
+    func processQueue() {
         // Upload all images in queue
         for upload in uploadQueue {
             attemptUpload(upload)
@@ -137,7 +156,7 @@ public class ImgurClient {
         uploadQueue.removeAll(keepCapacity: false)
     }
     
-    public func attemptUpload(uploadRequest: ImgurUpload) {
+    func attemptUpload(uploadRequest: ImgurUpload) {
         let request = NSMutableURLRequest()
         request.URL = NSURL(string: "\(apiURL)3/upload")
         request.HTTPMethod = Method.POST.rawValue
@@ -147,7 +166,7 @@ public class ImgurClient {
         request.addValue(contentType, forHTTPHeaderField: "Content-Type")
         
         // Add authorization
-        request.addValue(isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(imgurClientId)", forHTTPHeaderField: "Authorization")
+        request.addValue(isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(clientId)", forHTTPHeaderField: "Authorization")
         
         // Add image data
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -163,7 +182,7 @@ public class ImgurClient {
         requestBody.appendData("\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         
         // Add description
-        let description =  uploadRequest.description.isEmpty ?"Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)" : uploadRequest.description
+        let description = uploadRequest.description.isEmpty ? "Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)" : uploadRequest.description
         requestBody.appendData("--\(boundary)\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData("Content-Disposition: form-data; name=\"description\"\r\n\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
         requestBody.appendData(description.dataUsingEncoding(NSUTF8StringEncoding)!)

@@ -35,7 +35,7 @@ public class ImgurUpload {
         self.init(imagePath: imagePath, isScreenshot:isScreenshot, description:"", callback: callback)
     }
     
-    public init (imagePath: String, isScreenshot: Bool, description:String, callback: (upload: ImgurUpload) -> ()){
+    public init(imagePath: String, isScreenshot: Bool, description:String, callback: (upload: ImgurUpload) -> ()){
         self.imagePath = imagePath
         self.imageURL = NSURL(fileURLWithPath: imagePath)!
         self.imageData = NSData(contentsOfURL: imageURL, options: nil, error: nil)!
@@ -43,9 +43,8 @@ public class ImgurUpload {
         self.description = description
         self.callback = callback
     }
-
     
-    public  func resizeImage(scaleFactor: CGFloat) {
+    public func resizeImage(scaleFactor: CGFloat) {
         if let image = NSImage(data: imageData) {
             let resizedBounds = NSRect(x: 0, y: 0, width: round(image.size.width * scaleFactor), height: round(image.size.height * scaleFactor))
             

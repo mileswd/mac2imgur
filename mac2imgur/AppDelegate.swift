@@ -33,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     let activeIcon = NSImage(named: "StatusActive")!
     let inactiveIcon = NSImage(named: "StatusInactive")!
     let defaults = NSUserDefaults.standardUserDefaults()
-    let imgurClient = ImgurClient()
+    let imgurClient = ImgurClient(clientId: imgurClientId, clientSecret: imgurClientSecret)
     var monitor: ScreenshotMonitor!
     var statusItem: NSStatusItem!
     
@@ -135,7 +135,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         // Ensure that the dragged files are images
         if let files = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
             for file in files {
-                if !contains(imgurAllowedFileTypes, file.pathExtension) {
+                if !contains(imgurClient.allowedFileTypes, file.pathExtension) {
                     return NSDragOperation.None
                 }
             }
@@ -168,7 +168,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                     }
                 }
                 if let code = params["code"] {
-                    imgurClient.requestRefreshTokens(code, callback: { () -> () in
+                    imgurClient.authenticate(code, callback: { () -> () in
                         self.displayNotification("Authentication successful", informativeText: "Signed in as \(self.imgurClient.username!)")
                     })
                 }
@@ -184,7 +184,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         panel.prompt = "Upload"
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
-        panel.allowedFileTypes = imgurAllowedFileTypes
+        panel.allowedFileTypes = imgurClient.allowedFileTypes
         if panel.runModal() == NSOKButton {
             for imageURL in panel.URLs {
                 if let imagePath = (imageURL as! NSURL).path {
