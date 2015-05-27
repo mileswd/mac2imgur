@@ -17,142 +17,83 @@
 import Cocoa
 import Fabric
 import Crashlytics
-import ImgurFx
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate, NSMenuDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate, NSURLSessionDataDelegate {
     
-    @IBOutlet weak var menu: NSMenu!
-    @IBOutlet weak var accountItem: NSMenuItem!
-    @IBOutlet weak var deleteAfterUploadOption: NSMenuItem!
-    @IBOutlet weak var disableDetectionOption: NSMenuItem!
-    @IBOutlet weak var requireConfirmationOption: NSMenuItem!
-    @IBOutlet weak var resizeScreenshotsOption: NSMenuItem!
-    @IBOutlet weak var launchAtLoginOption: NSMenuItem!
+    @IBOutlet weak var interfaceHelper: InterfaceHelper!
     
-    let activeIcon = NSImage(named: "StatusActive")!
-    let inactiveIcon = NSImage(named: "StatusInactive")!
     let defaults = NSUserDefaults.standardUserDefaults()
-    let imgurClient = ImgurClient(clientId: imgurClientId, clientSecret: imgurClientSecret)
+    var imgurClient: ImgurClient!
     var monitor: ScreenshotMonitor!
-    var statusItem: NSStatusItem!
-    
-    // Delegate methods
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         defaults.registerDefaults(["NSApplicationCrashOnExceptions": true])
         
         // Crashlytics integration
         Fabric.with([Crashlytics()])
-
+        
+        // Setup Imgur client
+        imgurClient = ImgurClient(username: defaults.stringForKey(kUsername), refreshToken: defaults.stringForKey(kRefreshToken))
+        
+        // Setup user interface
+        interfaceHelper.setup(manualUpload, imgurClient: imgurClient)
+        
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
         NSAppleEventManager.sharedAppleEventManager().setEventHandler(self, andSelector: "handleURLEvent:withReplyEvent:", forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
-        
-        // Bind menu items to user defaults controller
-        disableDetectionOption.bind("value", toObject: defaults, withKeyPath: kDisableScreenshotDetection, options: nil)
-        deleteAfterUploadOption.bind("value", toObject: defaults, withKeyPath: kDeleteScreeenshotAfterUpload, options: nil)
-        requireConfirmationOption.bind("value", toObject: defaults, withKeyPath: kRequiresUploadConfirmation, options: nil)
-        resizeScreenshotsOption.bind("value", toObject: defaults, withKeyPath: kResizeScreenshots, options: nil)
-        
-        // Hide screenshot resizing option if a retina display is not detected
-        resizeScreenshotsOption.hidden = !hasRetinaDisplay
-        
-        // Add menu to status bar
-        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
-        statusItem.menu = menu
-        statusItem.toolTip = "mac2imgur"
-        updateStatusIcon(false)
-        
-        // Enable drag and drop upload if OS X >= 10.10
-        if NSAppKitVersionNumber >= Double(NSAppKitVersionNumber10_10) {
-            statusItem.button?.window?.registerForDraggedTypes([NSFilenamesPboardType])
-            statusItem.button?.window?.delegate = self
-        }
-        
-        // Start monitoring for screenshots
-        monitor = ScreenshotMonitor(callback: screenshotDetected)
-        monitor.startMonitoring()
         
         // Handle the notification supplied if the application has been launched from the notification center
         if let userNotification = aNotification.userInfo?[NSApplicationLaunchUserNotificationKey] as? NSUserNotification {
             userNotificationCenter(NSUserNotificationCenter.defaultUserNotificationCenter(), didActivateNotification: userNotification)
         }
+        
+        // Start monitoring for screenshots
+        monitor = ScreenshotMonitor(callback: screenshotDetected)
+        monitor.startMonitoring()
     }
     
     func applicationWillTerminate(aNotification: NSNotification) {
         monitor.stopMonitoring()
-        NSStatusBar.systemStatusBar().removeStatusItem(statusItem)
+        NSStatusBar.systemStatusBar().removeStatusItem(interfaceHelper.statusItem)
+    }
+    
+    func manualUpload(imagePath: String) {
+        let upload = ImgurUpload(imagePath: imagePath, isScreenshot: false)
+        upload.initiationHandler = uploadAttemptInitiated
+        upload.completionHandler = uploadAttemptCompleted
+        imgurClient.addToQueue(upload)
     }
     
     func screenshotDetected(imagePath: String) {
-        // Check that screenshot detection has not been disabled
-        if !defaults.boolForKey(kDisableScreenshotDetection) && hasUploadConfirmation(imagePath) {
-            updateStatusIcon(true)
-            let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true, callback: uploadAttemptCompleted)
+        if !defaults.boolForKey(kDisableScreenshotDetection) {
+            let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true)
+            upload.initiationHandler = uploadAttemptInitiated
+            upload.completionHandler = uploadAttemptCompleted
             // Resize the screenshot if necessary
-            if defaults.boolForKey(kResizeScreenshots) && hasRetinaDisplay {
+            if defaults.boolForKey(kResizeScreenshots) &&  NSScreen.mainScreen()?.backingScaleFactor > 1 {
                 upload.resizeImage(1 / NSScreen.mainScreen()!.backingScaleFactor)
             }
             imgurClient.addToQueue(upload)
         }
     }
     
+    func uploadAttemptInitiated(upload: ImgurUpload) {
+        interfaceHelper.updateStatusIcon(true)
+    }
+    
     func uploadAttemptCompleted(upload: ImgurUpload) {
-        updateStatusIcon(false)
+        interfaceHelper.updateStatusIcon(false)
         let type = upload.isScreenshot ? "Screenshot" : "Image"
         if upload.successful {
-            copyToClipboard(upload.link!)
-            displayNotification("\(type) uploaded successfully!", informativeText: upload.link!)
-            
-            if upload.isScreenshot && defaults.boolForKey(kDeleteScreeenshotAfterUpload) {
-                deleteFile(upload.imagePath)
+            Utils.copyToClipboard(upload.link!)
+            Utils.displayNotification("\(type) uploaded successfully!", informativeText: upload.link!)
+            if upload.isScreenshot && defaults.boolForKey(kDeleteScreenshotAfterUpload) {
+                Utils.deleteFile(upload.imagePath)
             }
         } else {
-            displayNotification("\(type) upload failed...", informativeText: upload.error ?? "")
+            Utils.displayNotification("\(type) upload failed...", informativeText: upload.error ?? "")
         }
-    }
-    
-    func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
-        if let URL = NSURL(string: notification.informativeText!) {
-            NSWorkspace.sharedWorkspace().openURL(URL)
-        }
-    }
-    
-    func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
-        return true
-    }
-    
-    func menuWillOpen(menu: NSMenu) {
-        // Set account menu item to relevant title
-        accountItem.title = imgurClient.isAuthenticated ? "Sign Out (\(imgurClient.username!))" : "Sign in..."
-        
-        // Set launch at login menu option to current state
-        launchAtLoginOption.state = LaunchServicesHelper.applicationIsInStartUpItems ? NSOnState : NSOffState
-    }
-    
-    func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {
-        // Ensure that the dragged files are images
-        if let files = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
-            for file in files {
-                if !contains(imgurClient.allowedFileTypes, file.pathExtension) {
-                    return NSDragOperation.None
-                }
-            }
-        }
-        return NSDragOperation.Copy
-    }
-    
-    func performDragOperation(sender: NSDraggingInfo) -> Bool {
-        if let filePaths = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
-            for filePath in filePaths {
-                let upload = ImgurUpload(imagePath: filePath, isScreenshot: false, callback: uploadAttemptCompleted)
-                imgurClient.addToQueue(upload)
-                updateStatusIcon(true)
-            }
-            return true
-        }
-        return false
     }
     
     func handleURLEvent(event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
@@ -160,101 +101,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if let URLString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue {
             let URL = NSURL(string: URLString)!
             if let query = URL.query?.componentsSeparatedByString("&") {
-                var params = [String: String]()
-                for param in query {
-                    let elts = param.componentsSeparatedByString("=")
-                    if elts.count == 2 {
-                        params[elts[0]] = elts[1]
+                var parameters = [String: String]()
+                for parameter in query {
+                    let pair = parameter.componentsSeparatedByString("=")
+                    if pair.count == 2 {
+                        parameters[pair[0]] = pair[1]
                     }
                 }
-                if let code = params["code"] {
-                    imgurClient.authenticate(code, callback: { () -> () in
-                        self.displayNotification("Authentication successful", informativeText: "Signed in as \(self.imgurClient.username!)")
+                if let code = parameters["code"] {
+                    imgurClient.authenticate(code, callback: { (username: String, refreshToken: String) -> Void in
+                        self.defaults.setObject(username, forKey: kUsername)
+                        self.defaults.setObject(refreshToken, forKey: kRefreshToken)
+                        Utils.displayNotification("Authentication successful", informativeText: "Signed in as \(username)")
                     })
                 }
             }
         }
     }
     
-    // Selector methods
-    
-    @IBAction func selectImages(sender: NSMenuItem) {
-        let panel = NSOpenPanel()
-        panel.title = "Select Images"
-        panel.prompt = "Upload"
-        panel.canChooseDirectories = false
-        panel.allowsMultipleSelection = true
-        panel.allowedFileTypes = imgurClient.allowedFileTypes
-        if panel.runModal() == NSOKButton {
-            for imageURL in panel.URLs {
-                if let imagePath = (imageURL as! NSURL).path {
-                    let upload = ImgurUpload(imagePath: imagePath, isScreenshot: false, callback: uploadAttemptCompleted)
-                    imgurClient.addToQueue(upload)
-                    updateStatusIcon(true)
-                }
-            }
+    func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
+        // Open URL if present in the informativeText field of a notification
+        if let URL = NSURL(string: notification.informativeText!) {
+            NSWorkspace.sharedWorkspace().openURL(URL)
         }
     }
     
-    @IBAction func accountAction(sender: NSMenuItem) {
-        if imgurClient.isAuthenticated {
-            imgurClient.deleteCredentials()
-        } else {
-            NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://api.imgur.com/oauth2/authorize?client_id=\(imgurClientId)&response_type=code")!)
-        }
-    }
-    
-    @IBAction func launchAtLoginAction(sender: NSMenuItem) {
-        LaunchServicesHelper.toggleLaunchAtStartup()
-    }
-    
-    @IBAction func about(sender: NSMenuItem) {
-        NSApplication.sharedApplication().orderFrontStandardAboutPanel(sender)
-        NSApplication.sharedApplication().activateIgnoringOtherApps(true)
-    }
-    
-    // Utility methods
-    
-    func copyToClipboard(string: String) {
-        NSPasteboard.generalPasteboard().clearContents()
-        NSPasteboard.generalPasteboard().setString(string, forType: NSStringPboardType)
-    }
-    
-    func deleteFile(filePath: String) {
-        var error: NSError?
-        NSFileManager.defaultManager().removeItemAtPath(filePath, error: &error)
-        if error != nil {
-            NSLog("An error occurred while attempting to delete a file: %@", error!)
-        }
-    }
-    
-    func displayNotification(title: String, informativeText: String) {
-        let notification = NSUserNotification()
-        notification.title = title
-        notification.informativeText = informativeText
-        notification.soundName = NSUserNotificationDefaultSoundName
-        NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
-    }
-    
-    func updateStatusIcon(isActive: Bool) {
-        statusItem.image = isActive ? activeIcon : inactiveIcon
-    }
-    
-    func hasUploadConfirmation(imagePath: String) -> Bool {
-        if defaults.boolForKey(kRequiresUploadConfirmation) {
-            let alert = NSAlert()
-            alert.messageText = "Do you want to upload this screenshot?"
-            alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur.com, where it is publicly accessible."
-            alert.addButtonWithTitle("Upload")
-            alert.addButtonWithTitle("Cancel")
-            if alert.runModal() == NSAlertSecondButtonReturn {
-                return false
-            }
-        }
+    // Always show notifications
+    func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
         return true
-    }
-    
-    var hasRetinaDisplay: Bool {
-        return NSScreen.mainScreen()?.backingScaleFactor > 1
     }
 }

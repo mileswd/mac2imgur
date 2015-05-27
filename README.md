@@ -20,7 +20,7 @@ The application will listen for new screenshots taken by the [built in screensho
 
 - Press **[CMD ⌘] - [SHIFT ⇧] - [4] - [SPACE]** to capture a specific window, menu or dialog
 
-Disabling this feature and changing other related settings is possible through the options menu, however to modify options such as the directory where screenshots are stored, please refer to the relevant [terminal commands](http://secrets.blacktree.com/?showapp=com.apple.screencapture).
+Disabling this feature and changing other related settings is possible through the preferences menu, however to modify options such as the directory where screenshots are stored, please refer to the relevant [terminal commands](http://secrets.blacktree.com/?showapp=com.apple.screencapture).
 
 In addition, images can be uploaded manually by either:
 

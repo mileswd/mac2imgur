@@ -16,35 +16,29 @@
 
 import Cocoa
 
-public class ImgurUpload {
+class ImgurUpload {
     
-    public let imagePath: String
-    public let imageURL: NSURL
-    public let isScreenshot: Bool
-    public let description: String
-    let callback: (upload: ImgurUpload) -> ()
+    let imagePath: String
+    let imageURL: NSURL
+    let isScreenshot: Bool
     var imageData: NSData
+    var initiationHandler: ((upload: ImgurUpload) -> Void)?
+    var completionHandler: ((upload: ImgurUpload) -> Void)?
     
-    public var error: String?
-    public var link: String?
-    public var successful: Bool {
+    var error: String?
+    var link: String?
+    var successful: Bool {
         return link != nil
     }
     
-    public convenience init(imagePath: String, isScreenshot: Bool,callback: (upload: ImgurUpload) -> ()) {
-        self.init(imagePath: imagePath, isScreenshot:isScreenshot, description:"", callback: callback)
-    }
-    
-    public init(imagePath: String, isScreenshot: Bool, description:String, callback: (upload: ImgurUpload) -> ()){
+    init(imagePath: String, isScreenshot: Bool) {
         self.imagePath = imagePath
         self.imageURL = NSURL(fileURLWithPath: imagePath)!
         self.imageData = NSData(contentsOfURL: imageURL, options: nil, error: nil)!
         self.isScreenshot = isScreenshot
-        self.description = description
-        self.callback = callback
     }
     
-    public func resizeImage(scaleFactor: CGFloat) {
+    func resizeImage(scaleFactor: CGFloat) {
         if let image = NSImage(data: imageData) {
             let resizedBounds = NSRect(x: 0, y: 0, width: round(image.size.width * scaleFactor), height: round(image.size.height * scaleFactor))
             

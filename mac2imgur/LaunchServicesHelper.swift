@@ -18,14 +18,14 @@ import Foundation
 
 // Refined version of http://stackoverflow.com/a/27442962
 class LaunchServicesHelper {
-
-    static private let applicationURL = NSURL(fileURLWithPath: NSBundle.mainBundle().bundlePath)!
-
-    static var applicationIsInStartUpItems: Bool {
+    
+    let applicationURL = NSURL(fileURLWithPath: NSBundle.mainBundle().bundlePath)!
+    
+    var applicationIsInStartUpItems: Bool {
         return itemReferencesInLoginItems.existingReference != nil
     }
     
-    static var itemReferencesInLoginItems: (existingReference: LSSharedFileListItemRef?, lastReference: LSSharedFileListItemRef?) {
+    var itemReferencesInLoginItems: (existingReference: LSSharedFileListItemRef?, lastReference: LSSharedFileListItemRef?) {
         var itemURL = UnsafeMutablePointer<Unmanaged<CFURL>?>.alloc(1)
         if let loginItemsRef = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileListRef? {
             let loginItems = LSSharedFileListCopySnapshot(loginItemsRef, nil).takeRetainedValue() as NSArray
@@ -46,7 +46,7 @@ class LaunchServicesHelper {
         return (nil, nil)
     }
     
-    static func toggleLaunchAtStartup() {
+    func toggleLaunchAtStartup() {
         let itemReferences = itemReferencesInLoginItems
         if let loginItemsRef = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileListRef? {
             if let existingRef = itemReferences.existingReference {

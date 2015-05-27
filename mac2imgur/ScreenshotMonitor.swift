@@ -18,11 +18,11 @@ import Foundation
 
 class ScreenshotMonitor {
     
-    let callback: (screenshotPath: String) -> ()
+    let callback: (screenshotPath: String) -> Void
     var query: NSMetadataQuery
     var blacklist: [String]
     
-    init(callback: (screenshotPath: String) -> ()) {
+    init(callback: (screenshotPath: String) -> Void) {
         self.callback = callback
         self.blacklist = []
         
@@ -36,8 +36,8 @@ class ScreenshotMonitor {
     }
     
     func startMonitoring() {
-        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidFinishGatheringNotification, object: query, queue: NSOperationQueue.mainQueue(), usingBlock: initialPhaseComplete)
-        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidUpdateNotification, object: query, queue: NSOperationQueue.mainQueue(), usingBlock: liveUpdatePhaseEvent)
+        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidFinishGatheringNotification, object: query, queue: nil, usingBlock: initialPhaseComplete)
+        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidUpdateNotification, object: query, queue: nil, usingBlock: liveUpdatePhaseEvent)
         query.startQuery()
     }
     
