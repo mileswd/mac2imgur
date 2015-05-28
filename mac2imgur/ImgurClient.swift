@@ -136,16 +136,16 @@ class ImgurClient {
         }
     }
     
-    func attemptUpload(uploadRequest: ImgurUpload) {
+    func attemptUpload(upload: ImgurUpload) {
         let headers = [
             "Authorization": isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(imgurClientId)"
         ]
         let parameters = [
-            "title": uploadRequest.imagePath.lastPathComponent.stringByDeletingPathExtension,
+            "title": upload.imagePath.lastPathComponent.stringByDeletingPathExtension,
             "description": "Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)"
         ]
         let files = [
-            "image": HTTPFile.URL(uploadRequest.imageURL, nil)
+            "image": HTTPFile.Data("image.\(upload.imageExtension)", upload.imageData, nil)
         ]
         Just.post(
             "\(apiURL)/3/image",
@@ -155,16 +155,16 @@ class ImgurClient {
             headers: headers) { (result: HTTPResult!) -> Void in
                 if let link = result.json?.objectForKey("data")?.objectForKey("link") as? String {
                     // Update link provided by API to HTTPS if necessary
-                    uploadRequest.link = link.stringByReplacingOccurrencesOfString("http://", withString: "https://")
+                    upload.link = link.stringByReplacingOccurrencesOfString("http://", withString: "https://")
                 } else {
                     if let error = result.json?.objectForKey("data")?.objectForKey("error") as? String {
-                        uploadRequest.error = "Imgur responded with the following error: \"\(error)\""
+                        upload.error = "Imgur responded with the following error: \"\(error)\""
                     } else {
-                        uploadRequest.error = result.error?.localizedDescription
+                        upload.error = result.error?.localizedDescription
                     }
                     NSLog("An error occurred while attempting to upload an image: \(result.error)\nResponse: \(result.response)\nJSON: \(result.json)")
                 }
-                uploadRequest.completionHandler?(upload: uploadRequest)
+                upload.completionHandler?(upload: upload)
         }
     }
 }

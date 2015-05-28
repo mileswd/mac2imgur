@@ -65,7 +65,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Screenshots" id="kcL-cB-Kd5">
                                     <items>
-                                        <menuItem title="Downsize from Retina" id="Soj-EO-nCr">
+                                        <menuItem title="Downscale from Retina" id="Soj-EO-nCr">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem title="Delete After Upload" id="Hcu-OJ-uxu">

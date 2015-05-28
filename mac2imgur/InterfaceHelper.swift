@@ -75,8 +75,17 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         // Set launch at login menu option to current state
         launchAtLoginPreference.state = launchServicesHelper.applicationIsInStartUpItems ? NSOnState : NSOffState
         
+        var retinaDisplayDetected = false
+        if let screens = NSScreen.screens() as? [NSScreen] {
+            for screen in screens {
+                if screen.backingScaleFactor > 1 {
+                    retinaDisplayDetected = true
+                }
+            }
+        }
+
         // Hide screenshot resizing preference if a retina display is not detected
-        resizeScreenshotsPreference.hidden = NSScreen.mainScreen()?.backingScaleFactor <= 1
+        resizeScreenshotsPreference.hidden = !retinaDisplayDetected
     }
     
     func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {

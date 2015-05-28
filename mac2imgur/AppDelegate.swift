@@ -71,8 +71,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             upload.initiationHandler = uploadAttemptInitiated
             upload.completionHandler = uploadAttemptCompleted
             // Resize the screenshot if necessary
-            if defaults.boolForKey(kResizeScreenshots) &&  NSScreen.mainScreen()?.backingScaleFactor > 1 {
-                upload.resizeImage(1 / NSScreen.mainScreen()!.backingScaleFactor)
+            if defaults.boolForKey(kResizeScreenshots) {
+                upload.downscaleRetinaImage()
             }
             imgurClient.addToQueue(upload)
         }
