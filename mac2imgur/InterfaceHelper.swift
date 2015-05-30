@@ -24,6 +24,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     let inactiveIcon = NSImage(named: "StatusInactive")!
     
     @IBOutlet weak var menu: NSMenu!
+    @IBOutlet weak var recentUploadsItem: NSMenuItem!
     @IBOutlet weak var accountAuthItem: NSMenuItem!
     @IBOutlet weak var accountWebItem: NSMenuItem!
     @IBOutlet weak var deleteAfterUploadPreference: NSMenuItem!
@@ -75,6 +76,9 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         // Set launch at login menu option to current state
         launchAtLoginPreference.state = launchServicesHelper.applicationIsInStartUpItems ? NSOnState : NSOffState
         
+        // Hide recent uploads menu if it is empty
+        recentUploadsItem.hidden = recentUploadsItem.submenu?.itemArray.count == 0
+        
         var retinaDisplayDetected = false
         if let screens = NSScreen.screens() as? [NSScreen] {
             for screen in screens {
@@ -86,6 +90,24 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
 
         // Hide screenshot resizing preference if a retina display is not detected
         resizeScreenshotsPreference.hidden = !retinaDisplayDetected
+    }
+    
+    func addRecentUpload(upload: ImgurUpload) {
+        let menuItem = NSMenuItem(title: upload.imagePath.lastPathComponent, action: "recentUploadAction:", keyEquivalent: "")
+        let image = NSImage(data: upload.imageData)!
+        let scaleFactor = 16 / max(image.size.width, image.size.height)
+        let width = round(image.size.width * scaleFactor)
+        let height = round(image.size.height * scaleFactor)
+        image.size = NSSize(width: width, height: height)
+        menuItem.image = image
+        menuItem.target = self
+        menuItem.representedObject = upload.link
+        recentUploadsItem.submenu?.addItem(menuItem)
+    }
+    
+    func recentUploadAction(sender: NSMenuItem) {
+        let URL = NSURL(string: sender.representedObject as! String)!
+        NSWorkspace.sharedWorkspace().openURL(URL)
     }
     
     func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {

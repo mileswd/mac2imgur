@@ -25,17 +25,22 @@
                 <outlet property="disableDetectionPreference" destination="8W0-Wi-U05" id="JhT-8C-JvS"/>
                 <outlet property="launchAtLoginPreference" destination="Yco-bQ-8xr" id="ePs-eu-qgw"/>
                 <outlet property="menu" destination="Qba-hr-jWV" id="gnm-M9-Vwq"/>
+                <outlet property="recentUploadsItem" destination="b7Q-LI-ncN" id="5zq-3l-NDm"/>
                 <outlet property="resizeScreenshotsPreference" destination="Soj-EO-nCr" id="yWw-Aa-gu8"/>
             </connections>
         </customObject>
         <customObject id="uIM-P4-40h" customClass="SUUpdater"/>
         <menu id="Qba-hr-jWV">
             <items>
-                <menuItem title="Select Images…" id="d5R-Ji-SH4">
+                <menuItem title="Upload Images…" id="d5R-Ji-SH4">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="selectImagesAction:" target="Voe-Tx-rLC" id="2TK-Rg-z4j"/>
                     </connections>
+                </menuItem>
+                <menuItem title="Recent Uploads" id="b7Q-LI-ncN">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Recent Uploads" id="d3k-s4-iQe"/>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="m8J-uo-3rd"/>
                 <menuItem title="Preferences" id="End-bd-yda">

@@ -86,6 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         interfaceHelper.updateStatusIcon(false)
         let type = upload.isScreenshot ? "Screenshot" : "Image"
         if upload.successful {
+            interfaceHelper.addRecentUpload(upload)
             Utils.copyToClipboard(upload.link!)
             Utils.displayNotification("\(type) uploaded successfully!", informativeText: upload.link!)
             if upload.isScreenshot && defaults.boolForKey(kDeleteScreenshotAfterUpload) {
