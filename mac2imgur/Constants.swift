@@ -17,6 +17,7 @@
 // NSUserDefaults keys
 let kDeleteScreenshotAfterUpload = "DeleteScreenshotAfterUpload"
 let kDisableScreenshotDetection = "DisableScreenshotDetection"
+let kRequiresUploadConfirmation = "RequiresUploadConfirmation"
 let kResizeScreenshots = "ResizeScreenshots"
 let kRefreshToken = "RefreshToken"
 let kUsername = "ImgurUsername"

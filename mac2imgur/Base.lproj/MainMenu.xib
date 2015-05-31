@@ -26,6 +26,7 @@
                 <outlet property="launchAtLoginPreference" destination="Yco-bQ-8xr" id="ePs-eu-qgw"/>
                 <outlet property="menu" destination="Qba-hr-jWV" id="gnm-M9-Vwq"/>
                 <outlet property="recentUploadsItem" destination="b7Q-LI-ncN" id="5zq-3l-NDm"/>
+                <outlet property="requiresConfirmationPreference" destination="WTn-6f-hk6" id="OS7-Tg-lmo"/>
                 <outlet property="resizeScreenshotsPreference" destination="Soj-EO-nCr" id="yWw-Aa-gu8"/>
             </connections>
         </customObject>
@@ -77,6 +78,9 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                         <menuItem title="Ignore New Screenshots" id="8W0-Wi-U05">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                        <menuItem title="Request Confirmation" id="WTn-6f-hk6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                     </items>

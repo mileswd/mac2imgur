@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func screenshotDetected(imagePath: String) {
-        if !defaults.boolForKey(kDisableScreenshotDetection) {
+        if !defaults.boolForKey(kDisableScreenshotDetection) && interfaceHelper.hasUploadConfirmation(imagePath) {
             let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true)
             upload.initiationHandler = uploadAttemptInitiated
             upload.completionHandler = uploadAttemptCompleted

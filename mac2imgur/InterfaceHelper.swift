@@ -29,7 +29,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     @IBOutlet weak var accountWebItem: NSMenuItem!
     @IBOutlet weak var deleteAfterUploadPreference: NSMenuItem!
     @IBOutlet weak var disableDetectionPreference: NSMenuItem!
-    @IBOutlet weak var requireConfirmationPreference: NSMenuItem!
+    @IBOutlet weak var requiresConfirmationPreference: NSMenuItem!
     @IBOutlet weak var resizeScreenshotsPreference: NSMenuItem!
     @IBOutlet weak var launchAtLoginPreference: NSMenuItem!
     
@@ -47,6 +47,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         disableDetectionPreference.bind("value", toObject: defaults, withKeyPath: kDisableScreenshotDetection, options: nil)
         deleteAfterUploadPreference.bind("value", toObject: defaults, withKeyPath: kDeleteScreenshotAfterUpload, options: nil)
         resizeScreenshotsPreference.bind("value", toObject: defaults, withKeyPath: kResizeScreenshots, options: nil)
+        requiresConfirmationPreference.bind("value", toObject: defaults, withKeyPath: kRequiresUploadConfirmation, options: nil)
         
         // Add menu to status bar
         statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
@@ -59,6 +60,20 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
             statusItem.button?.window?.registerForDraggedTypes([NSFilenamesPboardType])
             statusItem.button?.window?.delegate = self
         }
+    }
+    
+    func hasUploadConfirmation(imagePath: String) -> Bool {
+        if defaults.boolForKey(kRequiresUploadConfirmation) {
+            let alert = NSAlert()
+            alert.messageText = "Do you want to upload this screenshot?"
+            alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur.com, where it is publicly accessible."
+            alert.addButtonWithTitle("Upload")
+            alert.addButtonWithTitle("Cancel")
+            if alert.runModal() == NSAlertSecondButtonReturn {
+                return false
+            }
+        }
+        return true
     }
     
     func updateStatusIcon(uploadInProgress: Bool) {
