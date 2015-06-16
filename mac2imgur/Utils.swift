@@ -24,10 +24,10 @@ class Utils {
     }
     
     static func deleteFile(filePath: String) {
-        var error: NSError?
-        NSFileManager.defaultManager().removeItemAtPath(filePath, error: &error)
-        if error != nil {
-            NSLog("An error occurred while attempting to delete a file: %@", error!)
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(filePath)
+        } catch let error as NSError {
+            NSLog("An error occurred while attempting to delete a file: %@", error)
         }
     }
     
@@ -37,5 +37,11 @@ class Utils {
         notification.informativeText = informativeText
         notification.soundName = NSUserNotificationDefaultSoundName
         NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
+    }
+    
+    static func openURL(URLString: String) {
+        if let URL = NSURL(string: URLString) {
+            NSWorkspace.sharedWorkspace().openURL(URL)
+        }
     }
 }

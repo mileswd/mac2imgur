@@ -56,7 +56,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         statusItem.image = inactiveIcon
         
         // Enable drag and drop upload if OS X >= 10.10
-        if NSAppKitVersionNumber >= Double(NSAppKitVersionNumber10_10) {
+        if #available(OSX 10.10, *) {
             statusItem.button?.window?.registerForDraggedTypes([NSFilenamesPboardType])
             statusItem.button?.window?.delegate = self
         }
@@ -95,7 +95,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         recentUploadsItem.hidden = recentUploadsItem.submenu?.itemArray.count == 0
         
         var retinaDisplayDetected = false
-        if let screens = NSScreen.screens() as? [NSScreen] {
+        if let screens = NSScreen.screens() {
             for screen in screens {
                 if screen.backingScaleFactor > 1 {
                     retinaDisplayDetected = true
@@ -121,15 +121,16 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     }
     
     func recentUploadAction(sender: NSMenuItem) {
-        let URL = NSURL(string: sender.representedObject as! String)!
-        NSWorkspace.sharedWorkspace().openURL(URL)
+        if let URLString = sender.representedObject as? String {
+            Utils.openURL(URLString)
+        }
     }
     
     func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {
         // Ensure that the dragged files are images
         if let files = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
             for file in files {
-                if !contains(imgurAllowedFileTypes, file.pathExtension) {
+                if !imgurAllowedFileTypes.contains(file.pathExtension) {
                     return NSDragOperation.None
                 }
             }
@@ -158,7 +159,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         panel.allowedFileTypes = imgurAllowedFileTypes
         if panel.runModal() == NSOKButton {
             for imageURL in panel.URLs {
-                upload(imagePath: (imageURL as! NSURL).path!)
+                upload(imagePath: imageURL.path!)
             }
         }
     }
@@ -169,12 +170,12 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
             defaults.removeObjectForKey(kRefreshToken)
             imgurClient.deauthenticate()
         } else {
-            NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://api.imgur.com/oauth2/authorize?client_id=\(imgurClientId)&response_type=code")!)
+            Utils.openURL("https://api.imgur.com/oauth2/authorize?client_id=\(imgurClientId)&response_type=code")
         }
     }
     
     @IBAction func accountWebAction(sender: NSMenuItem) {
-        NSWorkspace.sharedWorkspace().openURL(NSURL(string: "https://\(imgurClient.username!).imgur.com/all/")!)
+        Utils.openURL("https://\(imgurClient.username!).imgur.com/all/")
     }
     
     @IBAction func launchAtLoginAction(sender: NSMenuItem) {

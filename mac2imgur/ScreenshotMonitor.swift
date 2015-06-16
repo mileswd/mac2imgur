@@ -56,7 +56,7 @@ class ScreenshotMonitor {
                     let screenshotName = screenshotPath.lastPathComponent.stringByDeletingPathExtension
                     
                     // Blacklist the screenshot if it hasn't already been blacklisted
-                    if !contains(blacklist, screenshotName) {
+                    if !blacklist.contains(screenshotName) {
                         blacklist.append(screenshotName)
                     }
                 }
@@ -68,12 +68,21 @@ class ScreenshotMonitor {
         if let itemsAdded = notification.userInfo?["kMDQueryUpdateAddedItems"] as? [NSMetadataItem] {
             for item in itemsAdded {
                 // Get the path to the screenshot
-                if let screenshotPath = item.valueForAttribute(NSMetadataItemPathKey) as? String {
-                    let screenshotName = screenshotPath.lastPathComponent.stringByDeletingPathExtension
+                if let path = item.valueForAttribute(NSMetadataItemPathKey) as? String,
+                let creationDate = item.valueForAttribute(NSMetadataItemFSCreationDateKey) as? NSDate {
+                    let screenshotName = path.lastPathComponent.stringByDeletingPathExtension
+                    
+                    let oldestAllowedCreationDate = NSDate(timeIntervalSinceNow: -30) // 30 seconds ago
+                    let defaultScreenshotDirectoryPath = path.stringByDeletingLastPathComponent.stringByStandardizingPath
+                    let currentScreenshotDirectoryPath = screenshotDirectoryPath.stringByStandardizingPath
+                    
+                    let isInScreenshotFolder = currentScreenshotDirectoryPath == defaultScreenshotDirectoryPath
+                    let isRecentlyCreated = creationDate.compare(oldestAllowedCreationDate) == .OrderedDescending
+                    let isBlacklisted = blacklist.contains(screenshotName)
                     
                     // Ensure that the screenshot detected is from the right folder and isn't blacklisted
-                    if screenshotPath.stringByDeletingLastPathComponent.stringByStandardizingPath == screenshotLocationPath.stringByStandardizingPath && !contains(blacklist, screenshotName) {
-                        callback(screenshotPath: screenshotPath)
+                    if isRecentlyCreated && isInScreenshotFolder && !isBlacklisted {
+                        callback(screenshotPath: path)
                         blacklist.append(screenshotName)
                     }
                 }
@@ -81,7 +90,7 @@ class ScreenshotMonitor {
         }
     }
     
-    var screenshotLocationPath: String {
+    var screenshotDirectoryPath: String {
         // Check for custom screenshot location chosen by user
         if let customLocation = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
             // Check that the chosen directory exists, otherwise screencapture will not use it
@@ -91,6 +100,6 @@ class ScreenshotMonitor {
             }
         }
         // If a custom location is not defined (or invalid) return the default screenshot location (~/Desktop)
-        return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0] as! String
+        return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0]
     }
 }

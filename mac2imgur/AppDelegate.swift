@@ -122,13 +122,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
         // Open URL if present in the informativeText field of a notification
-        if let URL = NSURL(string: notification.informativeText!) {
-            NSWorkspace.sharedWorkspace().openURL(URL)
-        }
+        Utils.openURL(notification.informativeText!)
     }
     
-    // Always show notifications
     func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {
+        // Always show notifications
         return true
     }
 }

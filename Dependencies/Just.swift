@@ -8,40 +8,6 @@
 
 import Foundation
 
-// stolen from python-requests
-let statusCodeDescriptions = [
-    // Informational.
-    100: "continue"                      , 101: "switching protocols"             , 102: "processing"                           ,
-    103: "checkpoint"                    , 122: "uri too long"                    , 200: "ok"                                   ,
-    201: "created"                       , 202: "accepted"                        , 203: "non authoritative info"               ,
-    204: "no content"                    , 205: "reset content"                   , 206: "partial content"                      ,
-    207: "multi status"                  , 208: "already reported"                , 226: "im used"                              ,
-    
-    // Redirection.
-    300: "multiple choices"              , 301: "moved permanently"               , 302: "found"                                ,
-    303: "see other"                     , 304: "not modified"                    , 305: "use proxy"                            ,
-    306: "switch proxy"                  , 307: "temporary redirect"              , 308: "permanent redirect"                   ,
-    
-    // Client Error.
-    400: "bad request"                   , 401: "unauthorized"                    , 402: "payment required"                     ,
-    403: "forbidden"                     , 404: "not found"                       , 405: "method not allowed"                   ,
-    406: "not acceptable"                , 407: "proxy authentication required"   , 408: "request timeout"                      ,
-    409: "conflict"                      , 410: "gone"                            , 411: "length required"                      ,
-    412: "precondition failed"           , 413: "request entity too large"        , 414: "request uri too large"                ,
-    415: "unsupported media type"        , 416: "requested range not satisfiable" , 417: "expectation failed"                   ,
-    418: "im a teapot"                   , 422: "unprocessable entity"            , 423: "locked"                               ,
-    424: "failed dependency"             , 425: "unordered collection"            , 426: "upgrade required"                     ,
-    428: "precondition required"         , 429: "too many requests"               , 431: "header fields too large"              ,
-    444: "no response"                   , 449: "retry with"                      , 450: "blocked by windows parental controls" ,
-    451: "unavailable for legal reasons" , 499: "client closed request"           ,
-    
-    // Server Error.
-    500: "internal server error"         , 501: "not implemented"                 , 502: "bad gateway"                          ,
-    503: "service unavailable"           , 504: "gateway timeout"                 , 505: "http version not supported"           ,
-    506: "variant also negotiates"       , 507: "insufficient storage"            , 509: "bandwidth limit exceeded"             ,
-    510: "not extended"                  ,
-]
-
 extension Just {
     public class func delete(
         URLString:String,
@@ -56,6 +22,7 @@ extension Just {
         timeout:Double? = nil,
         URLQuery:String? = nil,
         requestBody:NSData? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
         asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
         ) -> HTTPResult {
             
@@ -73,6 +40,7 @@ extension Just {
                 timeout:timeout,
                 URLQuery: URLQuery,
                 requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
                 asyncCompletionHandler: asyncCompletionHandler
             )
             
@@ -91,6 +59,7 @@ extension Just {
         timeout:Double? = nil,
         requestBody:NSData? = nil,
         URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
         asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
         ) -> HTTPResult {
             
@@ -108,6 +77,7 @@ extension Just {
                 timeout:timeout,
                 URLQuery: URLQuery,
                 requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
                 asyncCompletionHandler: asyncCompletionHandler
             )
             
@@ -126,6 +96,7 @@ extension Just {
         timeout:Double? = nil,
         requestBody:NSData? = nil,
         URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
         asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
         ) -> HTTPResult {
             
@@ -143,6 +114,7 @@ extension Just {
                 timeout: timeout,
                 URLQuery: URLQuery,
                 requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
                 asyncCompletionHandler: asyncCompletionHandler
             )
             
@@ -161,6 +133,7 @@ extension Just {
         timeout:Double? = nil,
         requestBody:NSData? = nil,
         URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
         asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
         ) -> HTTPResult {
             
@@ -178,6 +151,7 @@ extension Just {
                 timeout: timeout,
                 URLQuery: URLQuery,
                 requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
                 asyncCompletionHandler: asyncCompletionHandler
             )
             
@@ -196,6 +170,7 @@ extension Just {
         timeout:Double? = nil,
         requestBody:NSData? = nil,
         URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
         asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
         ) -> HTTPResult {
             
@@ -213,6 +188,7 @@ extension Just {
                 timeout: timeout,
                 URLQuery: URLQuery,
                 requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
                 asyncCompletionHandler: asyncCompletionHandler
             )
             
@@ -231,6 +207,7 @@ extension Just {
         timeout:Double? = nil,
         requestBody:NSData? = nil,
         URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
         asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
         ) -> HTTPResult {
             
@@ -248,6 +225,7 @@ extension Just {
                 timeout: timeout,
                 URLQuery: URLQuery,
                 requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
                 asyncCompletionHandler: asyncCompletionHandler
             )
             
@@ -266,6 +244,7 @@ extension Just {
         timeout:Double? = nil,
         requestBody:NSData? = nil,
         URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
         asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
         ) -> HTTPResult {
             
@@ -283,9 +262,9 @@ extension Just {
                 timeout: timeout,
                 URLQuery: URLQuery,
                 requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
                 asyncCompletionHandler: asyncCompletionHandler
             )
-            
     }
 }
 
@@ -310,16 +289,16 @@ enum HTTPMethod: String {
 /// lazy evaluation of `headers` and `cookies`, which is mutating the
 /// struct. This would make those properties unusable with `HTTPResult`s
 /// declared with `let`
-public final class HTTPResult : NSObject, Printable, DebugPrintable {
+public final class HTTPResult : NSObject {
     public final var content:NSData?
     public var response:NSURLResponse?
     public var error:NSError?
     public var request:NSURLRequest?
     public var encoding = NSUTF8StringEncoding
-    public var JSONReadingOptions = NSJSONReadingOptions(0)
+    public var JSONReadingOptions = NSJSONReadingOptions(rawValue: 0)
     
     public var reason:String {
-        if let code = self.statusCode,
+        if  let code = self.statusCode,
             let text = statusCodeDescriptions[code] {
                 return text
         }
@@ -350,10 +329,6 @@ public final class HTTPResult : NSObject, Printable, DebugPrintable {
         }
     }
     
-    public override var debugDescription:String {
-        return description
-    }
-    
     init(data:NSData?, response:NSURLResponse?, error:NSError?, request:NSURLRequest?) {
         self.content = data
         self.response = response
@@ -363,7 +338,11 @@ public final class HTTPResult : NSObject, Printable, DebugPrintable {
     
     public var json:AnyObject? {
         if let theData = self.content {
-            return NSJSONSerialization.JSONObjectWithData(theData, options: JSONReadingOptions, error: nil)
+            do {
+                return try NSJSONSerialization.JSONObjectWithData(theData, options: JSONReadingOptions)
+            } catch _ {
+                return nil
+            }
         }
         return nil
     }
@@ -387,8 +366,8 @@ public final class HTTPResult : NSObject, Printable, DebugPrintable {
     
     public lazy var cookies:[String:NSHTTPCookie] = {
         let foundCookies: [NSHTTPCookie]
-        if let responseHeaders = (self.response as? NSHTTPURLResponse)?.allHeaderFields {
-            foundCookies = NSHTTPCookie.cookiesWithResponseHeaderFields(responseHeaders, forURL:NSURL(string:"")!) as! [NSHTTPCookie]
+        if let responseHeaders = (self.response as? NSHTTPURLResponse)?.allHeaderFields as? [String: String] {
+            foundCookies = NSHTTPCookie.cookiesWithResponseHeaderFields(responseHeaders, forURL:NSURL(string:"")!) as [NSHTTPCookie]
         } else {
             foundCookies = []
         }
@@ -418,16 +397,16 @@ public struct CaseInsensitiveDictionary<Key: Hashable, Value>: CollectionType, D
     public var startIndex: Index
     public var endIndex: Index
     
-    var count: Int {
+    public var count: Int {
         assert(_data.count == _keyMap.count, "internal keys out of sync")
         return _data.count
     }
     
-    var isEmpty: Bool {
+    public var isEmpty: Bool {
         return _data.isEmpty
     }
     
-    init() {
+    public init() {
         startIndex = _data.startIndex
         endIndex = _data.endIndex
     }
@@ -449,6 +428,7 @@ public struct CaseInsensitiveDictionary<Key: Hashable, Value>: CollectionType, D
         startIndex = _data.startIndex
         endIndex = _data.endIndex
     }
+    
     public subscript (position: Index) -> Element {
         return _data[position]
     }
@@ -473,29 +453,53 @@ public struct CaseInsensitiveDictionary<Key: Hashable, Value>: CollectionType, D
         return _data.generate()
     }
     
-    var keys: LazyForwardCollection<MapCollectionView<[Key : Value], Key>> {
+    public var keys: LazyForwardCollection<MapCollectionView<[Key : Value], Key>> {
         return _data.keys
     }
-    var values: LazyForwardCollection<MapCollectionView<[Key : Value], Value>> {
+    public var values: LazyForwardCollection<MapCollectionView<[Key : Value], Value>> {
         return _data.values
     }
 }
 
 typealias TaskID = Int
+typealias Credentials = (username:String, password:String)
+typealias TaskProgressHandler = (HTTPProgress!) -> Void
+typealias TaskCompletionHandler = (HTTPResult) -> Void
 struct TaskConfiguration {
-    var credential:(String, String)?
-    var redirects:Bool
+    let credential:Credentials?
+    let redirects:Bool
+    let originalRequest: NSURLRequest?
+    var data: NSMutableData
+    let progressHandler: TaskProgressHandler?
+    let completionHandler: TaskCompletionHandler?
 }
 
 public struct JustSessionDefaults {
-    public var JSONReadingOptions = NSJSONReadingOptions(0)
-    public var JSONWritingOptions = NSJSONWritingOptions(0)
+    public var JSONReadingOptions = NSJSONReadingOptions(rawValue: 0)
+    public var JSONWritingOptions = NSJSONWritingOptions(rawValue: 0)
     public var headers:[String:String] = [:]
     public var multipartBoundary = "Ju5tH77P15Aw350m3"
     public var encoding = NSUTF8StringEncoding
 }
 
-public class Just: NSObject {
+
+public struct HTTPProgress {
+    public enum Type {
+        case Upload
+        case Download
+    }
+    
+    public let type:Type
+    public let bytesProcessed:Int64
+    public let bytesExpectedToProcess:Int64
+    public var percent: Float {
+        return Float(bytesProcessed) / Float(bytesExpectedToProcess)
+    }
+}
+
+let errorDomain = "net.justhttp.Just"
+
+public class Just: NSObject, NSURLSessionDelegate {
     
     class var shared: Just {
         struct Singleton {
@@ -504,15 +508,7 @@ public class Just: NSObject {
         return Singleton.instance
     }
     
-    var credentials:[Int:(String,String)]=[:]
-    var taskConfigs:[TaskID:TaskConfiguration]=[:]
-    var defaults:JustSessionDefaults!
-    var session: NSURLSession!
-    var invalidURLError = NSError(domain: "net.justhttp", code: 0, userInfo: [NSLocalizedDescriptionKey:"[Just] URL is invalid"])
-    var syncResultAccessError = NSError(domain: "net.justhttp", code: 1, userInfo: [NSLocalizedDescriptionKey:"[Just] You are accessing asynchronous result synchronously."])
-    let errorDomain = "net.justhttp.Just"
-    
-    init(session:NSURLSession? = nil, defaults:JustSessionDefaults? = nil) {
+    public init(session:NSURLSession? = nil, defaults:JustSessionDefaults? = nil) {
         super.init()
         if let initialSession = session {
             self.session = initialSession
@@ -525,6 +521,21 @@ public class Just: NSObject {
             self.defaults = JustSessionDefaults()
         }
     }
+    
+    var taskConfigs:[TaskID:TaskConfiguration]=[:]
+    var defaults:JustSessionDefaults!
+    var session: NSURLSession!
+    var invalidURLError = NSError(
+        domain: errorDomain,
+        code: 0,
+        userInfo: [NSLocalizedDescriptionKey:"[Just] URL is invalid"]
+    )
+    
+    var syncResultAccessError = NSError(
+        domain: errorDomain,
+        code: 1,
+        userInfo: [NSLocalizedDescriptionKey:"[Just] You are accessing asynchronous result synchronously."]
+    )
     
     func queryComponents(key: String, _ value: AnyObject) -> [(String, String)] {
         var components: [(String, String)] = []
@@ -545,12 +556,12 @@ public class Just: NSObject {
     
     func query(parameters: [String: AnyObject]) -> String {
         var components: [(String, String)] = []
-        for key in sorted(Array(parameters.keys), <) {
+        for key in Array(parameters.keys).sort(<) {
             let value: AnyObject! = parameters[key]
             components += self.queryComponents(key, value)
         }
         
-        return join("&", components.map{"\($0)=\($1)"} as [String])
+        return "&".join(components.map{"\($0)=\($1)"} as [String])
     }
     
     func percentEncodeString(originalObject: AnyObject) -> String {
@@ -558,29 +569,27 @@ public class Just: NSObject {
             return "null"
         } else {
             let legalURLCharactersToBeEscaped: CFStringRef = ":&=;+!@#$()',*"
-            return CFURLCreateStringByAddingPercentEscapes(nil, "\(originalObject)", nil, legalURLCharactersToBeEscaped, CFStringBuiltInEncodings.UTF8.rawValue) as String
+            return CFURLCreateStringByAddingPercentEscapes(
+                nil,
+                "\(originalObject)",
+                nil,
+                legalURLCharactersToBeEscaped,
+                CFStringBuiltInEncodings.UTF8.rawValue
+                ) as String
         }
     }
     
     
-    func makeTask(request:NSURLRequest, configuration: TaskConfiguration, completionHandler:((HTTPResult) -> Void)? = nil) -> NSURLSessionDataTask {
-        let task:NSURLSessionDataTask
-        if let handler = completionHandler {
-            task = session.dataTaskWithRequest(request) { (data, response, error) in
-                let result = HTTPResult(data: data, response: response, error: error, request: request)
-                result.JSONReadingOptions = self.defaults.JSONReadingOptions
-                result.encoding = self.defaults.encoding
-                handler(result)
-            }
-        } else {
-            task = session.dataTaskWithRequest(request, completionHandler: nil)
+    func makeTask(request:NSURLRequest, configuration: TaskConfiguration) -> NSURLSessionDataTask? {
+        if let task = session.dataTaskWithRequest(request) {
+            taskConfigs[task.taskIdentifier] = configuration
+            return task
         }
-        taskConfigs[task.taskIdentifier] = configuration
-        return task
+        return nil
     }
     
     func synthesizeMultipartBody(data:[String:AnyObject], files:[String:HTTPFile]) -> NSData? {
-        var body = NSMutableData()
+        let body = NSMutableData()
         let boundary = "--\(self.defaults.multipartBoundary)\r\n".dataUsingEncoding(defaults.encoding)!
         for (k,v) in data {
             let valueToSend:AnyObject = v is NSNull ? "null" : v
@@ -644,9 +653,9 @@ public class Just: NSObject {
         URLQuery:String?
         ) -> NSURLRequest? {
             if let urlComponent = NSURLComponents(string: URLString) {
-                var queryString = query(params)
+                let queryString = query(params)
                 
-                if count(queryString) > 0 {
+                if queryString.characters.count > 0 {
                     urlComponent.percentEncodedQuery = queryString
                 }
                 
@@ -662,11 +671,19 @@ public class Just: NSObject {
                 } else {
                     if let requestJSON = json {
                         contentType = "application/json"
-                        body = NSJSONSerialization.dataWithJSONObject(requestJSON, options: defaults.JSONWritingOptions, error: nil)
+                        do {
+                            body = try NSJSONSerialization.dataWithJSONObject(requestJSON, options: defaults.JSONWritingOptions)
+                        } catch _ {
+                            body = nil
+                        }
                     } else {
                         if data.count > 0 {
                             if headers["content-type"]?.lowercaseString == "application/json" { // assume user wants JSON if she is using this header
-                                body = NSJSONSerialization.dataWithJSONObject(data, options: defaults.JSONWritingOptions, error: nil)
+                                do {
+                                    body = try NSJSONSerialization.dataWithJSONObject(data, options: defaults.JSONWritingOptions)
+                                } catch _ {
+                                    body = nil
+                                }
                             } else {
                                 contentType = "application/x-www-form-urlencoded"
                                 body = query(data).dataUsingEncoding(defaults.encoding)
@@ -710,19 +727,19 @@ public class Just: NSObject {
         json:[String:AnyObject]?,
         headers:[String:String],
         files:[String:HTTPFile],
-        auth:(String, String)?,
+        auth:Credentials?,
         cookies: [String:String],
         redirects:Bool,
         timeout:Double?,
         URLQuery:String?,
         requestBody:NSData?,
+        asyncProgressHandler:TaskProgressHandler?,
         asyncCompletionHandler:((HTTPResult!) -> Void)?) -> HTTPResult {
             
             let isSync = asyncCompletionHandler == nil
-            var semaphore = dispatch_semaphore_create(0)
+            let semaphore = dispatch_semaphore_create(0)
             var requestResult:HTTPResult = HTTPResult(data: nil, response: nil, error: syncResultAccessError, request: nil)
             
-            let config = TaskConfiguration(credential:auth, redirects:redirects)
             let caseInsensitiveHeaders = CaseInsensitiveDictionary<String,String>(dictionary:headers)
             if let request = synthesizeRequest(
                 method,
@@ -737,16 +754,25 @@ public class Just: NSObject {
                 URLQuery: URLQuery
                 ) {
                     addCookies(request.URL!, newCookies: cookies)
-                    let task = makeTask(request, configuration:config) { (result) in
-                        if let handler = asyncCompletionHandler {
-                            handler(result)
-                        }
-                        if isSync {
-                            requestResult = result
-                            dispatch_semaphore_signal(semaphore)
-                        }
+                    let config = TaskConfiguration(
+                        credential:auth,
+                        redirects:redirects,
+                        originalRequest:request,
+                        data:NSMutableData(),
+                        progressHandler: asyncProgressHandler
+                        ) { (result) in
+                            if let handler = asyncCompletionHandler {
+                                handler(result)
+                            }
+                            if isSync {
+                                requestResult = result
+                                dispatch_semaphore_signal(semaphore)
+                            }
+                            
                     }
-                    task.resume()
+                    if let task = makeTask(request, configuration:config) {
+                        task.resume()
+                    }
                     if isSync {
                         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
                         return requestResult
@@ -775,15 +801,15 @@ public class Just: NSObject {
             }
         }
     }
-    
 }
 
-extension Just: NSURLSessionTaskDelegate {
+
+extension Just: NSURLSessionTaskDelegate, NSURLSessionDataDelegate {
     public func URLSession(
         session: NSURLSession,
         task: NSURLSessionTask,
         didReceiveChallenge challenge: NSURLAuthenticationChallenge,
-        completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void
+        completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void
         ) {
             var endCredential:NSURLCredential? = nil
             
@@ -800,7 +826,7 @@ extension Just: NSURLSessionTaskDelegate {
         session: NSURLSession,
         task: NSURLSessionTask,
         willPerformHTTPRedirection response: NSHTTPURLResponse,
-        newRequest request: NSURLRequest, completionHandler: (NSURLRequest!) -> Void
+        newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void
         ) {
             if let allowRedirects = taskConfigs[task.taskIdentifier]?.redirects {
                 if !allowRedirects {
@@ -813,4 +839,85 @@ extension Just: NSURLSessionTaskDelegate {
             }
     }
     
+    public func URLSession(
+        session: NSURLSession,
+        task: NSURLSessionTask,
+        didSendBodyData bytesSent: Int64,
+        totalBytesSent: Int64,
+        totalBytesExpectedToSend: Int64
+        ) {
+            if let handler = taskConfigs[task.taskIdentifier]?.progressHandler {
+                handler(
+                    HTTPProgress(
+                        type: .Upload,
+                        bytesProcessed: totalBytesSent,
+                        bytesExpectedToProcess: totalBytesExpectedToSend
+                    )
+                )
+            }
+    }
+    
+    public func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
+        if let handler = taskConfigs[dataTask.taskIdentifier]?.progressHandler {
+            handler(
+                HTTPProgress(
+                    type: .Download,
+                    bytesProcessed: dataTask.countOfBytesReceived,
+                    bytesExpectedToProcess: dataTask.countOfBytesExpectedToReceive
+                )
+            )
+        }
+        if taskConfigs[dataTask.taskIdentifier]?.data != nil {
+            taskConfigs[dataTask.taskIdentifier]?.data.appendData(data)
+        }
+    }
+    
+    public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if let config = taskConfigs[task.taskIdentifier], let handler = config.completionHandler {
+            let result = HTTPResult(
+                data: config.data,
+                response: task.response,
+                error: error,
+                request: config.originalRequest ?? task.originalRequest
+            )
+            result.JSONReadingOptions = self.defaults.JSONReadingOptions
+            result.encoding = self.defaults.encoding
+            handler(result)
+        }
+        taskConfigs.removeValueForKey(task.taskIdentifier)
+    }
 }
+
+// stolen from python-requests
+let statusCodeDescriptions = [
+    // Informational.
+    100: "continue"                      , 101: "switching protocols"             , 102: "processing"                           ,
+    103: "checkpoint"                    , 122: "uri too long"                    , 200: "ok"                                   ,
+    201: "created"                       , 202: "accepted"                        , 203: "non authoritative info"               ,
+    204: "no content"                    , 205: "reset content"                   , 206: "partial content"                      ,
+    207: "multi status"                  , 208: "already reported"                , 226: "im used"                              ,
+    
+    // Redirection.
+    300: "multiple choices"              , 301: "moved permanently"               , 302: "found"                                ,
+    303: "see other"                     , 304: "not modified"                    , 305: "use proxy"                            ,
+    306: "switch proxy"                  , 307: "temporary redirect"              , 308: "permanent redirect"                   ,
+    
+    // Client Error.
+    400: "bad request"                   , 401: "unauthorized"                    , 402: "payment required"                     ,
+    403: "forbidden"                     , 404: "not found"                       , 405: "method not allowed"                   ,
+    406: "not acceptable"                , 407: "proxy authentication required"   , 408: "request timeout"                      ,
+    409: "conflict"                      , 410: "gone"                            , 411: "length required"                      ,
+    412: "precondition failed"           , 413: "request entity too large"        , 414: "request uri too large"                ,
+    415: "unsupported media type"        , 416: "requested range not satisfiable" , 417: "expectation failed"                   ,
+    418: "im a teapot"                   , 422: "unprocessable entity"            , 423: "locked"                               ,
+    424: "failed dependency"             , 425: "unordered collection"            , 426: "upgrade required"                     ,
+    428: "precondition required"         , 429: "too many requests"               , 431: "header fields too large"              ,
+    444: "no response"                   , 449: "retry with"                      , 450: "blocked by windows parental controls" ,
+    451: "unavailable for legal reasons" , 499: "client closed request"           ,
+    
+    // Server Error.
+    500: "internal server error"         , 501: "not implemented"                 , 502: "bad gateway"                          ,
+    503: "service unavailable"           , 504: "gateway timeout"                 , 505: "http version not supported"           ,
+    506: "variant also negotiates"       , 507: "insufficient storage"            , 509: "bandwidth limit exceeded"             ,
+    510: "not extended"                  ,
+]

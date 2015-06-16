@@ -34,8 +34,8 @@ class ImgurUpload {
     
     init(imagePath: String, isScreenshot: Bool) {
         self.imagePath = imagePath
-        self.imageURL = NSURL(fileURLWithPath: imagePath)!
-        self.imageData = NSData(contentsOfURL: imageURL, options: nil, error: nil)!
+        self.imageURL = NSURL(fileURLWithPath: imagePath)
+        self.imageData = NSData(contentsOfURL: imageURL)!
         self.isScreenshot = isScreenshot
         self.imageExtension = imagePath.pathExtension
     }
