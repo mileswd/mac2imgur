@@ -18,33 +18,30 @@ import Cocoa
 
 class ImgurUpload {
     
-    let imagePath: String
-    let imageURL: NSURL
     let isScreenshot: Bool
+    let imageURL: NSURL
+    let imageName: String
     var imageData: NSData
     var imageExtension: String
-    var initiationHandler: ((upload: ImgurUpload) -> Void)?
-    var completionHandler: ((upload: ImgurUpload) -> Void)?
     
+    var initiationHandler: (ImgurUpload -> Void)?
+    var completionHandler: (ImgurUpload -> Void)?
     var error: String?
     var link: String?
-    var successful: Bool {
-        return link != nil
-    }
     
-    init(imagePath: String, isScreenshot: Bool) {
-        self.imagePath = imagePath
-        self.imageURL = NSURL(fileURLWithPath: imagePath)
+    init(imageURL: NSURL, isScreenshot: Bool) {
+        self.imageURL = imageURL
+        self.imageName = imageURL.path!.lastPathComponent.stringByDeletingPathExtension
         self.imageData = NSData(contentsOfURL: imageURL)!
         self.isScreenshot = isScreenshot
-        self.imageExtension = imagePath.pathExtension
+        self.imageExtension = imageURL.path!.pathExtension
     }
     
     func downscaleRetinaImage() {
         if let image = NSImage(data: imageData) {
             // Check if image is "retina"
-            if Int(image.size.width) < NSBitmapImageRep(data: image.TIFFRepresentation!)!.pixelsWide {
-                let resizedImageRep = NSBitmapImageRep(
+            if Int(image.size.width) < image.representations[0].pixelsWide {
+                let bitmapImageRep = NSBitmapImageRep(
                     bitmapDataPlanes: nil,
                     pixelsWide: Int(image.size.width),
                     pixelsHigh: Int(image.size.height),
@@ -54,19 +51,23 @@ class ImgurUpload {
                     isPlanar: false,
                     colorSpaceName: NSCalibratedRGBColorSpace,
                     bytesPerRow: 0,
-                    bitsPerPixel: 0)!
+                    bitsPerPixel: 0)
                 
-                NSGraphicsContext.saveGraphicsState()
-                NSGraphicsContext.setCurrentContext(NSGraphicsContext(bitmapImageRep: resizedImageRep))
-                image.drawInRect(NSRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
-                NSGraphicsContext.restoreGraphicsState()
-                
-                // Use a PNG representation of the resized image
-                imageData = resizedImageRep.representationUsingType(.NSPNGFileType, properties: [:])!
-                imageExtension = "png"
+                if let resizedImageRep = bitmapImageRep {
+                    NSGraphicsContext.saveGraphicsState()
+                    NSGraphicsContext.setCurrentContext(NSGraphicsContext(bitmapImageRep: resizedImageRep))
+                    image.drawInRect(NSRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+                    NSGraphicsContext.restoreGraphicsState()
+                    
+                    // Use a PNG representation of the resized image
+                    if let PNGRepresentation = resizedImageRep.representationUsingType(.NSPNGFileType, properties: [:]) {
+                        imageData = PNGRepresentation
+                        imageExtension = "png"
+                    }
+                }
             }
         } else {
-            NSLog("An error occurred while attempting to resize %@", imagePath)
+            NSLog("An error occurred while attempting to resize %@", imageURL)
         }
     }
 }

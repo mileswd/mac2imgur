@@ -23,9 +23,9 @@ class Utils {
         NSPasteboard.generalPasteboard().setString(string, forType: NSStringPboardType)
     }
     
-    static func deleteFile(filePath: String) {
+    static func deleteFile(fileURL: NSURL) {
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(filePath)
+            try NSFileManager.defaultManager().removeItemAtURL(fileURL)
         } catch let error as NSError {
             NSLog("An error occurred while attempting to delete a file: %@", error)
         }

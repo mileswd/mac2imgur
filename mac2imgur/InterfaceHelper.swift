@@ -35,11 +35,11 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     
     var statusItem: NSStatusItem!
     var imgurClient: ImgurClient!
-    var upload: ((imagePath: String) -> Void)!
+    var upload: (NSURL -> Void)!
     var uploadCount = 0
     
     /// Setup all interface components, including the status bar item and menu
-    func setup(upload: (imagePath: String) -> Void, imgurClient: ImgurClient) {
+    func setup(upload: NSURL -> Void, imgurClient: ImgurClient) {
         self.imgurClient = imgurClient
         self.upload = upload
         
@@ -108,7 +108,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     }
     
     func addRecentUpload(upload: ImgurUpload) {
-        let menuItem = NSMenuItem(title: upload.imagePath.lastPathComponent, action: "recentUploadAction:", keyEquivalent: "")
+        let menuItem = NSMenuItem(title: upload.imageName, action: "recentUploadAction:", keyEquivalent: "")
         let image = NSImage(data: upload.imageData)!
         let scaleFactor = 16 / max(image.size.width, image.size.height)
         let width = round(image.size.width * scaleFactor)
@@ -141,7 +141,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     func performDragOperation(sender: NSDraggingInfo) -> Bool {
         if let filePaths = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
             for filePath in filePaths {
-                upload(imagePath: filePath)
+                upload(NSURL(fileURLWithPath: filePath))
             }
             return true
         }
@@ -157,11 +157,17 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
         panel.allowedFileTypes = imgurAllowedFileTypes
-        if panel.runModal() == NSOKButton {
-            for imageURL in panel.URLs {
-                upload(imagePath: imageURL.path!)
+        
+        panel.beginWithCompletionHandler { (result) -> Void in
+            if result == NSFileHandlingPanelOKButton {
+                for imageURL in panel.URLs {
+                    self.upload(imageURL)
+                }
             }
         }
+        
+        // Show in front of all other applications
+        NSApplication.sharedApplication().activateIgnoringOtherApps(true)
     }
     
     @IBAction func accountAuthAction(sender: NSMenuItem) {
@@ -183,7 +189,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     }
     
     @IBAction func aboutAction(sender: NSMenuItem) {
-        NSApplication.sharedApplication().activateIgnoringOtherApps(true)
         NSApplication.sharedApplication().orderFrontStandardAboutPanel(sender)
+        NSApplication.sharedApplication().activateIgnoringOtherApps(true)
     }
 }

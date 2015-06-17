@@ -58,16 +58,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSStatusBar.systemStatusBar().removeStatusItem(interfaceHelper.statusItem)
     }
     
-    func manualUpload(imagePath: String) {
-        let upload = ImgurUpload(imagePath: imagePath, isScreenshot: false)
+    func manualUpload(imageURL: NSURL) {
+        let upload = ImgurUpload(imageURL: imageURL, isScreenshot: false)
         upload.initiationHandler = uploadAttemptInitiated
         upload.completionHandler = uploadAttemptCompleted
         imgurClient.addToQueue(upload)
     }
     
-    func screenshotDetected(imagePath: String) {
-        if !defaults.boolForKey(kDisableScreenshotDetection) && interfaceHelper.hasUploadConfirmation(imagePath) {
-            let upload = ImgurUpload(imagePath: imagePath, isScreenshot: true)
+    func screenshotDetected(imageURL: NSURL) {
+        if !defaults.boolForKey(kDisableScreenshotDetection) && interfaceHelper.hasUploadConfirmation(imageURL.path!) {
+            let upload = ImgurUpload(imageURL: imageURL, isScreenshot: true)
             upload.initiationHandler = uploadAttemptInitiated
             upload.completionHandler = uploadAttemptCompleted
             // Resize the screenshot if necessary
@@ -85,12 +85,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func uploadAttemptCompleted(upload: ImgurUpload) {
         interfaceHelper.updateStatusIcon(false)
         let type = upload.isScreenshot ? "Screenshot" : "Image"
-        if upload.successful {
+        if let link = upload.link {
+            // Upload was successful
             interfaceHelper.addRecentUpload(upload)
-            Utils.copyToClipboard(upload.link!)
-            Utils.displayNotification("\(type) uploaded successfully!", informativeText: upload.link!)
+            Utils.copyToClipboard(link)
+            Utils.displayNotification("\(type) uploaded successfully!", informativeText: link)
             if upload.isScreenshot && defaults.boolForKey(kDeleteScreenshotAfterUpload) {
-                Utils.deleteFile(upload.imagePath)
+                Utils.deleteFile(upload.imageURL)
             }
         } else {
             Utils.displayNotification("\(type) upload failed...", informativeText: upload.error ?? "")
@@ -100,8 +101,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func handleURLEvent(event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
         // Attempt to parse response URL
         if let URLString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue {
-            let URL = NSURL(string: URLString)!
-            if let query = URL.query?.componentsSeparatedByString("&") {
+            let URL = NSURL(string: URLString)
+            if let query = URL?.query?.componentsSeparatedByString("&") {
                 var parameters = [String: String]()
                 for parameter in query {
                     let pair = parameter.componentsSeparatedByString("=")
@@ -122,7 +123,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
         // Open URL if present in the informativeText field of a notification
-        Utils.openURL(notification.informativeText!)
+        if let text = notification.informativeText {
+            Utils.openURL(text)
+        }
     }
     
     func userNotificationCenter(center: NSUserNotificationCenter, shouldPresentNotification notification: NSUserNotification) -> Bool {

@@ -44,14 +44,14 @@ class ImgurClient {
     }
     
     var accessTokenIsValid: Bool {
-        if accessToken != nil {
-            return tokenExpiryDate!.timeIntervalSinceReferenceDate > NSDate().timeIntervalSinceReferenceDate
+        if let expiry = tokenExpiryDate {
+            return expiry.timeIntervalSinceNow > 0 && accessToken != nil
         }
         return false
     }
     
     func addToQueue(upload: ImgurUpload) {
-        upload.initiationHandler?(upload: upload)
+        upload.initiationHandler?(upload)
         // If necessary, request a new access token
         if isAuthenticated && !accessTokenIsValid {
             uploadQueue.append(upload)
@@ -74,7 +74,7 @@ class ImgurClient {
                 attemptUpload(upload)
             } else {
                 upload.error = "Unable to authenticate with Imgur"
-                upload.completionHandler?(upload: upload)
+                upload.completionHandler?(upload)
             }
         }
         // Clear queue
@@ -94,7 +94,7 @@ class ImgurClient {
     
     :callback: The code to be executed upon a successful authentication attempt
     */
-    func authenticate(code: String, callback: (username: String, refreshToken: String) -> Void) {
+    func authenticate(code: String, callback: (String, String) -> Void) {
         let parameters = [
             "client_id": imgurClientId,
             "client_secret": imgurClientSecret,
@@ -108,8 +108,8 @@ class ImgurClient {
                 self.refreshToken = result.json?.objectForKey("refresh_token") as? String
                 self.accessToken = result.json?.objectForKey("access_token") as? String
                 self.username = result.json?.objectForKey("account_username") as? String
-                if self.username != nil && self.refreshToken != nil {
-                    callback(username: self.username!, refreshToken: self.refreshToken!)
+                if let username = self.username, refreshToken = self.refreshToken {
+                    callback(username, refreshToken)
                 } else {
                     NSLog("An error occurred while attempting to obtain tokens from a pin: \(result.error)\nResponse: \(result.response)\nJSON: \(result.json)")
                 }
@@ -141,7 +141,7 @@ class ImgurClient {
             "Authorization": isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(imgurClientId)"
         ]
         let parameters = [
-            "title": upload.imagePath.lastPathComponent.stringByDeletingPathExtension,
+            "title": upload.imageName,
             "description": "Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)"
         ]
         let files = [
@@ -164,7 +164,7 @@ class ImgurClient {
                     }
                     NSLog("An error occurred while attempting to upload an image: \(result.error)\nResponse: \(result.response)\nJSON: \(result.json)")
                 }
-                upload.completionHandler?(upload: upload)
+                upload.completionHandler?(upload)
         }
     }
 }

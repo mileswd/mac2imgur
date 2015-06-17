@@ -18,11 +18,11 @@ import Foundation
 
 class ScreenshotMonitor {
     
-    let callback: (screenshotPath: String) -> Void
+    let callback: NSURL -> Void
     var query: NSMetadataQuery
     var blacklist: [String]
     
-    init(callback: (screenshotPath: String) -> Void) {
+    init(callback: NSURL -> Void) {
         self.callback = callback
         self.blacklist = []
         
@@ -47,7 +47,7 @@ class ScreenshotMonitor {
         query.stopQuery()
     }
     
-    func initialPhaseComplete(notification: NSNotification!) {
+    func initialPhaseComplete(notification: NSNotification) {
         // Blacklist all screenshots that already exist
         if let itemsAdded = notification.object?.results as? [NSMetadataItem] {
             for item in itemsAdded {
@@ -64,7 +64,7 @@ class ScreenshotMonitor {
         }
     }
     
-    func liveUpdatePhaseEvent(notification: NSNotification!) {
+    func liveUpdatePhaseEvent(notification: NSNotification) {
         if let itemsAdded = notification.userInfo?["kMDQueryUpdateAddedItems"] as? [NSMetadataItem] {
             for item in itemsAdded {
                 // Get the path to the screenshot
@@ -82,7 +82,7 @@ class ScreenshotMonitor {
                     
                     // Ensure that the screenshot detected is from the right folder and isn't blacklisted
                     if isRecentlyCreated && isInScreenshotFolder && !isBlacklisted {
-                        callback(screenshotPath: path)
+                        callback(NSURL(fileURLWithPath: path))
                         blacklist.append(screenshotName)
                     }
                 }
