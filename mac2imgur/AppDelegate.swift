@@ -101,8 +101,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     func handleURLEvent(event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
         // Attempt to parse response URL
         if let URLString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue {
-            let URL = NSURL(string: URLString)
-            if let query = URL?.query?.componentsSeparatedByString("&") {
+            if let query = NSURL(string: URLString)?.query?.componentsSeparatedByString("&") {
                 var parameters = [String: String]()
                 for parameter in query {
                     let pair = parameter.componentsSeparatedByString("=")
