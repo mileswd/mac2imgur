@@ -69,6 +69,11 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
             alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur.com, where it is publicly accessible."
             alert.addButtonWithTitle("Upload")
             alert.addButtonWithTitle("Cancel")
+            for button in alert.buttons where button.title == "Cancel" {
+                button.keyEquivalent = "c"
+            }
+            
+            NSApplication.sharedApplication().activateIgnoringOtherApps(true)
             if alert.runModal() == NSAlertSecondButtonReturn {
                 return false
             }
