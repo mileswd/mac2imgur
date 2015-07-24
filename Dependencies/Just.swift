@@ -392,8 +392,8 @@ public struct CaseInsensitiveDictionary<Key: Hashable, Value>: CollectionType, D
     private var _data:[Key: Value] = [:]
     private var _keyMap: [String: Key] = [:]
     
-    typealias Element = (Key, Value)
-    typealias Index = DictionaryIndex<Key, Value>
+    public typealias Element = (Key, Value)
+    public typealias Index = DictionaryIndex<Key, Value>
     public var startIndex: Index
     public var endIndex: Index
     
@@ -500,13 +500,11 @@ public struct HTTPProgress {
 let errorDomain = "net.justhttp.Just"
 
 public class Just: NSObject, NSURLSessionDelegate {
-    
-    class var shared: Just {
-        struct Singleton {
-            static let instance = Just()
-        }
-        return Singleton.instance
+    private struct Shared {
+        static let instance = Just()
     }
+    
+    class var shared: Just { return Shared.instance }
     
     public init(session:NSURLSession? = nil, defaults:JustSessionDefaults? = nil) {
         super.init()
@@ -574,11 +572,9 @@ public class Just: NSObject, NSURLSessionDelegate {
     
     
     func makeTask(request:NSURLRequest, configuration: TaskConfiguration) -> NSURLSessionDataTask? {
-        if let task = session.dataTaskWithRequest(request) {
-            taskConfigs[task.taskIdentifier] = configuration
-            return task
-        }
-        return nil
+        let task = session.dataTaskWithRequest(request)
+        taskConfigs[task.taskIdentifier] = configuration
+        return task
     }
     
     func synthesizeMultipartBody(data:[String:AnyObject], files:[String:HTTPFile]) -> NSData? {

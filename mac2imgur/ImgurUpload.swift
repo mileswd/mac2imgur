@@ -24,7 +24,6 @@ class ImgurUpload {
     var imageData: NSData
     var imageExtension: String
     
-    var initiationHandler: (ImgurUpload -> Void)?
     var completionHandler: (ImgurUpload -> Void)?
     var error: String?
     var link: String?
@@ -38,36 +37,42 @@ class ImgurUpload {
     }
     
     func downscaleRetinaImage() {
-        if let image = NSImage(data: imageData) {
-            // Check if image is "retina"
-            if Int(image.size.width) < image.representations[0].pixelsWide {
-                let bitmapImageRep = NSBitmapImageRep(
-                    bitmapDataPlanes: nil,
-                    pixelsWide: Int(image.size.width),
-                    pixelsHigh: Int(image.size.height),
-                    bitsPerSample: 8,
-                    samplesPerPixel: 4,
-                    hasAlpha: true,
-                    isPlanar: false,
-                    colorSpaceName: NSCalibratedRGBColorSpace,
-                    bytesPerRow: 0,
-                    bitsPerPixel: 0)
-                
-                if let resizedImageRep = bitmapImageRep {
-                    NSGraphicsContext.saveGraphicsState()
-                    NSGraphicsContext.setCurrentContext(NSGraphicsContext(bitmapImageRep: resizedImageRep))
-                    image.drawInRect(NSRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
-                    NSGraphicsContext.restoreGraphicsState()
-                    
-                    // Use a PNG representation of the resized image
-                    if let PNGRepresentation = resizedImageRep.representationUsingType(.NSPNGFileType, properties: [:]) {
-                        imageData = PNGRepresentation
-                        imageExtension = "png"
-                    }
-                }
-            }
+        guard let image = NSImage(data: imageData) else {
+            NSLog("Resize failed: Unable to create image from image data")
+            return
+        }
+        
+        if Int(image.size.width) >= image.representations[0].pixelsWide {
+            // Image is not retina
+            return
+        }
+        
+        guard let bitmapImageRep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(image.size.width),
+            pixelsHigh: Int(image.size.height),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: NSCalibratedRGBColorSpace,
+            bytesPerRow: 0,
+            bitsPerPixel: 0) else {
+                NSLog("Resize failed: Unable to create bitmap image representation from image data")
+                return
+        }
+        
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.setCurrentContext(NSGraphicsContext(bitmapImageRep: bitmapImageRep))
+        image.drawInRect(NSRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+        NSGraphicsContext.restoreGraphicsState()
+        
+        // Use a PNG representation of the resized image
+        if let resizedRep = bitmapImageRep.representationUsingType(.NSPNGFileType, properties: [:]) {
+            imageData = resizedRep
+            imageExtension = "png"
         } else {
-            NSLog("An error occurred while attempting to resize %@", imageURL)
+            NSLog("Resize failed: Unable to create PNG representation")
         }
     }
 }

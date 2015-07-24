@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E26a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A226f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -21,6 +21,7 @@
             <connections>
                 <outlet property="accountAuthItem" destination="oDJ-vp-azL" id="4xA-we-p0m"/>
                 <outlet property="accountWebItem" destination="PXa-cM-oTt" id="feg-3o-hjm"/>
+                <outlet property="appDelegate" destination="sn7-gE-PGB" id="uoR-xe-R8G"/>
                 <outlet property="deleteAfterUploadPreference" destination="Hcu-OJ-uxu" id="VIS-1G-DIi"/>
                 <outlet property="disableDetectionPreference" destination="8W0-Wi-U05" id="JhT-8C-JvS"/>
                 <outlet property="launchAtLoginPreference" destination="Yco-bQ-8xr" id="ePs-eu-qgw"/>

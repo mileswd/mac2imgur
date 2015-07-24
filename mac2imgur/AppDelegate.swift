@@ -24,20 +24,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     @IBOutlet weak var interfaceHelper: InterfaceHelper!
     
     let defaults = NSUserDefaults.standardUserDefaults()
-    var imgurClient: ImgurClient!
+    var imgurClient = ImgurClient()
     var monitor: ScreenshotMonitor!
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        
         defaults.registerDefaults(["NSApplicationCrashOnExceptions": true])
         
         // Crashlytics integration
         Fabric.with([Crashlytics()])
-        
-        // Setup Imgur client
-        imgurClient = ImgurClient(username: defaults.stringForKey(kUsername), refreshToken: defaults.stringForKey(kRefreshToken))
-        
-        // Setup user interface
-        interfaceHelper.setup(manualUpload, imgurClient: imgurClient)
         
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
@@ -49,7 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
         
         // Start monitoring for screenshots
-        monitor = ScreenshotMonitor(callback: screenshotDetected)
+        monitor = ScreenshotMonitor(callback: uploadScreenshot)
         monitor.startMonitoring()
     }
     
@@ -58,28 +53,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSStatusBar.systemStatusBar().removeStatusItem(interfaceHelper.statusItem)
     }
     
-    func manualUpload(imageURL: NSURL) {
+    func uploadImage(imageURL: NSURL) {
         let upload = ImgurUpload(imageURL: imageURL, isScreenshot: false)
-        upload.initiationHandler = uploadAttemptInitiated
         upload.completionHandler = uploadAttemptCompleted
         imgurClient.addToQueue(upload)
+        interfaceHelper.updateStatusIcon(true)
     }
     
-    func screenshotDetected(imageURL: NSURL) {
+    func uploadScreenshot(imageURL: NSURL) {
         if !defaults.boolForKey(kDisableScreenshotDetection) && interfaceHelper.hasUploadConfirmation(imageURL.path!) {
             let upload = ImgurUpload(imageURL: imageURL, isScreenshot: true)
-            upload.initiationHandler = uploadAttemptInitiated
             upload.completionHandler = uploadAttemptCompleted
             // Resize the screenshot if necessary
             if defaults.boolForKey(kResizeScreenshots) {
                 upload.downscaleRetinaImage()
             }
             imgurClient.addToQueue(upload)
+            interfaceHelper.updateStatusIcon(true)
         }
-    }
-    
-    func uploadAttemptInitiated(upload: ImgurUpload) {
-        interfaceHelper.updateStatusIcon(true)
     }
     
     func uploadAttemptCompleted(upload: ImgurUpload) {
@@ -89,34 +80,43 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             // Upload was successful
             interfaceHelper.addRecentUpload(upload)
             Utils.copyToClipboard(link)
-            Utils.displayNotification("\(type) uploaded successfully!", informativeText: link)
+            Utils.displayNotification("\(type) Upload Succeeded", informativeText: link)
             if upload.isScreenshot && defaults.boolForKey(kDeleteScreenshotAfterUpload) {
                 Utils.deleteFile(upload.imageURL)
             }
         } else {
-            Utils.displayNotification("\(type) upload failed...", informativeText: upload.error ?? "")
+            Utils.displayNotification("\(type) Upload Failed", informativeText: upload.error ?? "")
         }
     }
     
     func handleURLEvent(event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
         // Attempt to parse response URL
-        if let URLString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue {
-            if let query = NSURL(string: URLString)?.query?.componentsSeparatedByString("&") {
-                var parameters = [String: String]()
-                for parameter in query {
-                    let pair = parameter.componentsSeparatedByString("=")
-                    if pair.count == 2 {
-                        parameters[pair[0]] = pair[1]
-                    }
-                }
-                if let code = parameters["code"] {
-                    imgurClient.authenticate(code, callback: { (username: String, refreshToken: String) -> Void in
-                        self.defaults.setObject(username, forKey: kUsername)
-                        self.defaults.setObject(refreshToken, forKey: kRefreshToken)
-                        Utils.displayNotification("Authentication successful", informativeText: "Signed in as \(username)")
-                    })
-                }
+        guard let URLString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue else {
+            NSLog("Unable to determine URL from AppleEvent")
+            return
+        }
+        
+        guard let query = NSURL(string: URLString)?.query?.componentsSeparatedByString("&") else {
+            NSLog("Unable to find URL query component")
+            return
+        }
+        
+        var parameters = [String: String]()
+        for parameter in query {
+            let pair = parameter.componentsSeparatedByString("=")
+            if pair.count == 2 {
+                parameters[pair[0]] = pair[1]
             }
+        }
+        
+        if let code = parameters["code"] {
+            imgurClient.requestRefreshToken(code, callback: { (authError: String?) -> Void in
+                if let error = authError {
+                    Utils.displayNotification("Authentication Failed", informativeText: error)
+                } else {
+                    Utils.displayNotification("Authentication Succeeded", informativeText: "Signed in as \(self.imgurClient.username!)")
+                }
+            })
         }
     }
     

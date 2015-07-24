@@ -23,6 +23,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     let activeIcon = NSImage(named: "StatusActive")!
     let inactiveIcon = NSImage(named: "StatusInactive")!
     
+    @IBOutlet weak var appDelegate: AppDelegate!
     @IBOutlet weak var menu: NSMenu!
     @IBOutlet weak var recentUploadsItem: NSMenuItem!
     @IBOutlet weak var accountAuthItem: NSMenuItem!
@@ -34,14 +35,10 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     @IBOutlet weak var launchAtLoginPreference: NSMenuItem!
     
     var statusItem: NSStatusItem!
-    var imgurClient: ImgurClient!
-    var upload: (NSURL -> Void)!
     var uploadCount = 0
     
-    /// Setup all interface components, including the status bar item and menu
-    func setup(upload: NSURL -> Void, imgurClient: ImgurClient) {
-        self.imgurClient = imgurClient
-        self.upload = upload
+    override func awakeFromNib() {
+        // Setup all interface components, including the status bar item and menu
         
         // Bind menu items to user defaults controller
         disableDetectionPreference.bind("value", toObject: defaults, withKeyPath: kDisableScreenshotDetection, options: nil)
@@ -88,10 +85,10 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     
     func menuWillOpen(menu: NSMenu) {
         // Set account menu item to relevant title
-        accountAuthItem.title = imgurClient.isAuthenticated ? "Sign Out (\(imgurClient.username!))" : "Sign in..."
+        accountAuthItem.title = appDelegate.imgurClient.isAuthenticated ? "Sign Out (\(appDelegate.imgurClient.username!))" : "Sign in..."
         
         // Hide account web action if not authenticated
-        accountWebItem.hidden = !imgurClient.isAuthenticated
+        accountWebItem.hidden = !appDelegate.imgurClient.isAuthenticated
         
         // Set launch at login menu option to current state
         launchAtLoginPreference.state = launchServicesHelper.applicationIsInStartUpItems ? NSOnState : NSOffState
@@ -146,7 +143,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     func performDragOperation(sender: NSDraggingInfo) -> Bool {
         if let filePaths = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
             for filePath in filePaths {
-                upload(NSURL(fileURLWithPath: filePath))
+                appDelegate.uploadImage(NSURL(fileURLWithPath: filePath))
             }
             return true
         }
@@ -166,7 +163,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         panel.beginWithCompletionHandler { (result) -> Void in
             if result == NSFileHandlingPanelOKButton {
                 for imageURL in panel.URLs {
-                    self.upload(imageURL)
+                    self.appDelegate.uploadImage(imageURL)
                 }
             }
         }
@@ -176,17 +173,15 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     }
     
     @IBAction func accountAuthAction(sender: NSMenuItem) {
-        if imgurClient.isAuthenticated {
-            defaults.removeObjectForKey(kUsername)
-            defaults.removeObjectForKey(kRefreshToken)
-            imgurClient.deauthenticate()
+        if appDelegate.imgurClient.isAuthenticated {
+            appDelegate.imgurClient.deauthenticate()
         } else {
             Utils.openURL("https://api.imgur.com/oauth2/authorize?client_id=\(imgurClientId)&response_type=code")
         }
     }
     
     @IBAction func accountWebAction(sender: NSMenuItem) {
-        Utils.openURL("https://\(imgurClient.username!).imgur.com/all/")
+        Utils.openURL("https://\(appDelegate.imgurClient.username!).imgur.com/all/")
     }
     
     @IBAction func launchAtLoginAction(sender: NSMenuItem) {

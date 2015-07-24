@@ -19,22 +19,33 @@ import Foundation
 class ImgurClient {
     
     let apiURL = "https://api.imgur.com"
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     var uploadQueue = [ImgurUpload]()
     var authenticationInProgress = false
     var tokenExpiryDate: NSDate?
     
-    var username: String?
-    var refreshToken: String?
+    var username: String? {
+        get {
+            return defaults.stringForKey(kImgurUsername)
+        }
+        set {
+            defaults.setObject(newValue, forKey: kImgurUsername)
+        }
+    }
     
-    init(username: String?, refreshToken: String?) {
-        self.username = username
-        self.refreshToken = refreshToken
+    var refreshToken: String? {
+        get {
+            return defaults.stringForKey(kRefreshToken)
+        }
+        set {
+            defaults.setObject(newValue, forKey: kRefreshToken)
+        }
     }
     
     var accessToken: String? {
         didSet {
-            // Update token expiry date (imgur access tokens are valid for 1 hour)
+            // Update token expiry date (Imgur access tokens are valid for 1 hour)
             tokenExpiryDate = NSDate(timeIntervalSinceNow: 1 * 60 * 60)
         }
     }
@@ -50,89 +61,92 @@ class ImgurClient {
         return false
     }
     
+    func deauthenticate() {
+        defaults.removeObjectForKey(kImgurUsername)
+        defaults.removeObjectForKey(kRefreshToken)
+        accessToken = nil
+    }
+    
     func addToQueue(upload: ImgurUpload) {
-        upload.initiationHandler?(upload)
-        // If necessary, request a new access token
         if isAuthenticated && !accessTokenIsValid {
+            
+            // Queue the upload if we need an access token
             uploadQueue.append(upload)
+            
+            // Request the access token if it hasn't already been requested
             if !authenticationInProgress {
+                
                 authenticationInProgress = true
-                requestAccessToken({ () -> Void in
+                
+                requestAccessToken({ (authError: String?) -> Void in
+                    if let error = authError {
+                        upload.error = error
+                        upload.completionHandler?(upload)
+                    } else {
+                        // Upload all images in the queue
+                        while self.uploadQueue.count != 0 {
+                            self.attemptUpload(self.uploadQueue[0])
+                            self.uploadQueue.removeAtIndex(0)
+                        }
+                    }
+                    
                     self.authenticationInProgress = false
-                    self.processQueue()
                 })
             }
         } else {
+            // We don't need any access tokens, just upload the image
             attemptUpload(upload)
         }
     }
     
-    func processQueue() {
-        // Upload all images in queue
-        for upload in uploadQueue {
-            if accessTokenIsValid {
-                attemptUpload(upload)
-            } else {
-                upload.error = "Unable to authenticate with Imgur"
-                upload.completionHandler?(upload)
-            }
+    func readableErrorFromResult(result: HTTPResult) -> String {
+        NSLog("A HTTP request error occurred: \(result.error)\n\n\(result.json)\n\n\(result.response)")
+        if let error = result.json?.objectForKey("data")?.objectForKey("error") as? String {
+            return error
+        } else if let error = result.error?.localizedDescription {
+            return error
+        } else {
+            return "An unknown error occurred"
         }
-        // Clear queue
-        uploadQueue.removeAll(keepCapacity: false)
     }
     
-    func deauthenticate() {
-        username = nil
-        refreshToken = nil
-        accessToken = nil
-    }
-    
-    /**
-    Authenticate with the Imgur API
-    
-    :param: code The authorization code obtained from the Imgur API
-    
-    :callback: The code to be executed upon a successful authentication attempt
-    */
-    func authenticate(code: String, callback: (String, String) -> Void) {
+    func requestRefreshToken(code: String, callback: (String?) -> Void) {
         let parameters = [
             "client_id": imgurClientId,
             "client_secret": imgurClientSecret,
             "grant_type": "authorization_code",
             "code": code
         ]
-        Just.post(
-            "\(apiURL)/oauth2/token",
-            timeout: 30,
-            json: parameters) { (result: HTTPResult!) -> Void in
-                self.refreshToken = result.json?.objectForKey("refresh_token") as? String
-                self.accessToken = result.json?.objectForKey("access_token") as? String
-                self.username = result.json?.objectForKey("account_username") as? String
-                if let username = self.username, refreshToken = self.refreshToken {
-                    callback(username, refreshToken)
-                } else {
-                    NSLog("An error occurred while attempting to obtain tokens from a pin: \(result.error)\nResponse: \(result.response)\nJSON: \(result.json)")
-                }
+        Just.post("\(apiURL)/oauth2/token", timeout: 30, json: parameters) { (result: HTTPResult!) -> Void in
+            if let username = result.json?["account_username"] as? String,
+                let refreshToken = result.json?["refresh_token"] as? String,
+                let accessToken = result.json?["access_token"] as? String {
+                    self.username = username
+                    self.refreshToken = refreshToken
+                    self.accessToken = accessToken
+                    callback(nil)
+            } else {
+                callback(self.readableErrorFromResult(result))
+            }
         }
     }
     
-    func requestAccessToken(callback: () -> Void) {
+    func requestAccessToken(callback: (String?) -> Void) {
         let parameters = [
             "client_id": imgurClientId,
             "client_secret": imgurClientSecret,
             "grant_type": "refresh_token",
             "refresh_token": self.refreshToken!
         ]
-        Just.post(
-            "\(apiURL)/oauth2/token",
-            timeout: 30,
-            json: parameters) { (result: HTTPResult!) -> Void in
-                if let accessToken = result.json?.objectForKey("access_token") as? String {
+        Just.post("\(apiURL)/oauth2/token", timeout: 30, json: parameters) { (result: HTTPResult!) -> Void in
+            if let accessToken = result.json?["access_token"] as? String,
+                let refreshToken = result.json?["refresh_token"] as? String {
                     self.accessToken = accessToken
-                } else {
-                    NSLog("An error occurred while attempting to obtain tokens from a pin: \(result.error)\nResponse: \(result.response)\nJSON: \(result.json)")
-                }
-                callback()
+                    self.refreshToken = refreshToken
+                    callback(nil)
+            } else {
+                callback(self.readableErrorFromResult(result))
+            }
         }
     }
     
@@ -147,24 +161,14 @@ class ImgurClient {
         let files = [
             "image": HTTPFile.Data("image.\(upload.imageExtension)", upload.imageData, nil)
         ]
-        Just.post(
-            "\(apiURL)/3/image",
-            timeout: 90,
-            json: parameters,
-            files: files,
-            headers: headers) { (result: HTTPResult!) -> Void in
-                if let link = result.json?.objectForKey("data")?.objectForKey("link") as? String {
-                    // Update link provided by API to HTTPS if necessary
-                    upload.link = link.stringByReplacingOccurrencesOfString("http://", withString: "https://")
-                } else {
-                    if let error = result.json?.objectForKey("data")?.objectForKey("error") as? String {
-                        upload.error = "Imgur responded with the following error: \"\(error)\""
-                    } else {
-                        upload.error = result.error?.localizedDescription
-                    }
-                    NSLog("An error occurred while attempting to upload an image: \(result.error)\nResponse: \(result.response)\nJSON: \(result.json)")
-                }
-                upload.completionHandler?(upload)
+        Just.post("\(apiURL)/3/image", json: parameters, files: files, headers: headers) { (result: HTTPResult!) -> Void in
+            if let link = result.json?.objectForKey("data")?.objectForKey("link") as? String {
+                // Update link provided by API to HTTPS if necessary
+                upload.link = link.stringByReplacingOccurrencesOfString("http://", withString: "https://")
+            } else {
+                upload.error = self.readableErrorFromResult(result)
+            }
+            upload.completionHandler?(upload)
         }
     }
 }

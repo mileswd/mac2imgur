@@ -20,7 +20,7 @@ let kDisableScreenshotDetection = "DisableScreenshotDetection"
 let kRequiresUploadConfirmation = "RequiresUploadConfirmation"
 let kResizeScreenshots = "ResizeScreenshots"
 let kRefreshToken = "RefreshToken"
-let kUsername = "ImgurUsername"
+let kImgurUsername = "ImgurUsername"
 
 // Imgur specific
 let imgurClientId = "5867856c9027819"
