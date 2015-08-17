@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		020F82521B30957700E70F9C /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 020F82501B30957700E70F9C /* Fabric.framework */; };
-		020F82531B30957700E70F9C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 020F82511B30957700E70F9C /* Crashlytics.framework */; };
 		0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220B2AA19F4104A0064E9FE /* AppDelegate.swift */; };
 		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		023ACBEA1A2A9ABF008510AC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
@@ -18,6 +16,8 @@
 		026EE18A1B1285EB00EB87A0 /* Just.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026EE1891B1285EB00EB87A0 /* Just.swift */; };
 		02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 02933D051A2A7CDA001FB628 /* dsa_pub.pem */; };
 		029FAD891AF032E5002F17E1 /* LaunchServicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */; };
+		02A35E5B1B824D99009C1C79 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A35E591B824D99009C1C79 /* Fabric.framework */; };
+		02A35E5C1B824D99009C1C79 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A35E5A1B824D99009C1C79 /* Crashlytics.framework */; };
 		02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02B00A7619CE38AF00F924D6 /* Credits.rtf */; };
 		02C8A9BD1AB4BA0900E8C704 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8A9BC1AB4BA0900E8C704 /* Constants.swift */; };
 		02E0E91319A41CB200766FDB /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */; };
@@ -43,8 +43,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		020F82501B30957700E70F9C /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		020F82511B30957700E70F9C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		0220B2AA19F4104A0064E9FE /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		022321BE19A6959500048626 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		022321C019A6F57E00048626 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -53,6 +51,8 @@
 		026EE1891B1285EB00EB87A0 /* Just.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Just.swift; sourceTree = "<group>"; };
 		02933D051A2A7CDA001FB628 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		029FAD881AF032E5002F17E1 /* LaunchServicesHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchServicesHelper.swift; sourceTree = "<group>"; };
+		02A35E591B824D99009C1C79 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		02A35E5A1B824D99009C1C79 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		02B00A7619CE38AF00F924D6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		02C8A9BC1AB4BA0900E8C704 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		02E0E91219A41CB200766FDB /* ScreenshotMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotMonitor.swift; sourceTree = "<group>"; };
@@ -72,9 +72,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */,
-				020F82531B30957700E70F9C /* Crashlytics.framework in Frameworks */,
-				020F82521B30957700E70F9C /* Fabric.framework in Frameworks */,
 				02E61C321B3098DB00A0A872 /* Sparkle.framework in Frameworks */,
+				02A35E5C1B824D99009C1C79 /* Crashlytics.framework in Frameworks */,
+				02A35E5B1B824D99009C1C79 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +86,8 @@
 			children = (
 				026EE1891B1285EB00EB87A0 /* Just.swift */,
 				07B42AE619AB75DA00A6349D /* AppKit.framework */,
-				020F82511B30957700E70F9C /* Crashlytics.framework */,
-				020F82501B30957700E70F9C /* Fabric.framework */,
+				02A35E5A1B824D99009C1C79 /* Crashlytics.framework */,
+				02A35E591B824D99009C1C79 /* Fabric.framework */,
 				02E61C2E1B3098AD00A0A872 /* Sparkle.framework */,
 			);
 			path = Dependencies;

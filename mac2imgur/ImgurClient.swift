@@ -139,11 +139,9 @@ class ImgurClient {
             "refresh_token": self.refreshToken!
         ]
         Just.post("\(apiURL)/oauth2/token", timeout: 30, json: parameters) { (result: HTTPResult!) -> Void in
-            if let accessToken = result.json?["access_token"] as? String,
-                let refreshToken = result.json?["refresh_token"] as? String {
-                    self.accessToken = accessToken
-                    self.refreshToken = refreshToken
-                    callback(nil)
+            if let accessToken = result.json?["access_token"] as? String {
+                self.accessToken = accessToken
+                callback(nil)
             } else {
                 callback(self.readableErrorFromResult(result))
             }
