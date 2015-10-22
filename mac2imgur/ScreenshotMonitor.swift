@@ -49,43 +49,60 @@ class ScreenshotMonitor {
     
     func initialPhaseComplete(notification: NSNotification) {
         // Blacklist all screenshots that already exist
-        if let itemsAdded = notification.object?.results as? [NSMetadataItem] {
-            for item in itemsAdded {
-                // Get the path to the screenshot
-                if let screenshotPath = item.valueForAttribute(NSMetadataItemPathKey) as? String {
-                    let screenshotName = screenshotPath.lastPathComponent.stringByDeletingPathExtension
-                    
-                    // Blacklist the screenshot if it hasn't already been blacklisted
-                    if !blacklist.contains(screenshotName) {
-                        blacklist.append(screenshotName)
-                    }
-                }
+        guard let itemsAdded = notification.object?.results as? [NSMetadataItem] else {
+            return
+        }
+        
+        for item in itemsAdded {
+            // Get the path to the screenshot
+            guard let screenshotFilePath = item.valueForAttribute(NSMetadataItemPathKey) as? String else {
+                return
+            }
+            
+            let screenshotURL = NSURL(fileURLWithPath: screenshotFilePath)
+            
+            guard let screenshotFileName = screenshotURL.lastPathComponent else {
+                NSLog("Unable to determine screenshot file name from path: \(screenshotFilePath)")
+                return
+            }
+            
+            // Blacklist the screenshot if it hasn't already been blacklisted
+            if !blacklist.contains(screenshotFileName) {
+                blacklist.append(screenshotFileName)
             }
         }
     }
     
     func liveUpdatePhaseEvent(notification: NSNotification) {
-        if let itemsAdded = notification.userInfo?["kMDQueryUpdateAddedItems"] as? [NSMetadataItem] {
-            for item in itemsAdded {
-                // Get the path to the screenshot
-                if let path = item.valueForAttribute(NSMetadataItemPathKey) as? String,
-                let creationDate = item.valueForAttribute(NSMetadataItemFSCreationDateKey) as? NSDate {
-                    let screenshotName = path.lastPathComponent.stringByDeletingPathExtension
-                    
-                    let oldestAllowedCreationDate = NSDate(timeIntervalSinceNow: -30) // 30 seconds ago
-                    let defaultScreenshotDirectoryPath = path.stringByDeletingLastPathComponent.stringByStandardizingPath
-                    let currentScreenshotDirectoryPath = screenshotDirectoryPath.stringByStandardizingPath
-                    
-                    let isInScreenshotFolder = currentScreenshotDirectoryPath == defaultScreenshotDirectoryPath
-                    let isRecentlyCreated = creationDate.compare(oldestAllowedCreationDate) == .OrderedDescending
-                    let isBlacklisted = blacklist.contains(screenshotName)
-                    
-                    // Ensure that the screenshot detected is from the right folder and isn't blacklisted
-                    if isRecentlyCreated && isInScreenshotFolder && !isBlacklisted {
-                        callback(NSURL(fileURLWithPath: path))
-                        blacklist.append(screenshotName)
-                    }
-                }
+        guard let itemsAdded = notification.userInfo?["kMDQueryUpdateAddedItems"] as? [NSMetadataItem] else {
+            return
+        }
+        
+        for item in itemsAdded {
+            // Get the path to the screenshot
+            guard let screenshotFilePath = item.valueForAttribute(NSMetadataItemPathKey) as? String,
+                creationDate = item.valueForAttribute(NSMetadataItemFSCreationDateKey) as? NSDate else {
+                    // Skip invalid items
+                    return
+            }
+            
+            let screenshotURL = NSURL(fileURLWithPath: screenshotFilePath)
+            
+            guard let screenshotFileName = screenshotURL.lastPathComponent else {
+                NSLog("Unable to determine screenshot file name from path: \(screenshotFilePath)")
+                return
+            }
+            
+            let oldestAllowedCreationDate = NSDate(timeIntervalSinceNow: -30) // 30 seconds ago
+            
+            let isInScreenshotFolder = screenshotURL.absoluteString.containsString(screenshotDirectoryPath)
+            let isRecentlyCreated = creationDate.compare(oldestAllowedCreationDate) == .OrderedDescending
+            let isBlacklisted = blacklist.contains(screenshotFileName)
+            
+            // Ensure that the screenshot detected is from the right folder and isn't blacklisted
+            if isRecentlyCreated && isInScreenshotFolder && !isBlacklisted {
+                callback(screenshotURL)
+                blacklist.append(screenshotFileName)
             }
         }
     }

@@ -42,12 +42,590 @@ let statusCodeDescriptions = [
     510: "not extended"                  ,
 ]
 
-public class Just: NSObject, NSURLSessionDelegate {
-    private struct Shared {
-        static let instance = Just()
+public enum HTTPFile {
+    case URL(NSURL,String?) // URL to a file, mimetype
+    case Data(String,NSData,String?) // filename, data, mimetype
+    case Text(String,String,String?) // filename, text, mimetype
+}
+
+// Supported request types
+public enum HTTPMethod: String {
+    case DELETE = "DELETE"
+    case GET = "GET"
+    case HEAD = "HEAD"
+    case OPTIONS = "OPTIONS"
+    case PATCH = "PATCH"
+    case POST = "POST"
+    case PUT = "PUT"
+}
+
+/// The only reason this is not a struct is the requirements for
+/// lazy evaluation of `headers` and `cookies`, which is mutating the
+/// struct. This would make those properties unusable with `HTTPResult`s
+/// declared with `let`
+public final class HTTPResult : NSObject {
+    public final var content:NSData?
+    public var response:NSURLResponse?
+    public var error:NSError?
+    public var request:NSURLRequest?
+    public var encoding = NSUTF8StringEncoding
+    public var JSONReadingOptions = NSJSONReadingOptions(rawValue: 0)
+    
+    public var reason:String {
+        if  let code = self.statusCode,
+            let text = statusCodeDescriptions[code] {
+                return text
+        }
+        if let error = self.error {
+            return error.localizedDescription
+        }
+        return "Unkown"
     }
     
-    class var shared: Just { return Shared.instance }
+    public var isRedirect:Bool {
+        if let code = self.statusCode {
+            return code >= 300 && code < 400
+        }
+        return false
+    }
+    
+    public var isPermanentRedirect:Bool {
+        return self.statusCode == 301
+    }
+    
+    public override var description:String {
+        if let status = statusCode,
+            urlString = request?.URL?.absoluteString,
+            method = request?.HTTPMethod
+        {
+            return "\(method) \(urlString) \(status)"
+        } else {
+            return "<Empty>"
+        }
+    }
+    
+    public init(data:NSData?, response:NSURLResponse?, error:NSError?, request:NSURLRequest?) {
+        self.content = data
+        self.response = response
+        self.error = error
+        self.request = request
+    }
+    
+    public var json:AnyObject? {
+        if let theData = self.content {
+            return try? NSJSONSerialization.JSONObjectWithData(theData, options: JSONReadingOptions)
+        }
+        return nil
+    }
+    
+    public var statusCode: Int? {
+        if let theResponse = self.response as? NSHTTPURLResponse {
+            return theResponse.statusCode
+        }
+        return nil
+    }
+    
+    public var text:String? {
+        if let theData = self.content {
+            return NSString(data:theData, encoding:encoding) as? String
+        }
+        return nil
+    }
+    
+    public lazy var headers:CaseInsensitiveDictionary<String,String> = {
+        return CaseInsensitiveDictionary<String,String>(dictionary: (self.response as? NSHTTPURLResponse)?.allHeaderFields as? [String:String] ?? [:])
+    }()
+    
+    public lazy var cookies:[String:NSHTTPCookie] = {
+        let foundCookies: [NSHTTPCookie]
+        if let responseHeaders = (self.response as? NSHTTPURLResponse)?.allHeaderFields as? [String: String] {
+            foundCookies = NSHTTPCookie.cookiesWithResponseHeaderFields(responseHeaders, forURL:NSURL(string:"")!) as [NSHTTPCookie]
+        } else {
+            foundCookies = []
+        }
+        var result:[String:NSHTTPCookie] = [:]
+        for cookie in foundCookies {
+            result[cookie.name] = cookie
+        }
+        return result
+    }()
+    
+    public var ok:Bool {
+        return statusCode != nil && !(statusCode! >= 400 && statusCode! < 600)
+    }
+    
+    public var url:NSURL? {
+        return response?.URL
+    }
+    public lazy var links: [String:[String:String]] = {
+        var result = [String:[String:String]]()
+        if let content = self.headers["link"] {
+            content.componentsSeparatedByString(",").forEach { s in
+                let linkComponents = s.componentsSeparatedByString(";").map { ($0 as NSString).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) }
+                if linkComponents.count > 1 { // although a link without a rel is valid, there's no way to reference it
+                    let urlComponent = linkComponents.first!
+                    let urlRange = urlComponent.startIndex.advancedBy(1)..<urlComponent.endIndex.advancedBy(-1)
+                    var link: [String: String] = ["url": String(urlComponent.characters[urlRange])]
+                    linkComponents.dropFirst().forEach { s in
+                        if let equalIndex = s.characters.indexOf("=") {
+                            let componentKey = String(s.characters[s.startIndex..<equalIndex])
+                            let componentValueCharacters = s.characters[equalIndex.advancedBy(1)..<s.endIndex]
+                            if componentValueCharacters.first == "\"" && componentValueCharacters.last == "\"" {
+                                let unquotedValueRange = componentValueCharacters.startIndex.advancedBy(1)..<componentValueCharacters.endIndex.advancedBy(-1)
+                                link[componentKey] = String(componentValueCharacters[unquotedValueRange])
+                            } else {
+                                link[componentKey] = String(componentValueCharacters)
+                            }
+                        }
+                    }
+                    if let rel = link["rel"] {
+                        result[rel] = link
+                    }
+                }
+            }
+        }
+        return result
+    }()
+}
+
+
+public struct CaseInsensitiveDictionary<Key: Hashable, Value>: CollectionType, DictionaryLiteralConvertible {
+    private var _data:[Key: Value] = [:]
+    private var _keyMap: [String: Key] = [:]
+    
+    public typealias Element = (Key, Value)
+    public typealias Index = DictionaryIndex<Key, Value>
+    public var startIndex: Index
+    public var endIndex: Index
+    
+    public var count: Int {
+        assert(_data.count == _keyMap.count, "internal keys out of sync")
+        return _data.count
+    }
+    
+    public var isEmpty: Bool {
+        return _data.isEmpty
+    }
+    
+    public init() {
+        startIndex = _data.startIndex
+        endIndex = _data.endIndex
+    }
+    
+    public init(dictionaryLiteral elements: (Key, Value)...) {
+        for (key, value) in elements {
+            _keyMap["\(key)".lowercaseString] = key
+            _data[key] = value
+        }
+        startIndex = _data.startIndex
+        endIndex = _data.endIndex
+    }
+    
+    public init(dictionary:[Key:Value]) {
+        for (key, value) in dictionary {
+            _keyMap["\(key)".lowercaseString] = key
+            _data[key] = value
+        }
+        startIndex = _data.startIndex
+        endIndex = _data.endIndex
+    }
+    
+    public subscript (position: Index) -> Element {
+        return _data[position]
+    }
+    
+    public subscript (key: Key) -> Value? {
+        get {
+            if let realKey = _keyMap["\(key)".lowercaseString] {
+                return _data[realKey]
+            }
+            return nil
+        }
+        set(newValue) {
+            let lowerKey = "\(key)".lowercaseString
+            if _keyMap[lowerKey] == nil {
+                _keyMap[lowerKey] = key
+            }
+            _data[_keyMap[lowerKey]!] = newValue
+        }
+    }
+    
+    public func generate() -> DictionaryGenerator<Key, Value> {
+        return _data.generate()
+    }
+    
+    public var keys: LazyMapCollection<[Key : Value], Key> {
+        return _data.keys
+    }
+    public var values: LazyMapCollection<[Key : Value], Value> {
+        return _data.values
+    }
+}
+
+typealias TaskID = Int
+public typealias Credentials = (username:String, password:String)
+public typealias TaskProgressHandler = (HTTPProgress!) -> Void
+typealias TaskCompletionHandler = (HTTPResult) -> Void
+struct TaskConfiguration {
+    let credential:Credentials?
+    let redirects:Bool
+    let originalRequest: NSURLRequest?
+    var data: NSMutableData
+    let progressHandler: TaskProgressHandler?
+    let completionHandler: TaskCompletionHandler?
+}
+
+public struct JustSessionDefaults {
+    public var JSONReadingOptions = NSJSONReadingOptions(rawValue: 0)
+    public var JSONWritingOptions = NSJSONWritingOptions(rawValue: 0)
+    public var headers:[String:String] = [:]
+    public var multipartBoundary = "Ju5tH77P15Aw350m3"
+    public var encoding = NSUTF8StringEncoding
+}
+
+
+public struct HTTPProgress {
+    public enum Type {
+        case Upload
+        case Download
+    }
+    
+    public let type:Type
+    public let bytesProcessed:Int64
+    public let bytesExpectedToProcess:Int64
+    public var percent: Float {
+        return Float(bytesProcessed) / Float(bytesExpectedToProcess)
+    }
+}
+
+let errorDomain = "net.justhttp.Just"
+
+
+public protocol JustAdaptor {
+    func request(
+        method:HTTPMethod,
+        URLString:String,
+        params:[String:AnyObject],
+        data:[String:AnyObject],
+        json:[String:AnyObject]?,
+        headers:[String:String],
+        files:[String:HTTPFile],
+        auth:Credentials?,
+        cookies: [String:String],
+        redirects:Bool,
+        timeout:Double?,
+        URLQuery:String?,
+        requestBody:NSData?,
+        asyncProgressHandler:TaskProgressHandler?,
+        asyncCompletionHandler:((HTTPResult!) -> Void)?) -> HTTPResult
+    init(session:NSURLSession?, defaults:JustSessionDefaults?)
+}
+
+public struct JustOf<Adaptor: JustAdaptor> {
+    private let adaptor: Adaptor
+    public init(session:NSURLSession? = nil, defaults:JustSessionDefaults? = nil) {
+        adaptor = Adaptor(session: session, defaults: defaults)
+    }
+}
+
+extension JustOf {
+    public func request(
+        method:HTTPMethod,
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        cookies:[String:String] = [:],
+        allowRedirects:Bool = true,
+        timeout:Double? = nil,
+        URLQuery:String? = nil,
+        requestBody:NSData? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            return adaptor.request(
+                method,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout:timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+            
+    }
+    public func delete(
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        cookies:[String:String] = [:],
+        allowRedirects:Bool = true,
+        timeout:Double? = nil,
+        URLQuery:String? = nil,
+        requestBody:NSData? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            
+            return adaptor.request(
+                .DELETE,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout:timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+            
+    }
+    
+    public func get(
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        allowRedirects:Bool = true,
+        cookies:[String:String] = [:],
+        timeout:Double? = nil,
+        requestBody:NSData? = nil,
+        URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            
+            return adaptor.request(
+                .GET,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout:timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+            
+    }
+    
+    public func head(
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        cookies:[String:String] = [:],
+        allowRedirects:Bool = true,
+        timeout:Double? = nil,
+        requestBody:NSData? = nil,
+        URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            
+            return adaptor.request(
+                .HEAD,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout: timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+            
+    }
+    
+    public func options(
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        cookies:[String:String] = [:],
+        allowRedirects:Bool = true,
+        timeout:Double? = nil,
+        requestBody:NSData? = nil,
+        URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            
+            return adaptor.request(
+                .OPTIONS,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout: timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+            
+    }
+    
+    public func patch(
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        cookies:[String:String] = [:],
+        allowRedirects:Bool = true,
+        timeout:Double? = nil,
+        requestBody:NSData? = nil,
+        URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            
+            return adaptor.request(
+                .OPTIONS,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout: timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+            
+    }
+    
+    public func post(
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        cookies:[String:String] = [:],
+        allowRedirects:Bool = true,
+        timeout:Double? = nil,
+        requestBody:NSData? = nil,
+        URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            
+            return adaptor.request(
+                .POST,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout: timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+            
+    }
+    
+    public func put(
+        URLString:String,
+        params:[String:AnyObject] = [:],
+        data:[String:AnyObject] = [:],
+        json:[String:AnyObject]? = nil,
+        headers:[String:String] = [:],
+        files:[String:HTTPFile] = [:],
+        auth:(String,String)? = nil,
+        cookies:[String:String] = [:],
+        allowRedirects:Bool = true,
+        timeout:Double? = nil,
+        requestBody:NSData? = nil,
+        URLQuery:String? = nil,
+        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
+        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
+        ) -> HTTPResult {
+            
+            return adaptor.request(
+                .PUT,
+                URLString: URLString,
+                params: params,
+                data: data,
+                json: json,
+                headers: headers,
+                files:files,
+                auth: auth,
+                cookies: cookies,
+                redirects: allowRedirects,
+                timeout: timeout,
+                URLQuery: URLQuery,
+                requestBody: requestBody,
+                asyncProgressHandler: asyncProgressHandler,
+                asyncCompletionHandler: asyncCompletionHandler
+            )
+    }
+}
+
+
+public final class HTTP: NSObject, NSURLSessionDelegate, JustAdaptor {
     
     public init(session:NSURLSession? = nil, defaults:JustSessionDefaults? = nil) {
         super.init()
@@ -89,7 +667,7 @@ public class Just: NSObject, NSURLSessionDelegate {
                 components += queryComponents("\(key)", value)
             }
         } else {
-            components.extend([(percentEncodeString(key), percentEncodeString("\(value)"))])
+            components.appendContentsOf([(percentEncodeString(key), percentEncodeString("\(value)"))])
         }
         
         return components
@@ -102,7 +680,7 @@ public class Just: NSObject, NSURLSessionDelegate {
             components += self.queryComponents(key, value)
         }
         
-        return "&".join(components.map{"\($0)=\($1)"} as [String])
+        return (components.map{"\($0)=\($1)"} as [String]).joinWithSeparator("&")
     }
     
     func percentEncodeString(originalObject: AnyObject) -> String {
@@ -172,7 +750,7 @@ public class Just: NSObject, NSURLSessionDelegate {
         return body
     }
     
-    func synthesizeRequest(
+    public func synthesizeRequest(
         method:HTTPMethod,
         URLString:String,
         params:[String:AnyObject],
@@ -203,19 +781,12 @@ public class Just: NSObject, NSURLSessionDelegate {
                 } else {
                     if let requestJSON = json {
                         contentType = "application/json"
-                        do {
-                            body = try NSJSONSerialization.dataWithJSONObject(requestJSON, options: defaults.JSONWritingOptions)
-                        } catch _ {
-                            body = nil
-                        }
+                        body = try? NSJSONSerialization.dataWithJSONObject(requestJSON, options: defaults.JSONWritingOptions)
+                        
                     } else {
                         if data.count > 0 {
                             if headers["content-type"]?.lowercaseString == "application/json" { // assume user wants JSON if she is using this header
-                                do {
-                                    body = try NSJSONSerialization.dataWithJSONObject(data, options: defaults.JSONWritingOptions)
-                                } catch _ {
-                                    body = nil
-                                }
+                                body = try? NSJSONSerialization.dataWithJSONObject(data, options: defaults.JSONWritingOptions)
                             } else {
                                 contentType = "application/x-www-form-urlencoded"
                                 body = query(data).dataUsingEncoding(defaults.encoding)
@@ -251,7 +822,7 @@ public class Just: NSObject, NSURLSessionDelegate {
             return nil
     }
     
-    func request(
+    public func request(
         method:HTTPMethod,
         URLString:String,
         params:[String:AnyObject],
@@ -318,7 +889,6 @@ public class Just: NSObject, NSURLSessionDelegate {
                 }
             }
             return requestResult
-            
     }
     
     func addCookies(URL:NSURL, newCookies:[String:String]) {
@@ -335,498 +905,7 @@ public class Just: NSObject, NSURLSessionDelegate {
     }
 }
 
-extension Just {
-    public class func delete(
-        URLString:String,
-        params:[String:AnyObject] = [:],
-        data:[String:AnyObject] = [:],
-        json:[String:AnyObject]? = nil,
-        headers:[String:String] = [:],
-        files:[String:HTTPFile] = [:],
-        auth:(String,String)? = nil,
-        cookies:[String:String] = [:],
-        allowRedirects:Bool = true,
-        timeout:Double? = nil,
-        URLQuery:String? = nil,
-        requestBody:NSData? = nil,
-        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
-        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
-        ) -> HTTPResult {
-            
-            return Just.shared.request(
-                .DELETE,
-                URLString: URLString,
-                params: params,
-                data: data,
-                json: json,
-                headers: headers,
-                files:files,
-                auth: auth,
-                cookies: cookies,
-                redirects: allowRedirects,
-                timeout:timeout,
-                URLQuery: URLQuery,
-                requestBody: requestBody,
-                asyncProgressHandler: asyncProgressHandler,
-                asyncCompletionHandler: asyncCompletionHandler
-            )
-            
-    }
-    
-    public class func get(
-        URLString:String,
-        params:[String:AnyObject] = [:],
-        data:[String:AnyObject] = [:],
-        json:[String:AnyObject]? = nil,
-        headers:[String:String] = [:],
-        files:[String:HTTPFile] = [:],
-        auth:(String,String)? = nil,
-        allowRedirects:Bool = true,
-        cookies:[String:String] = [:],
-        timeout:Double? = nil,
-        requestBody:NSData? = nil,
-        URLQuery:String? = nil,
-        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
-        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
-        ) -> HTTPResult {
-            
-            return Just.shared.request(
-                .GET,
-                URLString: URLString,
-                params: params,
-                data: data,
-                json: json,
-                headers: headers,
-                files:files,
-                auth: auth,
-                cookies: cookies,
-                redirects: allowRedirects,
-                timeout:timeout,
-                URLQuery: URLQuery,
-                requestBody: requestBody,
-                asyncProgressHandler: asyncProgressHandler,
-                asyncCompletionHandler: asyncCompletionHandler
-            )
-            
-    }
-    
-    public class func head(
-        URLString:String,
-        params:[String:AnyObject] = [:],
-        data:[String:AnyObject] = [:],
-        json:[String:AnyObject]? = nil,
-        headers:[String:String] = [:],
-        files:[String:HTTPFile] = [:],
-        auth:(String,String)? = nil,
-        cookies:[String:String] = [:],
-        allowRedirects:Bool = true,
-        timeout:Double? = nil,
-        requestBody:NSData? = nil,
-        URLQuery:String? = nil,
-        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
-        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
-        ) -> HTTPResult {
-            
-            return Just.shared.request(
-                .HEAD,
-                URLString: URLString,
-                params: params,
-                data: data,
-                json: json,
-                headers: headers,
-                files:files,
-                auth: auth,
-                cookies: cookies,
-                redirects: allowRedirects,
-                timeout: timeout,
-                URLQuery: URLQuery,
-                requestBody: requestBody,
-                asyncProgressHandler: asyncProgressHandler,
-                asyncCompletionHandler: asyncCompletionHandler
-            )
-            
-    }
-    
-    public class func options(
-        URLString:String,
-        params:[String:AnyObject] = [:],
-        data:[String:AnyObject] = [:],
-        json:[String:AnyObject]? = nil,
-        headers:[String:String] = [:],
-        files:[String:HTTPFile] = [:],
-        auth:(String,String)? = nil,
-        cookies:[String:String] = [:],
-        allowRedirects:Bool = true,
-        timeout:Double? = nil,
-        requestBody:NSData? = nil,
-        URLQuery:String? = nil,
-        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
-        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
-        ) -> HTTPResult {
-            
-            return Just.shared.request(
-                .OPTIONS,
-                URLString: URLString,
-                params: params,
-                data: data,
-                json: json,
-                headers: headers,
-                files:files,
-                auth: auth,
-                cookies: cookies,
-                redirects: allowRedirects,
-                timeout: timeout,
-                URLQuery: URLQuery,
-                requestBody: requestBody,
-                asyncProgressHandler: asyncProgressHandler,
-                asyncCompletionHandler: asyncCompletionHandler
-            )
-            
-    }
-    
-    public class func patch(
-        URLString:String,
-        params:[String:AnyObject] = [:],
-        data:[String:AnyObject] = [:],
-        json:[String:AnyObject]? = nil,
-        headers:[String:String] = [:],
-        files:[String:HTTPFile] = [:],
-        auth:(String,String)? = nil,
-        cookies:[String:String] = [:],
-        allowRedirects:Bool = true,
-        timeout:Double? = nil,
-        requestBody:NSData? = nil,
-        URLQuery:String? = nil,
-        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
-        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
-        ) -> HTTPResult {
-            
-            return Just.shared.request(
-                .OPTIONS,
-                URLString: URLString,
-                params: params,
-                data: data,
-                json: json,
-                headers: headers,
-                files:files,
-                auth: auth,
-                cookies: cookies,
-                redirects: allowRedirects,
-                timeout: timeout,
-                URLQuery: URLQuery,
-                requestBody: requestBody,
-                asyncProgressHandler: asyncProgressHandler,
-                asyncCompletionHandler: asyncCompletionHandler
-            )
-            
-    }
-    
-    public class func post(
-        URLString:String,
-        params:[String:AnyObject] = [:],
-        data:[String:AnyObject] = [:],
-        json:[String:AnyObject]? = nil,
-        headers:[String:String] = [:],
-        files:[String:HTTPFile] = [:],
-        auth:(String,String)? = nil,
-        cookies:[String:String] = [:],
-        allowRedirects:Bool = true,
-        timeout:Double? = nil,
-        requestBody:NSData? = nil,
-        URLQuery:String? = nil,
-        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
-        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
-        ) -> HTTPResult {
-            
-            return Just.shared.request(
-                .POST,
-                URLString: URLString,
-                params: params,
-                data: data,
-                json: json,
-                headers: headers,
-                files:files,
-                auth: auth,
-                cookies: cookies,
-                redirects: allowRedirects,
-                timeout: timeout,
-                URLQuery: URLQuery,
-                requestBody: requestBody,
-                asyncProgressHandler: asyncProgressHandler,
-                asyncCompletionHandler: asyncCompletionHandler
-            )
-            
-    }
-    
-    public class func put(
-        URLString:String,
-        params:[String:AnyObject] = [:],
-        data:[String:AnyObject] = [:],
-        json:[String:AnyObject]? = nil,
-        headers:[String:String] = [:],
-        files:[String:HTTPFile] = [:],
-        auth:(String,String)? = nil,
-        cookies:[String:String] = [:],
-        allowRedirects:Bool = true,
-        timeout:Double? = nil,
-        requestBody:NSData? = nil,
-        URLQuery:String? = nil,
-        asyncProgressHandler:((HTTPProgress!) -> Void)? = nil,
-        asyncCompletionHandler:((HTTPResult!) -> Void)? = nil
-        ) -> HTTPResult {
-            
-            return Just.shared.request(
-                .PUT,
-                URLString: URLString,
-                params: params,
-                data: data,
-                json: json,
-                headers: headers,
-                files:files,
-                auth: auth,
-                cookies: cookies,
-                redirects: allowRedirects,
-                timeout: timeout,
-                URLQuery: URLQuery,
-                requestBody: requestBody,
-                asyncProgressHandler: asyncProgressHandler,
-                asyncCompletionHandler: asyncCompletionHandler
-            )
-    }
-}
-
-public enum HTTPFile {
-    case URL(NSURL,String?) // URL to a file, mimetype
-    case Data(String,NSData,String?) // filename, data, mimetype
-    case Text(String,String,String?) // filename, text, mimetype
-}
-
-// Supported request types
-enum HTTPMethod: String {
-    case DELETE = "DELETE"
-    case GET = "GET"
-    case HEAD = "HEAD"
-    case OPTIONS = "OPTIONS"
-    case PATCH = "PATCH"
-    case POST = "POST"
-    case PUT = "PUT"
-}
-
-/// The only reason this is not a struct is the requirements for
-/// lazy evaluation of `headers` and `cookies`, which is mutating the
-/// struct. This would make those properties unusable with `HTTPResult`s
-/// declared with `let`
-public final class HTTPResult : NSObject {
-    public final var content:NSData?
-    public var response:NSURLResponse?
-    public var error:NSError?
-    public var request:NSURLRequest?
-    public var encoding = NSUTF8StringEncoding
-    public var JSONReadingOptions = NSJSONReadingOptions(rawValue: 0)
-    
-    public var reason:String {
-        if  let code = self.statusCode,
-            let text = statusCodeDescriptions[code] {
-                return text
-        }
-        if let error = self.error {
-            return error.localizedDescription
-        }
-        return "Unkown"
-    }
-    public var isRedirect:Bool {
-        if let code = self.statusCode {
-            return code >= 300 && code < 400
-        }
-        return false
-    }
-    
-    public var isPermanentRedirect:Bool {
-        return self.statusCode == 301
-    }
-    
-    public override var description:String {
-        if let status = statusCode,
-            urlString = request?.URL?.absoluteString,
-            method = request?.HTTPMethod
-        {
-            return "\(method) \(urlString) \(status)"
-        } else {
-            return "<Empty>"
-        }
-    }
-    
-    init(data:NSData?, response:NSURLResponse?, error:NSError?, request:NSURLRequest?) {
-        self.content = data
-        self.response = response
-        self.error = error
-        self.request = request
-    }
-    
-    public var json:AnyObject? {
-        if let theData = self.content {
-            do {
-                return try NSJSONSerialization.JSONObjectWithData(theData, options: JSONReadingOptions)
-            } catch _ {
-                return nil
-            }
-        }
-        return nil
-    }
-    public var statusCode: Int? {
-        if let theResponse = self.response as? NSHTTPURLResponse {
-            return theResponse.statusCode
-        }
-        return nil
-    }
-    
-    public var text:String? {
-        if let theData = self.content {
-            return NSString(data:theData, encoding:encoding) as? String
-        }
-        return nil
-    }
-    
-    public lazy var headers:CaseInsensitiveDictionary<String,String> = {
-        return CaseInsensitiveDictionary<String,String>(dictionary: (self.response as? NSHTTPURLResponse)?.allHeaderFields as? [String:String] ?? [:])
-        }()
-    
-    public lazy var cookies:[String:NSHTTPCookie] = {
-        let foundCookies: [NSHTTPCookie]
-        if let responseHeaders = (self.response as? NSHTTPURLResponse)?.allHeaderFields as? [String: String] {
-            foundCookies = NSHTTPCookie.cookiesWithResponseHeaderFields(responseHeaders, forURL:NSURL(string:"")!) as [NSHTTPCookie]
-        } else {
-            foundCookies = []
-        }
-        var result:[String:NSHTTPCookie] = [:]
-        for cookie in foundCookies {
-            result[cookie.name] = cookie
-        }
-        return result
-        }()
-    
-    public var ok:Bool {
-        return statusCode != nil && !(statusCode! >= 400 && statusCode! < 600)
-    }
-    
-    public var url:NSURL? {
-        return response?.URL
-    }
-}
-
-
-public struct CaseInsensitiveDictionary<Key: Hashable, Value>: CollectionType, DictionaryLiteralConvertible {
-    private var _data:[Key: Value] = [:]
-    private var _keyMap: [String: Key] = [:]
-    
-    public typealias Element = (Key, Value)
-    public typealias Index = DictionaryIndex<Key, Value>
-    public var startIndex: Index
-    public var endIndex: Index
-    
-    public var count: Int {
-        assert(_data.count == _keyMap.count, "internal keys out of sync")
-        return _data.count
-    }
-    
-    public var isEmpty: Bool {
-        return _data.isEmpty
-    }
-    
-    public init() {
-        startIndex = _data.startIndex
-        endIndex = _data.endIndex
-    }
-    
-    public init(dictionaryLiteral elements: (Key, Value)...) {
-        for (key, value) in elements {
-            _keyMap["\(key)".lowercaseString] = key
-            _data[key] = value
-        }
-        startIndex = _data.startIndex
-        endIndex = _data.endIndex
-    }
-    
-    public init(dictionary:[Key:Value]) {
-        for (key, value) in dictionary {
-            _keyMap["\(key)".lowercaseString] = key
-            _data[key] = value
-        }
-        startIndex = _data.startIndex
-        endIndex = _data.endIndex
-    }
-    
-    public subscript (position: Index) -> Element {
-        return _data[position]
-    }
-    
-    public subscript (key: Key) -> Value? {
-        get {
-            if let realKey = _keyMap["\(key)".lowercaseString] {
-                return _data[realKey]
-            }
-            return nil
-        }
-        set(newValue) {
-            let lowerKey = "\(key)".lowercaseString
-            if _keyMap[lowerKey] == nil {
-                _keyMap[lowerKey] = key
-            }
-            _data[_keyMap[lowerKey]!] = newValue
-        }
-    }
-    
-    public func generate() -> DictionaryGenerator<Key, Value> {
-        return _data.generate()
-    }
-    
-    public var keys: LazyForwardCollection<MapCollection<[Key : Value], Key>> {
-        return _data.keys
-    }
-    public var values: LazyForwardCollection<MapCollection<[Key : Value], Value>> {
-        return _data.values
-    }
-}
-
-typealias TaskID = Int
-typealias Credentials = (username:String, password:String)
-typealias TaskProgressHandler = (HTTPProgress!) -> Void
-typealias TaskCompletionHandler = (HTTPResult) -> Void
-struct TaskConfiguration {
-    let credential:Credentials?
-    let redirects:Bool
-    let originalRequest: NSURLRequest?
-    var data: NSMutableData
-    let progressHandler: TaskProgressHandler?
-    let completionHandler: TaskCompletionHandler?
-}
-
-public struct JustSessionDefaults {
-    public var JSONReadingOptions = NSJSONReadingOptions(rawValue: 0)
-    public var JSONWritingOptions = NSJSONWritingOptions(rawValue: 0)
-    public var headers:[String:String] = [:]
-    public var multipartBoundary = "Ju5tH77P15Aw350m3"
-    public var encoding = NSUTF8StringEncoding
-}
-
-
-public struct HTTPProgress {
-    public enum Type {
-        case Upload
-        case Download
-    }
-    
-    public let type:Type
-    public let bytesProcessed:Int64
-    public let bytesExpectedToProcess:Int64
-    public var percent: Float {
-        return Float(bytesProcessed) / Float(bytesExpectedToProcess)
-    }
-}
-
-let errorDomain = "net.justhttp.Just"
-
-extension Just: NSURLSessionTaskDelegate, NSURLSessionDataDelegate {
+extension HTTP: NSURLSessionTaskDelegate, NSURLSessionDataDelegate {
     public func URLSession(
         session: NSURLSession,
         task: NSURLSessionTask,
@@ -909,3 +988,5 @@ extension Just: NSURLSessionTaskDelegate, NSURLSessionDataDelegate {
         taskConfigs.removeValueForKey(task.taskIdentifier)
     }
 }
+
+public let Just = JustOf<HTTP>()

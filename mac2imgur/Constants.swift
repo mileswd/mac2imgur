@@ -19,6 +19,7 @@ let kDeleteScreenshotAfterUpload = "DeleteScreenshotAfterUpload"
 let kDisableScreenshotDetection = "DisableScreenshotDetection"
 let kRequiresUploadConfirmation = "RequiresUploadConfirmation"
 let kResizeScreenshots = "ResizeScreenshots"
+let kClearClipboard = "ClearClipboard"
 let kRefreshToken = "RefreshToken"
 let kImgurUsername = "ImgurUsername"
 

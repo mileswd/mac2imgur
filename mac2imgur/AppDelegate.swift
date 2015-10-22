@@ -32,7 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         defaults.registerDefaults(["NSApplicationCrashOnExceptions": true])
         
         // Crashlytics integration
-        Fabric.with([Crashlytics()])
+        Fabric.with([Crashlytics.self])
         
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
@@ -44,7 +44,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
         
         // Start monitoring for screenshots
-        monitor = ScreenshotMonitor(callback: uploadScreenshot)
+        monitor = ScreenshotMonitor(callback: { (screenshotURL) -> Void in
+            let imgurUpload = ImgurUpload(imageURL: screenshotURL, isScreenshot: true)
+            self.upload(imgurUpload)
+        })
         monitor.startMonitoring()
     }
     
@@ -53,37 +56,47 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         NSStatusBar.systemStatusBar().removeStatusItem(interfaceHelper.statusItem)
     }
     
-    func uploadImage(imageURL: NSURL) {
-        let upload = ImgurUpload(imageURL: imageURL, isScreenshot: false)
-        upload.completionHandler = uploadAttemptCompleted
-        imgurClient.addToQueue(upload)
-        interfaceHelper.updateStatusIcon(true)
-    }
-    
-    func uploadScreenshot(imageURL: NSURL) {
-        if !defaults.boolForKey(kDisableScreenshotDetection) && interfaceHelper.hasUploadConfirmation(imageURL.path!) {
-            let upload = ImgurUpload(imageURL: imageURL, isScreenshot: true)
-            upload.completionHandler = uploadAttemptCompleted
+    func upload(imgurUpload: ImgurUpload) {
+        if imgurUpload.isScreenshot {
+            if defaults.boolForKey(kDisableScreenshotDetection) {
+                // Screenshot detection is disabled
+                return
+            }
+            
+            if !interfaceHelper.hasUploadConfirmation(imgurUpload){
+                return
+            }
+            
             // Resize the screenshot if necessary
             if defaults.boolForKey(kResizeScreenshots) {
-                upload.downscaleRetinaImage()
+                imgurUpload.downscaleRetinaImage()
             }
-            imgurClient.addToQueue(upload)
-            interfaceHelper.updateStatusIcon(true)
+            
+            // Clear the pasteboard if necessary
+            if defaults.boolForKey(kClearClipboard) {
+                NSPasteboard.generalPasteboard().clearContents()
+            }
         }
+        imgurUpload.completionHandler = uploadAttemptCompleted
+        imgurClient.addToQueue(imgurUpload)
+        interfaceHelper.updateStatusIcon(true)
     }
     
     func uploadAttemptCompleted(upload: ImgurUpload) {
         interfaceHelper.updateStatusIcon(false)
+        
         let type = upload.isScreenshot ? "Screenshot" : "Image"
+        
         if let link = upload.link {
             // Upload was successful
             interfaceHelper.addRecentUpload(upload)
             Utils.copyToClipboard(link)
             Utils.displayNotification("\(type) Upload Succeeded", informativeText: link)
+            
             if upload.isScreenshot && defaults.boolForKey(kDeleteScreenshotAfterUpload) {
                 Utils.deleteFile(upload.imageURL)
             }
+            
         } else {
             Utils.displayNotification("\(type) Upload Failed", informativeText: upload.error ?? "")
         }

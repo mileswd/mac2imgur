@@ -102,7 +102,7 @@ class ImgurClient {
     func readableErrorFromResult(result: HTTPResult) -> String {
         NSLog("A HTTP request error occurred: \(result.error)\n\n\(result.json)\n\n\(result.response)")
         if let error = result.json?.objectForKey("data")?.objectForKey("error") as? String {
-            return error
+            return "Imgur responded with the following error: \"\(error)\""
         } else if let error = result.error?.localizedDescription {
             return error
         } else {
@@ -157,7 +157,7 @@ class ImgurClient {
             "description": "Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)"
         ]
         let files = [
-            "image": HTTPFile.Data("image.\(upload.imageExtension)", upload.imageData, nil)
+            "image": HTTPFile.Data(upload.imageName, upload.imageData, nil)
         ]
         Just.post("\(apiURL)/3/image", json: parameters, files: files, headers: headers) { (result: HTTPResult!) -> Void in
             if let link = result.json?.objectForKey("data")?.objectForKey("link") as? String {

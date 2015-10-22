@@ -1,4 +1,4 @@
-# mac2imgur
+# mac2imgur [![Build Status](https://travis-ci.org/mileswd/mac2imgur.svg?branch=master)](https://travis-ci.org/mileswd/mac2imgur)
 
 A simple and minimalistic Mac application designed to make uploading images to [imgur.com](https://imgur.com) quick and effortless.
 

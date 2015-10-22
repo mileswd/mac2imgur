@@ -33,6 +33,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     @IBOutlet weak var requiresConfirmationPreference: NSMenuItem!
     @IBOutlet weak var resizeScreenshotsPreference: NSMenuItem!
     @IBOutlet weak var launchAtLoginPreference: NSMenuItem!
+    @IBOutlet weak var clearClipboardPreference: NSMenuItem!
     
     var statusItem: NSStatusItem!
     var uploadCount = 0
@@ -45,9 +46,10 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         deleteAfterUploadPreference.bind("value", toObject: defaults, withKeyPath: kDeleteScreenshotAfterUpload, options: nil)
         resizeScreenshotsPreference.bind("value", toObject: defaults, withKeyPath: kResizeScreenshots, options: nil)
         requiresConfirmationPreference.bind("value", toObject: defaults, withKeyPath: kRequiresUploadConfirmation, options: nil)
+        clearClipboardPreference.bind("value", toObject: defaults, withKeyPath: kClearClipboard, options: nil)
         
         // Add menu to status bar
-        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1) // NSVariableStatusItemLength
+        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSVariableStatusItemLength)
         statusItem.menu = menu
         statusItem.toolTip = "mac2imgur"
         statusItem.image = inactiveIcon
@@ -59,11 +61,11 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         }
     }
     
-    func hasUploadConfirmation(imagePath: String) -> Bool {
+    func hasUploadConfirmation(imgurUpload: ImgurUpload) -> Bool {
         if defaults.boolForKey(kRequiresUploadConfirmation) {
             let alert = NSAlert()
             alert.messageText = "Do you want to upload this screenshot?"
-            alert.informativeText = "\"\(imagePath.lastPathComponent.stringByDeletingPathExtension)\" will be uploaded to imgur.com, where it is publicly accessible."
+            alert.informativeText = "\"\(imgurUpload.imageName)\" will be uploaded to imgur.com, where it is publicly accessible."
             alert.addButtonWithTitle("Upload")
             alert.addButtonWithTitle("Cancel")
             for button in alert.buttons where button.title == "Cancel" {
@@ -98,10 +100,8 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         
         var retinaDisplayDetected = false
         if let screens = NSScreen.screens() {
-            for screen in screens {
-                if screen.backingScaleFactor > 1 {
-                    retinaDisplayDetected = true
-                }
+            for screen in screens where screen.backingScaleFactor > 1 {
+                retinaDisplayDetected = true
             }
         }
 
@@ -130,9 +130,10 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     
     func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {
         // Ensure that the dragged files are images
-        if let files = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
-            for file in files {
-                if !imgurAllowedFileTypes.contains(file.pathExtension) {
+        if let filePaths = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
+            for filePath in filePaths {
+                let fileURL = NSURL(fileURLWithPath: filePath)
+                if !imgurAllowedFileTypes.contains(fileURL.pathExtension?.lowercaseString ?? "") {
                     return NSDragOperation.None
                 }
             }
@@ -143,11 +144,17 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
     func performDragOperation(sender: NSDraggingInfo) -> Bool {
         if let filePaths = sender.draggingPasteboard().propertyListForType(NSFilenamesPboardType) as? [String] {
             for filePath in filePaths {
-                appDelegate.uploadImage(NSURL(fileURLWithPath: filePath))
+                let fileURL = NSURL(fileURLWithPath: filePath)
+                uploadImage(fileURL)
             }
             return true
         }
         return false
+    }
+    
+    func uploadImage(imageURL: NSURL) {
+        let imgurUpload = ImgurUpload(imageURL: imageURL, isScreenshot: false)
+        appDelegate.upload(imgurUpload)
     }
     
     // MARK: Interface Builder actions
@@ -163,7 +170,7 @@ class InterfaceHelper: NSObject, NSWindowDelegate, NSMenuDelegate  {
         panel.beginWithCompletionHandler { (result) -> Void in
             if result == NSFileHandlingPanelOKButton {
                 for imageURL in panel.URLs {
-                    self.appDelegate.uploadImage(imageURL)
+                    self.uploadImage(imageURL)
                 }
             }
         }

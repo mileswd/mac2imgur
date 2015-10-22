@@ -22,7 +22,6 @@ class ImgurUpload {
     let imageURL: NSURL
     let imageName: String
     var imageData: NSData
-    var imageExtension: String
     
     var completionHandler: (ImgurUpload -> Void)?
     var error: String?
@@ -30,10 +29,9 @@ class ImgurUpload {
     
     init(imageURL: NSURL, isScreenshot: Bool) {
         self.imageURL = imageURL
-        self.imageName = imageURL.path!.lastPathComponent.stringByDeletingPathExtension
+        self.imageName = imageURL.lastPathComponent ?? "Unnamed"
         self.imageData = NSData(contentsOfURL: imageURL)!
         self.isScreenshot = isScreenshot
-        self.imageExtension = imageURL.path!.pathExtension
     }
     
     func downscaleRetinaImage() {
@@ -42,8 +40,13 @@ class ImgurUpload {
             return
         }
         
-        if Int(image.size.width) >= image.representations[0].pixelsWide {
-            // Image is not retina
+        guard let imageRep = image.representations.first else {
+            NSLog("Resize failed: Unable to get image representation")
+            return
+        }
+        
+        if image.size.width >= CGFloat(imageRep.pixelsWide) {
+            NSLog("Resize skipped: Image is not retina")
             return
         }
         
@@ -70,7 +73,6 @@ class ImgurUpload {
         // Use a PNG representation of the resized image
         if let resizedRep = bitmapImageRep.representationUsingType(.NSPNGFileType, properties: [:]) {
             imageData = resizedRep
-            imageExtension = "png"
         } else {
             NSLog("Resize failed: Unable to create PNG representation")
         }
