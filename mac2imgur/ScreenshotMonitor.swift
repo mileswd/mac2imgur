@@ -14,109 +14,114 @@
 * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import Foundation
+import Cocoa
 
 class ScreenshotMonitor {
     
+    let defaults = NSUserDefaults.standardUserDefaults()
+    let fileManager = NSFileManager.defaultManager()
+    let screencaptureDomain = "com.apple.screencapture"
+    
     let callback: NSURL -> Void
-    var query: NSMetadataQuery
-    var blacklist: [String]
+    var eventStream: FSEventStreamRef?
     
     init(callback: NSURL -> Void) {
         self.callback = callback
-        self.blacklist = []
-        
-        query = NSMetadataQuery()
-        
-        // Only accept screenshots
-        query.predicate = NSPredicate(format: "kMDItemIsScreenCapture = 1")
-        
-        // Limit scope to local mounted volumes
-        query.searchScopes = [NSMetadataQueryLocalComputerScope]
     }
     
     func startMonitoring() {
-        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidFinishGatheringNotification, object: query, queue: nil, usingBlock: initialPhaseComplete)
-        NSNotificationCenter.defaultCenter().addObserverForName(NSMetadataQueryDidUpdateNotification, object: query, queue: nil, usingBlock: liveUpdatePhaseEvent)
-        query.startQuery()
+        guard let path = screenshotDirectoryURL?.path else {
+            NSLog("Unable to get screenshot directory")
+            return
+        }
+        
+        let streamCallback: FSEventStreamCallback = {
+            (streamRef: ConstFSEventStreamRef,
+            clientCallBackInfo: UnsafeMutablePointer<Void>,
+            numEvents: Int,
+            eventPaths: UnsafeMutablePointer<Void>,
+            eventFlags: UnsafePointer<FSEventStreamEventFlags>,
+            eventIds: UnsafePointer<FSEventStreamEventId>) in
+            
+            guard let eventPaths = unsafeBitCast(eventPaths, NSArray.self) as? [String] else {
+                NSLog("Unable to get eventPaths")
+                return
+            }
+            
+            for path in eventPaths {
+                unsafeBitCast(clientCallBackInfo, ScreenshotMonitor.self).handleEvent(path)
+            }
+        }
+        
+        var streamContext = FSEventStreamContext(
+            version: 0,
+            info: UnsafeMutablePointer<Void>(unsafeAddressOf(self)),
+            retain: nil,
+            release: nil,
+            copyDescription: nil
+        )
+        
+        let eventStream = FSEventStreamCreate(
+            nil,
+            streamCallback,
+            &streamContext,
+            [path],
+            FSEventStreamEventId(kFSEventStreamEventIdSinceNow),
+            0,
+            FSEventStreamCreateFlags(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents)
+        )
+        
+        self.eventStream = eventStream
+        
+        FSEventStreamScheduleWithRunLoop(eventStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode)
+        FSEventStreamStart(eventStream)
     }
+    
     
     func stopMonitoring() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NSMetadataQueryDidFinishGatheringNotification, object: query)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NSMetadataQueryDidUpdateNotification, object: query)
-        query.stopQuery()
+        if let eventStream = eventStream {
+            FSEventStreamStop(eventStream)
+            FSEventStreamInvalidate(eventStream)
+        }
     }
     
-    func initialPhaseComplete(notification: NSNotification) {
-        // Blacklist all screenshots that already exist
-        guard let itemsAdded = notification.object?.results as? [NSMetadataItem] else {
-            return
+    func handleEvent(path: String) {
+        guard let attributes = try? fileManager.attributesOfItemAtPath(path) else {
+            return // Unable to get file attributes
         }
         
-        for item in itemsAdded {
-            // Get the path to the screenshot
-            guard let screenshotFilePath = item.valueForAttribute(NSMetadataItemPathKey) as? String else {
-                return
-            }
-            
-            let screenshotURL = NSURL(fileURLWithPath: screenshotFilePath)
-            
-            guard let screenshotFileName = screenshotURL.lastPathComponent else {
-                NSLog("Unable to determine screenshot file name from path: \(screenshotFilePath)")
-                return
-            }
-            
-            // Blacklist the screenshot if it hasn't already been blacklisted
-            if !blacklist.contains(screenshotFileName) {
-                blacklist.append(screenshotFileName)
-            }
-        }
-    }
-    
-    func liveUpdatePhaseEvent(notification: NSNotification) {
-        guard let itemsAdded = notification.userInfo?["kMDQueryUpdateAddedItems"] as? [NSMetadataItem] else {
-            return
+        guard let extendedAttributes = attributes["NSFileExtendedAttributes"] as? [String: AnyObject] else {
+            return // Unable to get extended attributes
         }
         
-        for item in itemsAdded {
-            // Get the path to the screenshot
-            guard let screenshotFilePath = item.valueForAttribute(NSMetadataItemPathKey) as? String,
-                creationDate = item.valueForAttribute(NSMetadataItemFSCreationDateKey) as? NSDate else {
-                    // Skip invalid items
-                    return
-            }
-            
-            let screenshotURL = NSURL(fileURLWithPath: screenshotFilePath)
-            
-            guard let screenshotFileName = screenshotURL.lastPathComponent else {
-                NSLog("Unable to determine screenshot file name from path: \(screenshotFilePath)")
-                return
-            }
-            
-            let oldestAllowedCreationDate = NSDate(timeIntervalSinceNow: -30) // 30 seconds ago
-            
-            let isInScreenshotFolder = screenshotURL.absoluteString.containsString(screenshotDirectoryPath)
-            let isRecentlyCreated = creationDate.compare(oldestAllowedCreationDate) == .OrderedDescending
-            let isBlacklisted = blacklist.contains(screenshotFileName)
-            
-            // Ensure that the screenshot detected is from the right folder and isn't blacklisted
-            if isRecentlyCreated && isInScreenshotFolder && !isBlacklisted {
-                callback(screenshotURL)
-                blacklist.append(screenshotFileName)
-            }
+        if !extendedAttributes.keys.contains("com.apple.metadata:kMDItemIsScreenCapture") {
+            return // File is not a screenshot
         }
+        
+        guard let creationDate = attributes[NSFileCreationDate] as? NSDate else {
+            return // Unable to get creation date
+        }
+        
+        if creationDate.timeIntervalSinceNow < -5 {
+            return // File is more than 5 seconds old - probably not a new screenshot
+        }
+        
+        callback(NSURL(fileURLWithPath: path))
     }
     
-    var screenshotDirectoryPath: String {
+    var screenshotDirectoryURL: NSURL? {
         // Check for custom screenshot location chosen by user
-        if let customLocation = NSUserDefaults.standardUserDefaults().persistentDomainForName("com.apple.screencapture")?["location"] as? String {
+        if let customPath = defaults.persistentDomainForName(screencaptureDomain)?["location"] as? NSString {
+            let standardizedPath = customPath.stringByStandardizingPath
+            
             // Check that the chosen directory exists, otherwise screencapture will not use it
             var isDir = ObjCBool(false)
-            if NSFileManager.defaultManager().fileExistsAtPath(customLocation, isDirectory: &isDir) && isDir {
-                return customLocation
+            if fileManager.fileExistsAtPath(standardizedPath, isDirectory: &isDir) && isDir {
+                return NSURL(fileURLWithPath: standardizedPath)
             }
         }
+        
         // If a custom location is not defined (or invalid) return the default screenshot location (~/Desktop)
-        return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0]
+        return fileManager.URLsForDirectory(.DesktopDirectory, inDomains: .UserDomainMask).first
     }
 }
