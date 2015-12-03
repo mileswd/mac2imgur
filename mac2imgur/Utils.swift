@@ -18,19 +18,6 @@ import Cocoa
 
 class Utils {
     
-    static func copyToClipboard(string: String) {
-        NSPasteboard.generalPasteboard().clearContents()
-        NSPasteboard.generalPasteboard().setString(string, forType: NSStringPboardType)
-    }
-    
-    static func deleteFile(fileURL: NSURL) {
-        do {
-            try NSFileManager.defaultManager().removeItemAtURL(fileURL)
-        } catch let error as NSError {
-            NSLog("An error occurred while attempting to delete a file: %@", error)
-        }
-    }
-    
     static func displayNotification(title: String, informativeText: String) {
         let notification = NSUserNotification()
         notification.title = title

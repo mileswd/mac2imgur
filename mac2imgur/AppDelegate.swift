@@ -90,11 +90,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         if let link = upload.link {
             // Upload was successful
             interfaceHelper.addRecentUpload(upload)
-            Utils.copyToClipboard(link)
+            
+            // Copy to clipboard
+            NSPasteboard.generalPasteboard().clearContents()
+            NSPasteboard.generalPasteboard().setString(link, forType: NSStringPboardType)
+            
             Utils.displayNotification("\(type) Upload Succeeded", informativeText: link)
             
             if upload.isScreenshot && defaults.boolForKey(kDeleteScreenshotAfterUpload) {
-                Utils.deleteFile(upload.imageURL)
+                do {
+                    try NSFileManager.defaultManager().removeItemAtURL(upload.imageURL)
+                } catch let error as NSError {
+                    NSLog("An error occurred while attempting to delete a file: %@", error)
+                }
             }
             
         } else {

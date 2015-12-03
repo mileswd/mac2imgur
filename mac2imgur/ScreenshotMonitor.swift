@@ -20,7 +20,6 @@ class ScreenshotMonitor {
     
     let defaults = NSUserDefaults.standardUserDefaults()
     let fileManager = NSFileManager.defaultManager()
-    let screencaptureDomain = "com.apple.screencapture"
     
     let callback: NSURL -> Void
     var eventStream: FSEventStreamRef?
@@ -43,13 +42,19 @@ class ScreenshotMonitor {
             eventFlags: UnsafePointer<FSEventStreamEventFlags>,
             eventIds: UnsafePointer<FSEventStreamEventId>) in
             
-            guard let eventPaths = unsafeBitCast(eventPaths, NSArray.self) as? [String] else {
-                NSLog("Unable to get eventPaths")
-                return
+            guard let eventPaths = Unmanaged<NSArray>
+                .fromOpaque(COpaquePointer(eventPaths))
+                .takeUnretainedValue() as? [String] else {
+                    NSLog("Unable to get eventPaths")
+                    return
             }
             
-            for path in eventPaths {
-                unsafeBitCast(clientCallBackInfo, ScreenshotMonitor.self).handleEvent(path)
+            let screenshotMonitor = Unmanaged<ScreenshotMonitor>
+                .fromOpaque(COpaquePointer(clientCallBackInfo))
+                .takeUnretainedValue()
+            
+            eventPaths.forEach {
+                screenshotMonitor.handleEvent($0)
             }
         }
         
@@ -62,7 +67,7 @@ class ScreenshotMonitor {
         )
         
         let eventStream = FSEventStreamCreate(
-            nil,
+            kCFAllocatorDefault,
             streamCallback,
             &streamContext,
             [path],
@@ -111,8 +116,8 @@ class ScreenshotMonitor {
     
     var screenshotDirectoryURL: NSURL? {
         // Check for custom screenshot location chosen by user
-        if let customPath = defaults.persistentDomainForName(screencaptureDomain)?["location"] as? NSString {
-            let standardizedPath = customPath.stringByStandardizingPath
+        if let path = defaults.persistentDomainForName("com.apple.screencapture")?["location"] as? NSString {
+            let standardizedPath = path.stringByStandardizingPath
             
             // Check that the chosen directory exists, otherwise screencapture will not use it
             var isDir = ObjCBool(false)
