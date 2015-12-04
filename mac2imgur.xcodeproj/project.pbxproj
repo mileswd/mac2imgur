@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0220B2AB19F4104A0064E9FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0220B2AA19F4104A0064E9FE /* AppDelegate.swift */; };
-		022321BF19A6959500048626 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 022321BE19A6959500048626 /* LICENSE */; };
 		023370FE1BD87E9C0094F9BB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 023370FC1BD87E9C0094F9BB /* Fabric.framework */; };
 		023370FF1BD87E9C0094F9BB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 023370FD1BD87E9C0094F9BB /* Crashlytics.framework */; };
-		023371141BD91D820094F9BB /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = 023371131BD91D820094F9BB /* .travis.yml */; };
 		023ACBEA1A2A9ABF008510AC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02FDC2D6194DF89D00E8CBC9 /* MainMenu.xib */; };
 		024130DA1A05157E0062E9D3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B42AE619AB75DA00A6349D /* AppKit.framework */; };
 		026E49411C10C314004EE4C8 /* LaunchServicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 026E49401C10C314004EE4C8 /* LaunchServicesHelper.swift */; };
@@ -206,11 +204,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				023371141BD91D820094F9BB /* .travis.yml in Resources */,
 				023ACBEA1A2A9ABF008510AC /* MainMenu.xib in Resources */,
 				02FDC2D5194DF89D00E8CBC9 /* Images.xcassets in Resources */,
 				02933D061A2A7CDA001FB628 /* dsa_pub.pem in Resources */,
-				022321BF19A6959500048626 /* LICENSE in Resources */,
 				02B00A7719CE38AF00F924D6 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
