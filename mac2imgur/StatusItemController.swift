@@ -74,17 +74,6 @@ class StatusItemController: NSObject, NSWindowDelegate, NSDraggingDestination {
     // MARK: NSDraggingDestination
     
     func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-        guard let types = sender.draggingPasteboard().types,
-            types.contains(NSURLPboardType) || types.contains(NSTIFFPboardType) else {
-                return []
-        }
-        
-        // Ensure that any file paths refer to supported images.
-        if let paths = sender.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? [NSString] {
-            for path in paths where !ImgurClient.shared.allowedFileTypes.contains(path.pathExtension) {
-                return []
-            }
-        }
         return .copy
     }
     

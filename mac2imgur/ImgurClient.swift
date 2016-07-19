@@ -21,10 +21,9 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     static let shared = ImgurClient()
     
-    let allowedFileTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
-    var externalWebviewCompletionHandler: (() -> Void)?
-    
     let defaults = UserDefaults.standard
+    
+    var externalWebviewCompletionHandler: (() -> Void)?
     
     // MARK: Defaults keys
     

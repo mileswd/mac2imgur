@@ -60,7 +60,7 @@ class StatusItemMenuController: MenuController {
         panel.prompt = "Upload"
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
-        panel.allowedFileTypes = ImgurClient.shared.allowedFileTypes
+        panel.allowedFileTypes = [kUTTypeImage as String]
         
         panel.begin { (result) -> Void in
             if result == NSFileHandlingPanelOKButton {

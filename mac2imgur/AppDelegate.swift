@@ -26,8 +26,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var screenshotMonitor: ScreenshotMonitor?
     
     // MARK: NSApplicationDelegate
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
+    
+    func applicationWillFinishLaunching(_ notification: Notification) {
         
         // Register initial defaults
         UserDefaults.standard.register([
@@ -48,14 +48,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSUserNotificationCenter.default.delegate = UserNotificationController.shared
         
         // Handle the notification supplied if the application has been launched from the notification center
-        if let userNotification = aNotification.userInfo?[NSApplicationLaunchUserNotificationKey] as? NSUserNotification {
+        if let userNotification = notification.userInfo?[NSApplicationLaunchUserNotificationKey] as? NSUserNotification {
             UserNotificationController.shared.userNotificationCenter(.default, didActivate: userNotification)
         }
         
         PFMoveToApplicationsFolderIfNecessary()
     }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
+    
+    func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+        ImgurClient.shared.uploadImage(withURL: URL(fileURLWithPath: filename),
+                                       isScreenshot: false)
+        return true
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
         screenshotMonitor?.stopMonitoring()
     }
     
