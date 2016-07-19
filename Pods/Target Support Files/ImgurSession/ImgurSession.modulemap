@@ -1,0 +1,6 @@
+framework module ImgurSession {
+  umbrella header "ImgurSession-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,84 +1,90 @@
 /* This file is part of mac2imgur.
-*
-* mac2imgur is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
+ *
+ * mac2imgur is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ 
+ * mac2imgur is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ 
+ * You should have received a copy of the GNU General Public License
+ * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-* mac2imgur is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-
-* You should have received a copy of the GNU General Public License
-* along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-import Cocoa
+import Foundation
 
 class ScreenshotMonitor {
     
-    let defaults = NSUserDefaults.standardUserDefaults()
-    let fileManager = NSFileManager.defaultManager()
+    let defaults = UserDefaults.standard
+    let fileManager = FileManager.default
     
-    let callback: NSURL -> Void
+    let eventHandler: (URL) -> Void
     var eventStream: FSEventStreamRef?
     
-    init(callback: NSURL -> Void) {
-        self.callback = callback
+    init(eventHandler: (URL) -> Void) {
+        self.eventHandler = eventHandler
     }
     
     func startMonitoring() {
         guard let path = screenshotDirectoryURL?.path else {
-            NSLog("Unable to get screenshot directory")
+            NSLog("Failed to get screenshot directory")
             return
         }
         
         let streamCallback: FSEventStreamCallback = {
             (streamRef: ConstFSEventStreamRef,
-            clientCallBackInfo: UnsafeMutablePointer<Void>,
+            clientCallBackInfo: UnsafeMutablePointer<Void>?,
             numEvents: Int,
             eventPaths: UnsafeMutablePointer<Void>,
-            eventFlags: UnsafePointer<FSEventStreamEventFlags>,
-            eventIds: UnsafePointer<FSEventStreamEventId>) in
+            eventFlags: UnsafePointer<FSEventStreamEventFlags>?,
+            eventIds: UnsafePointer<FSEventStreamEventId>?) in
             
             guard let eventPaths = Unmanaged<NSArray>
-                .fromOpaque(COpaquePointer(eventPaths))
+                .fromOpaque(eventPaths)
                 .takeUnretainedValue() as? [String] else {
-                    NSLog("Unable to get eventPaths")
+                    NSLog("Failed to get eventPaths")
                     return
             }
             
+            guard let clientCallBackInfo = clientCallBackInfo else {
+                NSLog("Failed to get clientCallBackInfo")
+                return
+            }
+            
             let screenshotMonitor = Unmanaged<ScreenshotMonitor>
-                .fromOpaque(COpaquePointer(clientCallBackInfo))
+                .fromOpaque(clientCallBackInfo)
                 .takeUnretainedValue()
             
             eventPaths.forEach {
-                screenshotMonitor.handleEvent($0)
+                screenshotMonitor.handleEvent(withPath: $0)
             }
         }
         
         var streamContext = FSEventStreamContext(
             version: 0,
-            info: UnsafeMutablePointer<Void>(unsafeAddressOf(self)),
+            info: UnsafeMutablePointer<Void>(unsafeAddress(of: self)),
             retain: nil,
             release: nil,
-            copyDescription: nil
-        )
+            copyDescription: nil)
         
-        let eventStream = FSEventStreamCreate(
+        guard let eventStream = FSEventStreamCreate(
             kCFAllocatorDefault,
             streamCallback,
             &streamContext,
             [path],
             FSEventStreamEventId(kFSEventStreamEventIdSinceNow),
             0,
-            FSEventStreamCreateFlags(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents)
-        )
+            FSEventStreamCreateFlags(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents)) else {
+                NSLog("Failed to create eventStream")
+                return
+        }
         
         self.eventStream = eventStream
         
-        FSEventStreamScheduleWithRunLoop(eventStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode)
+        FSEventStreamScheduleWithRunLoop(eventStream, CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode.rawValue)
         FSEventStreamStart(eventStream)
     }
     
@@ -87,46 +93,53 @@ class ScreenshotMonitor {
         if let eventStream = eventStream {
             FSEventStreamStop(eventStream)
             FSEventStreamInvalidate(eventStream)
+            FSEventStreamRelease(eventStream)
         }
     }
     
-    func handleEvent(path: String) {
-        guard let attributes = try? fileManager.attributesOfItemAtPath(path) else {
-            return // Unable to get file attributes
+    func recentScreenshotExists(atPath path: String) -> Bool {
+        guard let attributes = try? fileManager.attributesOfItem(atPath: path) else {
+            return false // Failed to get file attributes
         }
         
-        guard let extendedAttributes = attributes["NSFileExtendedAttributes"] as? [String: AnyObject] else {
-            return // Unable to get extended attributes
+        guard let extendedAttributes = attributes[FileAttributeKey(rawValue: "NSFileExtendedAttributes")] as? [String: AnyObject] else {
+            return false // Failed to get extended attributes
         }
         
         if !extendedAttributes.keys.contains("com.apple.metadata:kMDItemIsScreenCapture") {
-            return // File is not a screenshot
+            return false // File is not a screenshot
         }
         
-        guard let creationDate = attributes[NSFileCreationDate] as? NSDate else {
-            return // Unable to get creation date
+        guard let creationDate = attributes[.creationDate] as? NSDate else {
+            return false // Failed to get creation date
         }
         
         if creationDate.timeIntervalSinceNow < -5 {
-            return // File is more than 5 seconds old - probably not a new screenshot
+            return false // File is more than 5 seconds old - probably not a new screenshot
         }
         
-        callback(NSURL(fileURLWithPath: path))
+        return true
     }
     
-    var screenshotDirectoryURL: NSURL? {
+    func handleEvent(withPath path: String) {
+        if recentScreenshotExists(atPath: path) {
+            eventHandler(URL(fileURLWithPath: path))
+        }
+    }
+    
+    var screenshotDirectoryURL: URL? {
         // Check for custom screenshot location chosen by user
-        if let path = defaults.persistentDomainForName("com.apple.screencapture")?["location"] as? NSString {
-            let standardizedPath = path.stringByStandardizingPath
+        if let path = defaults.persistentDomain(forName: "com.apple.screencapture")?["location"] as? NSString {
+            let standardizedPath = path.standardizingPath
             
             // Check that the chosen directory exists, otherwise screencapture will not use it
             var isDir = ObjCBool(false)
-            if fileManager.fileExistsAtPath(standardizedPath, isDirectory: &isDir) && isDir {
-                return NSURL(fileURLWithPath: standardizedPath)
+            if fileManager.fileExists(atPath: standardizedPath, isDirectory: &isDir) && isDir {
+                return URL(fileURLWithPath: standardizedPath)
             }
         }
         
         // If a custom location is not defined (or invalid) return the default screenshot location (~/Desktop)
-        return fileManager.URLsForDirectory(.DesktopDirectory, inDomains: .UserDomainMask).first
+        return fileManager.urlsForDirectory(.desktopDirectory, inDomains: .userDomainMask).first
     }
 }

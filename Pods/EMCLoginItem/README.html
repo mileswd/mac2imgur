@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<h1>EMCLoginItem</h1>
+
+<p><code>EMCLoginItem</code> is an Objective-C library to query, add and remove login items
+in Apple OS X.</p>
+
+<h2>Usage</h2>
+
+<p>An instance of <code>EMCLoginItem</code> can be created using either one of the provided
+<code>init</code> methods or one of the provided factory methods (<code>loginItem*</code>).  These
+methods have the following method signatures:</p>
+
+<ul>
+<li><code>- (instancetype)init;</code></li>
+<li><code>- (instancetype)initWithBundle:(NSBundle *)bundle;</code></li>
+<li><code>- (instancetype)initWithPath:(NSString *)path;</code></li>
+</ul>
+
+<p>When the initialiser with no argument is used, the bundle path of the main
+bundle is used as login item URL:</p>
+
+<pre><code>[[NSBundle mainBundle] bundlePath];
+</code></pre>
+
+<p>Alternatively, the other two initialisers can be used to manually provide
+either a bundle or a path to use as login item URL.</p>
+
+<p>The methods implemented by the <code>EMCLoginItem</code> class are the following:</p>
+
+<ul>
+<li><code>- (BOOL)isLoginItem;</code></li>
+<li><code>- (void)addLoginItem;</code></li>
+<li><code>- (void)removeLoginItem;</code></li>
+<li><code>- (void)addAfterLast;</code></li>
+<li><code>- (void)addAfterFirst;</code></li>
+<li><code>- (void)addAfterItemWithPath:(NSString *)path;</code></li>
+<li><code>- (void)addAfterBundle:(NSBundle *)bundle;</code></li>
+<li><code>- (void)setIconRef:(IconRef)iconRef;</code></li>
+</ul>
+
+<p>The first three methods are used to respectively query, add and remove a login
+item for the current user with the specified URL, as show in the following
+example:</p>
+
+<pre><code>if (![loginItem isLoginItem])
+{
+  [loginItem addLoginItem];
+}
+</code></pre>
+
+<p>The <code>addAfter*</code> methods let callers specify the position where the login item
+will be added:</p>
+
+<ul>
+<li><code>addAfterLast</code> will add the login item at the end of the item list.</li>
+<li><code>addAfterFirst</code> will add the login item at the beginning of the item list.</li>
+<li><code>addAfterItemWithPath</code> will add the login item after the item with the
+specified path, if it exists, otherwise at the end of the item list.</li>
+<li><code>addAfterBundle</code> will add the login item after the item with the
+specified bundle, if it exists, otherwise at the end of the item list.</li>
+</ul>
+
+<p>The <code>setIconRef</code> path is used to pass an <code>IconRef</code> instance to be used as a
+custom icon for the login item to be added.  This method increases the IconRef
+reference count by 1 invoking the <code>AcquireIconRef</code> method if and only if the
+value to be set differs from the currently stored value (initially nil, and
+released if not nil).  The <code>dealloc</code> method takes care of releasing non-null
+IconRef references invoking the <code>ReleaseIconRef</code> method.</p>
+
+<h2>Installation</h2>
+
+<p><code>EMCLoginItem</code> is packaged and distributed as a <em>framework</em>.  Developers who
+want to compile it from source may either use XCode (a project called
+<code>EMCLoginItem.xcodeproj</code> is included in the sources) or <code>xcodebuild</code>.  Once the
+framework is installed it can be referenced and linked from any other XCode
+project.</p>
+
+<p>The best place to install public frameworks is in <code>/Library/Frameworks</code> since
+frameworks in that location are discovered automatically by the compiler and
+the dynamic linker (see Apple's <a href="https://developer.apple.com/library/mac/documentation/macosx/conceptual/BPFrameworks/Tasks/InstallingFrameworks.html"><em>Framework Programming Guide</em></a>).</p>
+
+<p>The easiest way to install or upgrade an installation of <code>EMCLoginItem</code> in
+<code>/Library/Framework</code> is using <code>xcodebuild</code> specifying <code>/</code> as <code>DSTROOT</code>:</p>
+
+<pre><code>$ sudo xcodebuild install DSTROOT=/
+</code></pre>
+
+<p>Alternatively, you can install the framework using a binary package you can
+download for every release.</p>
+
+<p>Please beware that since the package is <em>not</em>
+signed, you will have to temporarily allow installation for applications
+downloaded from <em>Anywhere</em> in the <em>Security &amp; Privay</em> section in
+<em>System Preferences</em>.</p>
+
+<h2>License</h2>
+
+<p><code>EMCLoginItem</code> is licensed under the <a href="http://opensource.org/licenses/BSD-3-Clause"><em>BSD 3-Clause License</em></a>.</p>
+
+<hr />
+
+<p>Copyright (C) 2014, Enrico M. Crisostomo
+All rights reserved.</p>
+
+<p>Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:</p>
+
+<ol>
+<li><p>Redistributions of source code must retain the above copyright notice, 
+ this list of conditions and the following disclaimer.</p></li>
+<li><p>Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.</p></li>
+<li><p>Neither the name of the copyright holder nor the names of its contributors
+ may be used to endorse or promote products derived from this software
+ without specific prior written permission.</p></li>
+</ol>
+
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+</body>
+</html>

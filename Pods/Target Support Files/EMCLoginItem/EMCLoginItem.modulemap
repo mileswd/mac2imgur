@@ -1,0 +1,6 @@
+framework module EMCLoginItem {
+  umbrella header "EMCLoginItem-umbrella.h"
+
+  export *
+  module * { export * }
+}

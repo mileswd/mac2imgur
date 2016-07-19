@@ -1,172 +1,309 @@
 /* This file is part of mac2imgur.
-*
-* mac2imgur is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-
-* mac2imgur is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-
-* You should have received a copy of the GNU General Public License
-* along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ *
+ * mac2imgur is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ 
+ * mac2imgur is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ 
+ * You should have received a copy of the GNU General Public License
+ * along with mac2imgur.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 import Foundation
+import ImgurSession
 
-class ImgurClient {
+class ImgurClient: NSObject, IMGSessionDelegate {
     
-    let apiURL = "https://api.imgur.com"
-    let defaults = NSUserDefaults.standardUserDefaults()
+    static let shared = ImgurClient()
     
-    var uploadQueue = [ImgurUpload]()
-    var authenticationInProgress = false
-    var tokenExpiryDate: NSDate?
+    let allowedFileTypes = ["jpg", "jpeg", "gif", "png", "apng", "tiff", "bmp", "pdf", "xcf"]
+    var externalWebviewCompletionHandler: (() -> Void)?
     
-    var username: String? {
+    let defaults = UserDefaults.standard
+    
+    // MARK: Defaults keys
+    
+    let refreshTokenKey = "RefreshToken"
+    let imgurAlbumKey = "ImgurAlbum"
+    
+    // MARK: Imgur tokens
+    
+    let clientID = "5867856c9027819"
+    let clientSecret = "7c2a63097cbb0f10f260291aab497be458388a64"
+    
+    // MARK: General
+    
+    var uploadAlbumID: String? {
         get {
-            return defaults.stringForKey(kImgurUsername)
+            return defaults.string(forKey: imgurAlbumKey)
         }
         set {
-            defaults.setObject(newValue, forKey: kImgurUsername)
+            defaults.set(newValue, forKey: imgurAlbumKey)
         }
     }
     
-    var refreshToken: String? {
-        get {
-            return defaults.stringForKey(kRefreshToken)
+    /// Prepare ImgurClient for use.
+    func setup() {
+        if let refreshToken = defaults.string(forKey: refreshTokenKey) {
+            configure(asAnonymous: false)
+            
+            IMGSession.sharedInstance()
+                .authenticate(withRefreshToken: refreshToken)
+        } else {
+            configure(asAnonymous: true)
         }
-        set {
-            defaults.setObject(newValue, forKey: kRefreshToken)
+        
+        NSAppleEventManager.shared().setEventHandler(
+            self,
+            andSelector: #selector(handleURLEvent(_:withReplyEvent:)),
+            forEventClass: AEEventClass(kInternetEventClass),
+            andEventID: AEEventID(kAEGetURL))
+    }
+    
+    /// Configures the `IMGSession.sharedInstance()`
+    /// - parameter anonymous: If the session should be configured for anonymous
+    /// API access, or alternatively authenticated.
+    func configure(asAnonymous anonymous: Bool) {
+        if anonymous {
+            IMGSession.anonymousSession(
+                withClientID: clientID,
+                with: self)
+        } else {
+            IMGSession.authenticatedSession(
+                withClientID: clientID,
+                secret: clientSecret,
+                authType: .codeAuth,
+                with: self)
+            
+            // Disable notification update requests
+            IMGSession.sharedInstance().notificationRefreshPeriod = 0
         }
     }
     
-    var accessToken: String? {
-        didSet {
-            // Update token expiry date (Imgur access tokens are valid for 1 hour)
-            tokenExpiryDate = NSDate(timeIntervalSinceNow: 1 * 60 * 60)
-        }
-    }
-    
-    var isAuthenticated: Bool {
-        return username != nil && refreshToken != nil
-    }
-    
-    var accessTokenIsValid: Bool {
-        if let expiry = tokenExpiryDate {
-            return expiry.timeIntervalSinceNow > 0 && accessToken != nil
-        }
-        return false
+    func authenticate() {
+        configure(asAnonymous: false)
+        IMGSession.sharedInstance().authenticate()
     }
     
     func deauthenticate() {
-        defaults.removeObjectForKey(kImgurUsername)
-        defaults.removeObjectForKey(kRefreshToken)
-        accessToken = nil
+        // Clear stored refresh token
+        defaults.removeObject(forKey: refreshTokenKey)
+        defaults.removeObject(forKey: imgurAlbumKey)
+        
+        configure(asAnonymous: true)
     }
     
-    func addToQueue(upload: ImgurUpload) {
-        if isAuthenticated && !accessTokenIsValid {
+    /// Requests manual upload confirmation from the user if required,
+    /// otherwise returns `true`
+    /// - parameter upload: The upload for which confirmation is required
+    func hasUploadConfirmation(forImageNamed imageName: String, imageData: Data) -> Bool {
+        // Manual upload confirmation may not be required
+        if !Preference.requiresUploadConfirmation.value {
+            return true
+        }
+        
+        let alert = NSAlert()
+        alert.messageText = "Do you want to upload this screenshot?"
+        alert.informativeText = "\"\(imageName)\" will be uploaded to imgur.com, where it will be publicly accessible."
+        alert.addButton(withTitle: "Upload")
+        alert.addButton(withTitle: "Cancel")
+        alert.icon = NSImage(data: imageData)
+        
+        NSApplication.shared().activateIgnoringOtherApps(true)
+        return alert.runModal() == NSAlertFirstButtonReturn
+    }
+    
+    /// Returns a PNG image representation data of the supplied image data,
+    /// reduced to non-retina scale
+    func downscaleRetinaImageData(_ data: Data) -> Data? {
+        guard let image = NSImage(data: data) else {
+            NSLog("Resize failed: Unable to create image from image data")
+            return nil
+        }
+        
+        guard let imageRep = image.representations.first else {
+            NSLog("Resize failed: Unable to get image representation")
+            return nil
+        }
+        
+        if image.size.width >= CGFloat(imageRep.pixelsWide) {
+            NSLog("Resize skipped: Image is not retina")
+            return nil
+        }
+        
+        guard let bitmapImageRep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(image.size.width),
+            pixelsHigh: Int(image.size.height),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: NSCalibratedRGBColorSpace,
+            bytesPerRow: 0,
+            bitsPerPixel: 0) else {
+                NSLog("Resize failed: Unable to create bitmap image representation")
+                return nil
+        }
+        
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.setCurrent(NSGraphicsContext(bitmapImageRep: bitmapImageRep))
+        image.draw(in: NSRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+        NSGraphicsContext.restoreGraphicsState()
+        
+        // Use a PNG representation of the resized image
+        guard let resizedRep = bitmapImageRep.representation(using: .PNG, properties: [:]) else {
+            NSLog("Resize failed: Unable to create PNG representation")
+            return nil
+        }
+        
+        return resizedRep
+    }
+    
+    // MARK: Imgur Upload
+    
+    /// Uploads the image at the specified URL.
+    /// - parameter imageURL: The URL to the image to be uploaded
+    /// - parameter isScreenshot: Whether the image is a screenshot or not,
+    /// affects which preferences will be applied to the upload
+    func uploadImage(withURL imageURL: URL, isScreenshot: Bool) {
+        
+        var imageData: Data
+        
+        do {
+            imageData = try Data(contentsOf: imageURL)
+        } catch let error as NSError {
+            uploadFailureHandler(error)
+            return
+        }
+        
+        guard let imageName = imageURL.lastPathComponent else {
+            return // TODO: Handle this?
+        }
+        
+        // Screenshot specific preferences
+        if isScreenshot {
             
-            // Queue the upload if we need an access token
-            uploadQueue.append(upload)
+            if Preference.disableScreenshotDetection.value
+                || !hasUploadConfirmation(forImageNamed: imageName, imageData: imageData) {
+                return // Skip, do not upload
+            }
             
-            // Request the access token if it hasn't already been requested
-            if !authenticationInProgress {
-                
-                authenticationInProgress = true
-                
-                requestAccessToken({ (authError: String?) -> Void in
-                    if let error = authError {
-                        upload.error = error
-                        upload.completionHandler?(upload)
-                    } else {
-                        // Upload all images in the queue
-                        while self.uploadQueue.count != 0 {
-                            self.attemptUpload(self.uploadQueue[0])
-                            self.uploadQueue.removeAtIndex(0)
-                        }
-                    }
-                    
-                    self.authenticationInProgress = false
-                })
+            // Downscale retina image if required
+            if Preference.resizeScreenshots.value,
+                let resizedImageData = downscaleRetinaImageData(imageData) {
+                imageData = resizedImageData
             }
-        } else {
-            // We don't need any access tokens, just upload the image
-            attemptUpload(upload)
+            
+            // Move the image to trash if required
+            if Preference.deleteScreenshotsAfterUpload.value {
+                NSWorkspace.shared().recycle([imageURL], completionHandler: nil)
+            }
+            
+        }
+        
+        uploadImage(withData: imageData,
+                    imageTitle: NSString(string: imageName).deletingPathExtension)
+    }
+    
+    /// Uploads the specified image data
+    /// - parameter imageData: The image data of which to upload
+    /// - parameter imageTitle: The title of the image (defaults to "Untitled")
+    func uploadImage(withData imageData: Data, imageTitle: String = "Untitled") {
+        
+        // Clear clipboard if required
+        if Preference.clearClipboard.value {
+            NSPasteboard.general().clearContents()
+        }
+        
+        IMGImageRequest.uploadImage(with: imageData,
+                                    title: imageTitle,
+                                    description: nil,
+                                    linkToAlbumWithID: uploadAlbumID,
+                                    success: uploadSuccessHandler,
+                                    progress: nil,
+                                    failure: uploadFailureHandler)
+    }
+    
+    func uploadSuccessHandler(_ image: IMGImage?) {
+        guard let image = image,
+            let urlString = image.secureURL?.absoluteString else {
+                return
+        }
+        
+        ImgurImageStore.shared.addImage(image)
+        
+        // Copy link to clipboard if required
+        if Preference.copyLinkToClipboard.value,
+            let urlString = image.secureURL?.absoluteString{
+            NSPasteboard.general().clearContents()
+            NSPasteboard.general()
+                .setString(urlString, forType: NSPasteboardTypeString)
+        }
+        
+        UserNotificationController.shared.displayNotification(
+            title: "Imgur Upload Successful",
+            informativeText: urlString)
+    }
+    
+    func uploadFailureHandler(_ error: NSError?) {
+        UserNotificationController.shared
+            .displayNotification(withTitle: "Imgur Upload Failed", error: error)
+    }
+    
+    // MARK: NSAppleEventManager Event Handler
+    
+    func handleURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        // Attempt to parse response URL
+        guard let URLString = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue else {
+            NSLog("Unable to determine URL from AppleEvent")
+            return
+        }
+        
+        guard let query = URL(string: URLString)?.query?.components(separatedBy: "&") else {
+            NSLog("Unable to find URL query component")
+            return
+        }
+        
+        for parameter in query {
+            let pair = parameter.components(separatedBy: "=")
+            
+            if pair.count == 2 && pair[0] == "code" {
+                IMGSession.sharedInstance().authenticate(withCode: pair[1])
+                externalWebviewCompletionHandler?()
+                externalWebviewCompletionHandler = nil
+                return
+            }
         }
     }
     
-    func readableErrorFromResult(result: HTTPResult) -> String {
-        NSLog("A HTTP request error occurred: \(result.error)\n\n\(result.json)\n\n\(result.response)")
-        if let error = result.json?.objectForKey("data")?.objectForKey("error") as? String {
-            return "Imgur responded with the following error: \"\(error)\""
-        } else if let error = result.error?.localizedDescription {
-            return error
-        } else {
-            return "An unknown error occurred"
+    // MARK: IMGSessionDelegate
+    
+    func imgurSessionRateLimitExceeded() {
+        UserNotificationController.shared
+            .displayNotification(title: "Imgur Rate Limit Exceeded",
+                                 informativeText: "Further Imgur requests may fail")
+    }
+    
+    func imgurSessionNeedsExternalWebview(_ url: URL!, completion: (() -> Void)!) {
+        NSWorkspace.shared().open(url)
+        self.externalWebviewCompletionHandler = completion
+    }
+    
+    func imgurSessionUserRefreshed(_ user: IMGAccount!) {
+        if user != nil, let refreshToken = IMGSession.sharedInstance().refreshToken {
+            defaults.set(refreshToken, forKey: refreshTokenKey)
         }
     }
     
-    func requestRefreshToken(code: String, callback: (String?) -> Void) {
-        let parameters = [
-            "client_id": imgurClientId,
-            "client_secret": imgurClientSecret,
-            "grant_type": "authorization_code",
-            "code": code
-        ]
-        Just.post("\(apiURL)/oauth2/token", timeout: 30, json: parameters) { (result: HTTPResult!) -> Void in
-            if let username = result.json?["account_username"] as? String,
-                let refreshToken = result.json?["refresh_token"] as? String,
-                let accessToken = result.json?["access_token"] as? String {
-                    self.username = username
-                    self.refreshToken = refreshToken
-                    self.accessToken = accessToken
-                    callback(nil)
-            } else {
-                callback(self.readableErrorFromResult(result))
-            }
-        }
+    func imgurRequestFailed(_ error: NSError!) {
+        UserNotificationController.shared
+            .displayNotification(withTitle: "Imgur Request Failed", error: error)
     }
     
-    func requestAccessToken(callback: (String?) -> Void) {
-        let parameters = [
-            "client_id": imgurClientId,
-            "client_secret": imgurClientSecret,
-            "grant_type": "refresh_token",
-            "refresh_token": self.refreshToken!
-        ]
-        Just.post("\(apiURL)/oauth2/token", timeout: 30, json: parameters) { (result: HTTPResult!) -> Void in
-            if let accessToken = result.json?["access_token"] as? String {
-                self.accessToken = accessToken
-                callback(nil)
-            } else {
-                callback(self.readableErrorFromResult(result))
-            }
-        }
-    }
-    
-    func attemptUpload(upload: ImgurUpload) {
-        let headers = [
-            "Authorization": isAuthenticated ? "Client-Bearer \(accessToken!)" : "Client-ID \(imgurClientId)"
-        ]
-        let parameters = [
-            "title": upload.imageName,
-            "description": "Uploaded by mac2imgur! (https://mileswd.com/mac2imgur)"
-        ]
-        let files = [
-            "image": HTTPFile.Data(upload.imageName, upload.imageData, nil)
-        ]
-        Just.post("\(apiURL)/3/image", json: parameters, files: files, headers: headers) { (result: HTTPResult!) -> Void in
-            if let link = result.json?.objectForKey("data")?.objectForKey("link") as? String {
-                // Update link provided by API to HTTPS if necessary
-                upload.link = link.stringByReplacingOccurrencesOfString("http://", withString: "https://")
-            } else {
-                upload.error = self.readableErrorFromResult(result)
-            }
-            upload.completionHandler?(upload)
-        }
-    }
 }
