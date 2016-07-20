@@ -77,7 +77,10 @@ class ScreenshotMonitor {
             [path],
             FSEventStreamEventId(kFSEventStreamEventIdSinceNow),
             0,
-            FSEventStreamCreateFlags(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents)) else {
+            FSEventStreamCreateFlags(kFSEventStreamCreateFlagUseCFTypes
+                | kFSEventStreamCreateFlagIgnoreSelf
+                | kFSEventStreamCreateFlagFileEvents))
+            else {
                 NSLog("Failed to create eventStream")
                 return
         }
@@ -87,7 +90,6 @@ class ScreenshotMonitor {
         FSEventStreamScheduleWithRunLoop(eventStream, CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode.rawValue)
         FSEventStreamStart(eventStream)
     }
-    
     
     func stopMonitoring() {
         if let eventStream = eventStream {
