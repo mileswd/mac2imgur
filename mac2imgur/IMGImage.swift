@@ -56,6 +56,14 @@ extension IMGImage {
         }
     }
     
+    /// Open the containing imgur.com page for the image.
+    func openPageURL() {
+        if let imageID = imageID,
+            let url = URL(string: "https://imgur.com/\(imageID)") {
+            NSWorkspace.shared().open(url)
+        }
+    }
+    
     /// Opens the image editing page on imgur.com.
     func openEditURL() {
         if let deletehash = deletehash,

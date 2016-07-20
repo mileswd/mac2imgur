@@ -74,6 +74,17 @@ class StatusItemController: NSObject, NSWindowDelegate, NSDraggingDestination {
     // MARK: NSDraggingDestination
     
     func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+        if let paths = sender.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? [String] {
+            for path in paths {
+                var isDirectory: ObjCBool = false
+                let fileExists = FileManager.default
+                    .fileExists(atPath: path, isDirectory: &isDirectory)
+                
+                if !fileExists || isDirectory {
+                    return []
+                }
+            }
+        }
         return .copy
     }
     

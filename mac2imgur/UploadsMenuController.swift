@@ -69,12 +69,19 @@ class UploadsMenuController: MenuController {
     
     func uploadItemMenu(forImage image: IMGImage) -> NSMenu {
         let menu = NSMenu()
-        menu.addItem(withTitle: "Copy Link",
+        
+        menu.addItem(withTitle: "Copy Image URL",
                      action: #selector(IMGImage.copyURL),
                      target: image)
         
-        menu.addItem(withTitle: "Open in Browser",
+        menu.addItem(.separator())
+        
+        menu.addItem(withTitle: "View Image",
                      action: #selector(IMGImage.openURL),
+                     target: image)
+        
+        menu.addItem(withTitle: "View Image Page",
+                     action: #selector(IMGImage.openPageURL),
                      target: image)
         
         menu.addItem(.separator())
