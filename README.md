@@ -80,6 +80,8 @@ More about `defaults` can be found from `defaults --help` and `man defaults`.
 
 For any changes to take effect, you must restart `SystemUIServer`, which can be done through `Activity Monitor.app` or by running a command such as `killall SystemUIServer`.
 
+When changing the screenshot location, it is also necessary to restart mac2imgur.
+
 ## Support
 
 If you encounter any problems or have an idea for a new feature, don't hesitate to [file an issue](https://github.com/mileswd/mac2imgur/issues) - but please be as descriptive as possible! 
