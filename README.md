@@ -1,7 +1,6 @@
 # mac2imgur
 
 ![Platform](https://img.shields.io/badge/platform-macOS%2010.9+-lightgrey.svg)
-[![Build Status](https://img.shields.io/travis/mileswd/mac2imgur.svg)](https://travis-ci.org/mileswd/mac2imgur)
 
 ![mac2imgur running on Yosemite](http://i.imgur.com/WrMhzbe.png)
 

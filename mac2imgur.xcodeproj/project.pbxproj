@@ -52,7 +52,6 @@
 		02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "Pods-mac2imgur-acknowledgements.markdown"; path = "../Pods/Target Support Files/Pods-mac2imgur/Pods-mac2imgur-acknowledgements.markdown"; sourceTree = "<group>"; };
 		02CCBEFE1D29AC9000F808ED /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		02CCBEFF1D29AC9000F808ED /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		02CCBF021D29ADCD00F808ED /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		02EC81321D3A957300D27B54 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		02F440B21D293F1A004AD4E9 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
 		02F440B51D293F5D004AD4E9 /* UploadsMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadsMenuController.swift; sourceTree = "<group>"; };
@@ -138,7 +137,6 @@
 				02CCBEFE1D29AC9000F808ED /* LICENSE */,
 				02CCBEFF1D29AC9000F808ED /* README.md */,
 				027A2CB81D317BB100FAEF8D /* .gitignore */,
-				02CCBF021D29ADCD00F808ED /* .travis.yml */,
 			);
 			sourceTree = "<group>";
 		};
