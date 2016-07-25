@@ -23,7 +23,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     let defaults = UserDefaults.standard
     
-    var externalWebviewCompletionHandler: (() -> Void)?
+    var externalWebViewCompletionHandler: (() -> Void)?
     
     // MARK: Defaults keys
     
@@ -56,12 +56,6 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         } else {
             configure(asAnonymous: true)
         }
-        
-        NSAppleEventManager.shared().setEventHandler(
-            self,
-            andSelector: #selector(handleURLEvent(_:withReplyEvent:)),
-            forEventClass: AEEventClass(kInternetEventClass),
-            andEventID: AEEventID(kAEGetURL))
     }
     
     /// Configures the `IMGSession.sharedInstance()`
@@ -255,16 +249,34 @@ class ImgurClient: NSObject, IMGSessionDelegate {
             .displayNotification(withTitle: "Imgur Upload Failed", error: error)
     }
     
-    // MARK: NSAppleEventManager Event Handler
+    // MARK: IMGSessionDelegate
     
-    func handleURLEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
-        // Attempt to parse response URL
-        guard let URLString = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue else {
-            NSLog("Unable to determine URL from AppleEvent")
-            return
+    func imgurRequestFailed(_ error: NSError!) {
+        UserNotificationController.shared
+            .displayNotification(withTitle: "Imgur Request Failed", error: error)
+    }
+    
+    func imgurSessionRateLimitExceeded() {
+        UserNotificationController.shared
+            .displayNotification(title: "Imgur Rate Limit Exceeded",
+                                 informativeText: "Further Imgur requests may fail")
+    }
+    
+    func imgurSessionNeedsExternalWebview(_ url: URL!, completion: (() -> Void)!) {
+        externalWebViewCompletionHandler = completion
+        NSWorkspace.shared().open(url)
+    }
+    
+    func imgurSessionUserRefreshed(_ user: IMGAccount!) {
+        if user != nil, let refreshToken = IMGSession.sharedInstance().refreshToken {
+            defaults.set(refreshToken, forKey: refreshTokenKey)
         }
-        
-        guard let query = URL(string: URLString)?.query?.components(separatedBy: "&") else {
+    }
+    
+    // MARK: External WebView Handler
+    
+    func handleExternalWebViewEvent(withResponseURL url: URL) {
+        guard let query = url.query?.components(separatedBy: "&") else {
             NSLog("Unable to find URL query component")
             return
         }
@@ -274,35 +286,11 @@ class ImgurClient: NSObject, IMGSessionDelegate {
             
             if pair.count == 2 && pair[0] == "code" {
                 IMGSession.sharedInstance().authenticate(withCode: pair[1])
-                externalWebviewCompletionHandler?()
-                externalWebviewCompletionHandler = nil
+                externalWebViewCompletionHandler?()
+                externalWebViewCompletionHandler = nil
                 return
             }
         }
-    }
-    
-    // MARK: IMGSessionDelegate
-    
-    func imgurSessionRateLimitExceeded() {
-        UserNotificationController.shared
-            .displayNotification(title: "Imgur Rate Limit Exceeded",
-                                 informativeText: "Further Imgur requests may fail")
-    }
-    
-    func imgurSessionNeedsExternalWebview(_ url: URL!, completion: (() -> Void)!) {
-        NSWorkspace.shared().open(url)
-        self.externalWebviewCompletionHandler = completion
-    }
-    
-    func imgurSessionUserRefreshed(_ user: IMGAccount!) {
-        if user != nil, let refreshToken = IMGSession.sharedInstance().refreshToken {
-            defaults.set(refreshToken, forKey: refreshTokenKey)
-        }
-    }
-    
-    func imgurRequestFailed(_ error: NSError!) {
-        UserNotificationController.shared
-            .displayNotification(withTitle: "Imgur Request Failed", error: error)
     }
     
 }

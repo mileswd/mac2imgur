@@ -52,6 +52,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             UserNotificationController.shared.userNotificationCenter(.default, didActivate: userNotification)
         }
         
+        // Register Apple Event handler
+        NSAppleEventManager.shared().setEventHandler(
+            self,
+            andSelector: #selector(handleAppleEvent(_:withReplyEvent:)),
+            forEventClass: AEEventClass(kInternetEventClass),
+            andEventID: AEEventID(kAEGetURL))
+        
         PFMoveToApplicationsFolderIfNecessary()
     }
     
@@ -69,6 +76,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func screenshotEventHandler(url: URL) {
         ImgurClient.shared.uploadImage(withURL: url, isScreenshot: true)
+    }
+    
+    // MARK: NSAppleEventManager Event Handler
+    
+    func handleAppleEvent(_ event: NSAppleEventDescriptor, withReplyEvent replyEvent: NSAppleEventDescriptor) {
+        // Attempt to parse response URL
+        guard let urlString = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue,
+            let url = URL(string: urlString) else {
+            NSLog("Unable to determine URL from AppleEvent")
+            return
+        }
+        
+        ImgurClient.shared.handleExternalWebViewEvent(withResponseURL: url)
     }
 
 }
