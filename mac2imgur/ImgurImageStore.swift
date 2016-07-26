@@ -27,7 +27,7 @@ class ImgurImageStore {
     var images: [IMGImage] {
         get {
             guard let data = UserDefaults.standard.object(forKey: imagesKey) as? Data else {
-                    return []
+                return []
             }
             return NSKeyedUnarchiver.unarchiveObject(with: data) as? [IMGImage] ?? []
         }

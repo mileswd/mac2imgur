@@ -84,8 +84,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Attempt to parse response URL
         guard let urlString = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue,
             let url = URL(string: urlString) else {
-            NSLog("Unable to determine URL from AppleEvent")
-            return
+                NSLog("Unable to determine URL from AppleEvent")
+                return
         }
         
         ImgurClient.shared.handleExternalWebViewEvent(withResponseURL: url)
