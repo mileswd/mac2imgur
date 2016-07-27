@@ -18,7 +18,6 @@ import Foundation
 
 class ScreenshotMonitor {
     
-    let defaults = UserDefaults.standard
     let fileManager = FileManager.default
     
     let eventHandler: (URL) -> Void
@@ -131,13 +130,13 @@ class ScreenshotMonitor {
     
     var screenshotDirectoryURL: URL? {
         // Check for custom screenshot location chosen by user
-        if let path = defaults.persistentDomain(forName: "com.apple.screencapture")?["location"] as? NSString {
-            let standardizedPath = path.standardizingPath
+        if let domain = UserDefaults.standard.persistentDomain(forName: "com.apple.screencapture"),
+            let path = (domain["location"] as? NSString)?.standardizingPath {
             
             // Check that the chosen directory exists, otherwise screencapture will not use it
             var isDir = ObjCBool(false)
-            if fileManager.fileExists(atPath: standardizedPath, isDirectory: &isDir) && isDir {
-                return URL(fileURLWithPath: standardizedPath)
+            if fileManager.fileExists(atPath: path, isDirectory: &isDir) && isDir {
+                return URL(fileURLWithPath: path)
             }
         }
         

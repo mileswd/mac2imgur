@@ -60,8 +60,8 @@ class AboutMenuController: MenuController {
     
     /// Opens the project website in the default browser.
     func projectWebsite() {
-        if let URL = URL(string: "https://github.com/mileswd/mac2imgur") {
-            NSWorkspace.shared().open(URL)
+        if let url = URL(string: "https://github.com/mileswd/mac2imgur") {
+            NSWorkspace.shared().open(url)
         }
     }
     

@@ -74,7 +74,7 @@ enum Preference: String {
     
     /// The corresponding value from `UserDefaults`.
     var value: Bool {
-        return UserDefaults.standard.bool(forKey: self.rawValue)
+        return UserDefaults.standard.bool(forKey: rawValue)
     }
     
 }
