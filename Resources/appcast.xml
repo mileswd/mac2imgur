@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+    <channel>
+        <title>mac2imgur Changelog</title>
+        <description>Most recent changes with links to updates.</description>
+        <language>en</language>
+        <item>
+            <title>Version 3.0</title>
+            <pubDate>Fri, 1 May 2015 00:00:00 +0000</pubDate>
+            <sparkle:minimumSystemVersion>10.9</sparkle:minimumSystemVersion>
+            <enclosure
+                length="4116563"
+                sparkle:dsaSignature="MCwCFDuvFy9yQXWWv/CjS3hSjpyVWJe/AhRwAS6JnbeYL4W009DBhJ2/B2Lygw=="
+                sparkle:shortVersionString="3.0 (build 187)"
+                sparkle:version="187"
+                type="application/octet-stream"
+                url="https://mileswd.com/mac2imgur/latest"/>
+        </item>
+    </channel>
+</rss>

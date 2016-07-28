@@ -20,6 +20,7 @@
 		0267FE471D1DB6E9003F601D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0267FE461D1DB6E9003F601D /* AppDelegate.swift */; };
 		0267FE4B1D1DB6E9003F601D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0267FE4A1D1DB6E9003F601D /* Assets.xcassets */; };
 		0267FE4E1D1DB6E9003F601D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0267FE4C1D1DB6E9003F601D /* Main.storyboard */; };
+		02696D101D4AB4CE00C7F90E /* appcast.xml in Resources */ = {isa = PBXBuildFile; fileRef = 02696D0F1D4AB4CE00C7F90E /* appcast.xml */; };
 		02CCBEFA1D29A74E00F808ED /* AboutMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CCBEF91D29A74E00F808ED /* AboutMenuController.swift */; };
 		02CCBEFD1D29AB5E00F808ED /* Pods-mac2imgur-acknowledgements.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */; };
 		02CCBF001D29AC9000F808ED /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 02CCBEFE1D29AC9000F808ED /* LICENSE */; };
@@ -47,6 +48,7 @@
 		0267FE4A1D1DB6E9003F601D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0267FE4D1D1DB6E9003F601D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0267FE4F1D1DB6E9003F601D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02696D0F1D4AB4CE00C7F90E /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
 		027A2CB81D317BB100FAEF8D /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		02CCBEF91D29A74E00F808ED /* AboutMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutMenuController.swift; sourceTree = "<group>"; };
 		02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "Pods-mac2imgur-acknowledgements.markdown"; path = "../Pods/Target Support Files/Pods-mac2imgur/Pods-mac2imgur-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		0267FE3A1D1DB6E9003F601D = {
 			isa = PBXGroup;
 			children = (
+				02696D0C1D4AB4A900C7F90E /* Resources */,
 				0267FE451D1DB6E9003F601D /* mac2imgur */,
 				0267FE441D1DB6E9003F601D /* Products */,
 				647F1FD33B0CC7B6A110948D /* Pods */,
@@ -161,6 +164,14 @@
 				021EABDA1D2878C200EFE6C8 /* Preferences.swift */,
 			);
 			path = mac2imgur;
+			sourceTree = "<group>";
+		};
+		02696D0C1D4AB4A900C7F90E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				02696D0F1D4AB4CE00C7F90E /* appcast.xml */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		647F1FD33B0CC7B6A110948D /* Pods */ = {
@@ -253,6 +264,7 @@
 			files = (
 				02EC81331D3A957300D27B54 /* dsa_pub.pem in Resources */,
 				02CCBEFD1D29AB5E00F808ED /* Pods-mac2imgur-acknowledgements.markdown in Resources */,
+				02696D101D4AB4CE00C7F90E /* appcast.xml in Resources */,
 				0267FE4B1D1DB6E9003F601D /* Assets.xcassets in Resources */,
 				02CCBF001D29AC9000F808ED /* LICENSE in Resources */,
 				0267FE4E1D1DB6E9003F601D /* Main.storyboard in Resources */,
