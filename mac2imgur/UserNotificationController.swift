@@ -44,7 +44,7 @@ class UserNotificationController: NSObject, NSUserNotificationCenterDelegate {
         NSUserNotificationCenter.default.deliver(notification)
     }
     
-    func displayNotification(withTitle title: String, error: NSError?) {
+    func displayNotification(withTitle title: String, error: Error?) {
         displayNotification(title: title,
                             informativeText: error?.localizedDescription ?? "An unknown error occurred")
     }

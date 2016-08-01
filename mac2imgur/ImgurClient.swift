@@ -170,14 +170,12 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         
         do {
             imageData = try Data(contentsOf: imageURL)
-        } catch let error as NSError {
+        } catch let error {
             uploadFailureHandler(error)
             return
         }
         
-        guard let imageName = imageURL.lastPathComponent else {
-            return // TODO: Handle this?
-        }
+        let imageName = imageURL.lastPathComponent
         
         // Screenshot specific preferences
         if isScreenshot {
@@ -244,14 +242,14 @@ class ImgurClient: NSObject, IMGSessionDelegate {
             informativeText: urlString)
     }
     
-    func uploadFailureHandler(_ error: NSError?) {
+    func uploadFailureHandler(_ error: Error?) {
         UserNotificationController.shared
             .displayNotification(withTitle: "Imgur Upload Failed", error: error)
     }
     
     // MARK: IMGSessionDelegate
     
-    func imgurRequestFailed(_ error: NSError!) {
+    func imgurRequestFailed(_ error: Error!) {
         UserNotificationController.shared
             .displayNotification(withTitle: "Imgur Request Failed", error: error)
     }

@@ -290,7 +290,7 @@
 		};
 		02B050711D2990A2007BE2C9 /* Update CFBundleVersion */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (

@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         
         // Register initial defaults
-        UserDefaults.standard.register([
+        UserDefaults.standard.register(defaults: [
             "NSApplicationCrashOnExceptions": true,
             Preference.copyLinkToClipboard.rawValue: true])
         

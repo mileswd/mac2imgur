@@ -77,10 +77,8 @@ class StatusItemController: NSObject, NSWindowDelegate, NSDraggingDestination {
         if let paths = sender.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? [String] {
             for path in paths {
                 var isDirectory: ObjCBool = false
-                let fileExists = FileManager.default
-                    .fileExists(atPath: path, isDirectory: &isDirectory)
-                
-                if !fileExists || isDirectory {
+                if !FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory)
+                    || isDirectory.boolValue {
                     return []
                 }
             }

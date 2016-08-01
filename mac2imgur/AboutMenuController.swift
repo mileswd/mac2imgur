@@ -67,7 +67,7 @@ class AboutMenuController: MenuController {
     
     /// Opens the bundle acknowledgements file in TextEdit.
     func showAcknowledgements() {
-        if let path = Bundle.main.pathForResource("Pods-mac2imgur-acknowledgements", ofType: "markdown") {
+        if let path = Bundle.main.path(forResource: "Pods-mac2imgur-acknowledgements", ofType: "markdown") {
             NSWorkspace.shared().openFile(path, withApplication: "TextEdit")
         }
     }

@@ -46,7 +46,7 @@ extension NSMenu {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = NSTextAlignment.center
         
-        menuItem.attributedTitle = AttributedString(
+        menuItem.attributedTitle = NSAttributedString(
             string: title,
             attributes: [
                 NSFontAttributeName: NSFont.systemFont(

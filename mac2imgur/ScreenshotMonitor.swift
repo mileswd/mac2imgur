@@ -18,8 +18,6 @@ import Foundation
 
 class ScreenshotMonitor {
     
-    let fileManager = FileManager.default
-    
     let eventHandler: (URL) -> Void
     var eventStream: FSEventStreamRef?
     
@@ -99,7 +97,7 @@ class ScreenshotMonitor {
     }
     
     func recentScreenshotExists(atPath path: String) -> Bool {
-        guard let attributes = try? fileManager.attributesOfItem(atPath: path) else {
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: path) else {
             return false // Failed to get file attributes
         }
         
@@ -111,7 +109,7 @@ class ScreenshotMonitor {
             return false // File is not a screenshot
         }
         
-        guard let creationDate = attributes[.creationDate] as? NSDate else {
+        guard let creationDate = attributes[.creationDate] as? Date else {
             return false // Failed to get creation date
         }
         
@@ -134,13 +132,15 @@ class ScreenshotMonitor {
             let path = (domain["location"] as? NSString)?.standardizingPath {
             
             // Check that the chosen directory exists, otherwise screencapture will not use it
-            var isDir = ObjCBool(false)
-            if fileManager.fileExists(atPath: path, isDirectory: &isDir) && isDir {
+            var isDirectory: ObjCBool = false
+            if FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) && isDirectory.boolValue {
                 return URL(fileURLWithPath: path)
             }
         }
         
+        
         // If a custom location is not defined (or invalid) return the default screenshot location (~/Desktop)
-        return fileManager.urlsForDirectory(.desktopDirectory, inDomains: .userDomainMask).first
+        return FileManager.default.urls(for: .desktopDirectory,
+                                        in: .userDomainMask).first
     }
 }

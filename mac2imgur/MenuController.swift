@@ -53,8 +53,7 @@ class MenuController: NSObject, NSMenuDelegate {
                           userInfo: nil,
                           repeats: false)
         
-        RunLoop.current.add(timer,
-                            forMode: RunLoopMode(rawValue: NSEventTrackingRunLoopMode))
+        RunLoop.current.add(timer, forMode: .eventTrackingRunLoopMode)
     }
     
     // MARK: NSMenuDelegate
