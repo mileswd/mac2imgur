@@ -44,7 +44,7 @@ class ImgurImageStore {
     }
     
     /// Removes all stored images.
-    @objc func clearAll() {
+    func clearAll() {
         UserDefaults.standard.removeObject(forKey: imagesKey)
     }
     

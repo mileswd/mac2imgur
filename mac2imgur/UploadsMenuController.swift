@@ -60,8 +60,8 @@ class UploadsMenuController: MenuController {
             menu.addItem(withTitle: "No Recent Uploads")
         } else {
             menu.addItem(withTitle: "Clear Uploads",
-                         action: #selector(ImgurImageStore.shared.clearAll),
-                         target: ImgurImageStore.shared)
+                         action: #selector(clearUploads),
+                         target: self)
         }
     }
     
@@ -95,6 +95,10 @@ class UploadsMenuController: MenuController {
                      target: image)
         
         return menu
+    }
+
+    func clearUploads() {
+        ImgurImageStore.shared.clearAll()
     }
     
 }
