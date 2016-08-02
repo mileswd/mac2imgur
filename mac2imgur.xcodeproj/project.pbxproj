@@ -14,12 +14,12 @@
 		022D73AD1D3002C200408B2B /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022D73AC1D3002C200408B2B /* StatusItemController.swift */; };
 		022D73B21D30416800408B2B /* UserNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 022D73B11D30416800408B2B /* UserNotificationController.swift */; };
 		0231212D1D31AAC600F14049 /* IMGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0231212C1D31AAC600F14049 /* IMGImage.swift */; };
+		02437FA71D51001700CC5E42 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02437FA51D51001700CC5E42 /* MainMenu.xib */; };
 		02659D281D2728E6005DAB74 /* ScreenshotMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02659D271D2728E6005DAB74 /* ScreenshotMonitor.swift */; };
 		02659D2C1D284F24005DAB74 /* StatusItemMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02659D2B1D284F24005DAB74 /* StatusItemMenuController.swift */; };
 		02659D2F1D285986005DAB74 /* NSMenuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02659D2E1D285986005DAB74 /* NSMenuExtension.swift */; };
 		0267FE471D1DB6E9003F601D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0267FE461D1DB6E9003F601D /* AppDelegate.swift */; };
 		0267FE4B1D1DB6E9003F601D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0267FE4A1D1DB6E9003F601D /* Assets.xcassets */; };
-		0267FE4E1D1DB6E9003F601D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0267FE4C1D1DB6E9003F601D /* Main.storyboard */; };
 		02696D101D4AB4CE00C7F90E /* appcast.xml in Resources */ = {isa = PBXBuildFile; fileRef = 02696D0F1D4AB4CE00C7F90E /* appcast.xml */; };
 		02CCBEFA1D29A74E00F808ED /* AboutMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CCBEF91D29A74E00F808ED /* AboutMenuController.swift */; };
 		02CCBEFD1D29AB5E00F808ED /* Pods-mac2imgur-acknowledgements.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */; };
@@ -40,13 +40,13 @@
 		022D73AC1D3002C200408B2B /* StatusItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
 		022D73B11D30416800408B2B /* UserNotificationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotificationController.swift; sourceTree = "<group>"; };
 		0231212C1D31AAC600F14049 /* IMGImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGImage.swift; sourceTree = "<group>"; };
+		02437FA61D51001700CC5E42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		02659D271D2728E6005DAB74 /* ScreenshotMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotMonitor.swift; sourceTree = "<group>"; };
 		02659D2B1D284F24005DAB74 /* StatusItemMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusItemMenuController.swift; sourceTree = "<group>"; };
 		02659D2E1D285986005DAB74 /* NSMenuExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMenuExtension.swift; sourceTree = "<group>"; };
 		0267FE431D1DB6E9003F601D /* mac2imgur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mac2imgur.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0267FE461D1DB6E9003F601D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0267FE4A1D1DB6E9003F601D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0267FE4D1D1DB6E9003F601D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0267FE4F1D1DB6E9003F601D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02696D0F1D4AB4CE00C7F90E /* appcast.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
 		027A2CB81D317BB100FAEF8D /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -79,9 +79,9 @@
 		021687FC1D1DE0D20093D733 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				02437FA51D51001700CC5E42 /* MainMenu.xib */,
 				02EC81321D3A957300D27B54 /* dsa_pub.pem */,
 				0267FE4A1D1DB6E9003F601D /* Assets.xcassets */,
-				0267FE4C1D1DB6E9003F601D /* Main.storyboard */,
 				0267FE4F1D1DB6E9003F601D /* Info.plist */,
 				02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */,
 			);
@@ -267,7 +267,7 @@
 				02696D101D4AB4CE00C7F90E /* appcast.xml in Resources */,
 				0267FE4B1D1DB6E9003F601D /* Assets.xcassets in Resources */,
 				02CCBF001D29AC9000F808ED /* LICENSE in Resources */,
-				0267FE4E1D1DB6E9003F601D /* Main.storyboard in Resources */,
+				02437FA71D51001700CC5E42 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,12 +376,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		0267FE4C1D1DB6E9003F601D /* Main.storyboard */ = {
+		02437FA51D51001700CC5E42 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				0267FE4D1D1DB6E9003F601D /* Base */,
+				02437FA61D51001700CC5E42 /* Base */,
 			);
-			name = Main.storyboard;
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
