@@ -20,7 +20,6 @@
 		02659D2F1D285986005DAB74 /* NSMenuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02659D2E1D285986005DAB74 /* NSMenuExtension.swift */; };
 		0267FE471D1DB6E9003F601D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0267FE461D1DB6E9003F601D /* AppDelegate.swift */; };
 		0267FE4B1D1DB6E9003F601D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0267FE4A1D1DB6E9003F601D /* Assets.xcassets */; };
-		02696D101D4AB4CE00C7F90E /* appcast.xml in Resources */ = {isa = PBXBuildFile; fileRef = 02696D0F1D4AB4CE00C7F90E /* appcast.xml */; };
 		02CCBEFA1D29A74E00F808ED /* AboutMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CCBEF91D29A74E00F808ED /* AboutMenuController.swift */; };
 		02CCBEFD1D29AB5E00F808ED /* Pods-mac2imgur-acknowledgements.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */; };
 		02CCBF001D29AC9000F808ED /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 02CCBEFE1D29AC9000F808ED /* LICENSE */; };
@@ -264,7 +263,6 @@
 			files = (
 				02EC81331D3A957300D27B54 /* dsa_pub.pem in Resources */,
 				02CCBEFD1D29AB5E00F808ED /* Pods-mac2imgur-acknowledgements.markdown in Resources */,
-				02696D101D4AB4CE00C7F90E /* appcast.xml in Resources */,
 				0267FE4B1D1DB6E9003F601D /* Assets.xcassets in Resources */,
 				02CCBF001D29AC9000F808ED /* LICENSE in Resources */,
 				02437FA71D51001700CC5E42 /* MainMenu.xib in Resources */,
