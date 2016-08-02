@@ -6,13 +6,13 @@
         <language>en</language>
         <item>
             <title>Version 4.0</title>
-            <pubDate>Tue, 2 Aug 2016 12:00:00 +0000</pubDate>
+            <pubDate>Wed, 3 Aug 2016 00:00:00 +0000</pubDate>
             <sparkle:minimumSystemVersion>10.9</sparkle:minimumSystemVersion>
             <enclosure
-            length="5022224"
-            sparkle:dsaSignature="MCwCFH/zvIHRg520sBS5KgsoREurAWOsAhRTPz4dW8nLEbNm2z/5awGVTQRLvg=="
-            sparkle:shortVersionString="4.0 (build 203)"
-            sparkle:version="203"
+            length="5022301"
+            sparkle:dsaSignature="MC0CFQDOyrl+Z8ZU4qvf4pmZXameWkLTgAIUT1Jljke43wI6PFlOBlROH49br1E="
+            sparkle:shortVersionString="4.0 (build 205)"
+            sparkle:version="205"
             type="application/octet-stream"
             url="https://github.com/mileswd/mac2imgur/releases/download/4.0/mac2imgur.zip"/>
         </item>
