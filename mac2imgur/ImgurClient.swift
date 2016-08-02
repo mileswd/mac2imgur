@@ -21,8 +21,6 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     static let shared = ImgurClient()
     
-    let defaults = UserDefaults.standard
-    
     var externalWebViewCompletionHandler: (() -> Void)?
     
     // MARK: Defaults keys
@@ -39,16 +37,16 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     var uploadAlbumID: String? {
         get {
-            return defaults.string(forKey: imgurAlbumKey)
+            return UserDefaults.standard.string(forKey: imgurAlbumKey)
         }
         set {
-            defaults.set(newValue, forKey: imgurAlbumKey)
+            UserDefaults.standard.set(newValue, forKey: imgurAlbumKey)
         }
     }
     
     /// Prepare ImgurClient for use.
     func setup() {
-        if let refreshToken = defaults.string(forKey: refreshTokenKey) {
+        if let refreshToken = UserDefaults.standard.string(forKey: refreshTokenKey) {
             configure(asAnonymous: false)
             
             IMGSession.sharedInstance()
@@ -85,8 +83,8 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     func deauthenticate() {
         // Clear stored refresh token
-        defaults.removeObject(forKey: refreshTokenKey)
-        defaults.removeObject(forKey: imgurAlbumKey)
+        UserDefaults.standard.removeObject(forKey: refreshTokenKey)
+        UserDefaults.standard.removeObject(forKey: imgurAlbumKey)
         
         configure(asAnonymous: true)
     }
@@ -267,7 +265,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     func imgurSessionUserRefreshed(_ user: IMGAccount!) {
         if user != nil, let refreshToken = IMGSession.sharedInstance().refreshToken {
-            defaults.set(refreshToken, forKey: refreshTokenKey)
+            UserDefaults.standard.set(refreshToken, forKey: refreshTokenKey)
         }
     }
     
