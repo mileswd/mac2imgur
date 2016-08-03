@@ -75,7 +75,7 @@ class ImgurAlbumMenuController: MenuController {
             menu.addItem(withTitle: "No Albums Available")
         } else {
             for album in albums {
-                menu.addItem(withTitle: album.title,
+                menu.addItem(withTitle: album.title ?? "Untitled",
                              action: #selector(selectAlbum(_:)),
                              target: self,
                              representedObject: album,
