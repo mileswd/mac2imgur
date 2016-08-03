@@ -56,6 +56,17 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         }
     }
     
+    func handleError(_ error: Error?, title: String) {
+        if let error = error {
+            NSLog("\(title): %@", error)
+        }
+        
+        let description = error?.localizedDescription ?? "An unknown error occured"
+        
+        UserNotificationController.shared
+            .displayNotification(withTitle: title, informativeText: description)
+    }
+    
     /// Configures the `IMGSession.sharedInstance()`
     /// - parameter anonymous: If the session should be configured for anonymous
     /// API access, or alternatively authenticated.
@@ -236,25 +247,23 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         }
         
         UserNotificationController.shared.displayNotification(
-            title: "Imgur Upload Successful",
+            withTitle: "Imgur Upload Successful",
             informativeText: urlString)
     }
     
     func uploadFailureHandler(_ error: Error?) {
-        UserNotificationController.shared
-            .displayNotification(withTitle: "Imgur Upload Failed", error: error)
+        handleError(error, title: "Imgur Upload Failed")
     }
     
     // MARK: IMGSessionDelegate
     
     func imgurRequestFailed(_ error: Error!) {
-        UserNotificationController.shared
-            .displayNotification(withTitle: "Imgur Request Failed", error: error)
+        handleError(error, title: "Imgur Request Failed")
     }
     
     func imgurSessionRateLimitExceeded() {
         UserNotificationController.shared
-            .displayNotification(title: "Imgur Rate Limit Exceeded",
+            .displayNotification(withTitle: "Imgur Rate Limit Exceeded",
                                  informativeText: "Further Imgur requests may fail")
     }
     

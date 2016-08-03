@@ -36,17 +36,12 @@ class UserNotificationController: NSObject, NSUserNotificationCenterDelegate {
     
     // MARK: General
     
-    func displayNotification(title: String, informativeText: String) {
+    func displayNotification(withTitle title: String, informativeText: String) {
         let notification = NSUserNotification()
         notification.title = title
         notification.informativeText = informativeText
         notification.soundName = NSUserNotificationDefaultSoundName
         NSUserNotificationCenter.default.deliver(notification)
-    }
-    
-    func displayNotification(withTitle title: String, error: Error?) {
-        displayNotification(title: title,
-                            informativeText: error?.localizedDescription ?? "An unknown error occurred")
     }
     
 }
