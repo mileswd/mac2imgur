@@ -116,7 +116,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         alert.addButton(withTitle: "Cancel")
         alert.icon = NSImage(data: imageData)
         
-        NSApplication.shared().activateIgnoringOtherApps(true)
+        NSApp.activateIgnoringOtherApps(true)
         return alert.runModal() == NSAlertFirstButtonReturn
     }
     
