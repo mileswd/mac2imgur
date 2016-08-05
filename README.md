@@ -1,6 +1,6 @@
 # mac2imgur
 
-![mac2imgur running on Yosemite](http://i.imgur.com/WrMhzbe.png)
+![mac2imgur running on macOS Yosemite](http://i.imgur.com/WrMhzbe.png)
 
 A simple Mac application designed to make uploading images and screenshots to [imgur.com](https://imgur.com) quick and effortless.
 
@@ -89,7 +89,7 @@ If you need help or would just like to say hello, I am also contactable via [Twi
 
 ## Development
 
-- Written in Swift 3 (Xcode 8 beta 3)
+- Written in Swift 3 (Xcode 8 beta 4)
 - [CocoaPods](https://cocoapods.org) for dependency management
 
 ## Legal
