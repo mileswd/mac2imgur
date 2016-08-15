@@ -25,9 +25,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let statusItemController = StatusItemController()
     var screenshotMonitor: ScreenshotMonitor?
     
+    var hasFinishedLaunching = false
+    var queuedFileURLs = [URL]()
+    
     // MARK: NSApplicationDelegate
     
-    func applicationWillFinishLaunching(_ notification: Notification) {
+    func applicationDidFinishLaunching(_ notification: Notification) {
         
         // Register initial defaults
         UserDefaults.standard.register(defaults: [
@@ -60,11 +63,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             andEventID: AEEventID(kAEGetURL))
         
         PFMoveToApplicationsFolderIfNecessary()
+        
+        hasFinishedLaunching = true
+        
+        queuedFileURLs.forEach {
+            ImgurClient.shared.uploadImage(withURL: $0, isScreenshot: false)
+        }
     }
     
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {
-        ImgurClient.shared.uploadImage(withURL: URL(fileURLWithPath: filename),
-                                       isScreenshot: false)
+        let fileURL = URL(fileURLWithPath: filename)
+        
+        if hasFinishedLaunching {
+            ImgurClient.shared.uploadImage(withURL: fileURL, isScreenshot: false)
+        } else {
+            queuedFileURLs.append(fileURL)
+        }
+        
         return true
     }
     
