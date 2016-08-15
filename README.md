@@ -89,7 +89,7 @@ If you need help or would just like to say hello, I am also contactable via [Twi
 
 ## Development
 
-- Written in Swift 3 (Xcode 8 beta 4)
+- Written in Swift 3 (Xcode 8 beta 6)
 - [CocoaPods](https://cocoapods.org) for dependency management
 
 ## Legal

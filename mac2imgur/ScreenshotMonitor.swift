@@ -21,7 +21,7 @@ class ScreenshotMonitor {
     let eventHandler: (URL) -> Void
     var eventStream: FSEventStreamRef?
     
-    init(eventHandler: (URL) -> Void) {
+    init(eventHandler: @escaping (URL) -> Void) {
         self.eventHandler = eventHandler
     }
     
@@ -33,9 +33,9 @@ class ScreenshotMonitor {
         
         let streamCallback: FSEventStreamCallback = {
             (streamRef: ConstFSEventStreamRef,
-            clientCallBackInfo: UnsafeMutablePointer<Void>?,
+            clientCallBackInfo: UnsafeMutableRawPointer?,
             numEvents: Int,
-            eventPaths: UnsafeMutablePointer<Void>,
+            eventPaths: UnsafeMutableRawPointer,
             eventFlags: UnsafePointer<FSEventStreamEventFlags>?,
             eventIds: UnsafePointer<FSEventStreamEventId>?) in
             
@@ -62,7 +62,7 @@ class ScreenshotMonitor {
         
         var streamContext = FSEventStreamContext(
             version: 0,
-            info: UnsafeMutablePointer<Void>(unsafeAddress(of: self)),
+            info: Unmanaged.passRetained(self).toOpaque(),
             retain: nil,
             release: nil,
             copyDescription: nil)
@@ -71,7 +71,7 @@ class ScreenshotMonitor {
             kCFAllocatorDefault,
             streamCallback,
             &streamContext,
-            [path],
+            [path] as CFArray,
             FSEventStreamEventId(kFSEventStreamEventIdSinceNow),
             0,
             FSEventStreamCreateFlags(kFSEventStreamCreateFlagUseCFTypes

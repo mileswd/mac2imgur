@@ -72,7 +72,7 @@ class StatusItemMenuController: MenuController {
         }
         
         // Show in front of all other applications
-        NSApp.activateIgnoringOtherApps(true)
+        NSApp.activate(ignoringOtherApps: true)
     }
     
 }

@@ -63,7 +63,7 @@ class ImgurImageStore {
     /// - parameter image: The image for which to request a preview image.
     /// - parameter completionHandler: The completion handler to call if the
     /// image has been retrieved successfully.
-    func requestPreviewImage(forImage image: IMGImage, completionHandler: (NSImage) -> Void) {
+    func requestPreviewImage(forImage image: IMGImage, completionHandler: @escaping (NSImage) -> Void) {
         guard let url = image.secureURL(with: .smallSquareSize) else {
             return
         }

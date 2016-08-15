@@ -16,6 +16,7 @@
 
 import Foundation
 import ImgurSession
+import Crashlytics
 
 class ImgurClient: NSObject, IMGSessionDelegate {
     
@@ -58,7 +59,8 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     func handleError(_ error: Error?, title: String) {
         if let error = error {
-            NSLog("\(title): %@", error)
+            Crashlytics.sharedInstance().recordError(error)
+            NSLog("\(title): %@", error as NSError)
         }
         
         let description = error?.localizedDescription ?? "An unknown error occured"
@@ -116,7 +118,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         alert.addButton(withTitle: "Cancel")
         alert.icon = NSImage(data: imageData)
         
-        NSApp.activateIgnoringOtherApps(true)
+        NSApp.activate(ignoringOtherApps: true)
         return alert.runModal() == NSAlertFirstButtonReturn
     }
     

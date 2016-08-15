@@ -17,10 +17,10 @@ PODS:
   - AFNetworking/Reachability (2.6.3)
   - AFNetworking/Security (2.6.3)
   - AFNetworking/Serialization (2.6.3)
-  - Crashlytics (3.7.2):
+  - Crashlytics (3.7.3):
     - Fabric (~> 1.6.3)
   - EMCLoginItem (1.0.1)
-  - Fabric (1.6.7)
+  - Fabric (1.6.8)
   - ImgurSession (1.3):
     - AFNetworking (= 2.6.3)
   - LetsMove (1.20)
@@ -36,9 +36,9 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  Crashlytics: 130ab943f8c78cda7a814b434f270b2e2c8a3cba
+  Crashlytics: 76f6beaff70acf226139582c09c78461597c2b98
   EMCLoginItem: ac4a198cda3f4a8dc72797d2e89ad6c640624835
-  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
+  Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
   ImgurSession: 76e5ef98cb0224866f571acd39f6170bdcc66c2b
   LetsMove: 40dda5f7a19bf9976e150ce304fa5765892bef8f
   Sparkle: ccd95233b12a3e3d4eeb55ff01dd4c8bb8188b07
