@@ -1,16 +1,16 @@
 # mac2imgur
 
-![mac2imgur running on macOS Yosemite](http://i.imgur.com/WrMhzbe.png)
+![mac2imgur running on macOS Yosemite](https://i.imgur.com/WrMhzbe.png)
 
 A simple Mac application designed to make uploading images and screenshots to [imgur.com](https://imgur.com) quick and effortless.
 
 ## Installation
 
-[Download the latest release](https://mileswd.com/mac2imgur/latest) (macOS 10.9+)
+[Download the latest release](https://github.com/mileswd/mac2imgur/releases/latest) (macOS 10.9+)
 
 ## Usage
 
-The application will listen for new screenshots taken by the [built in screenshot functionality of macOS](http://support.apple.com/kb/ht5775), so you can use the following shortcuts to capture your screen:
+The application will listen for new screenshots taken by the [built in screenshot functionality of macOS](https://support.apple.com/kb/ht5775), so you can use the following shortcuts to capture your screen:
 
 - Press <kbd>CMD ⌘</kbd> + <kbd>SHIFT ⇧</kbd> + <kbd>3</kbd> to take a full-screen screenshot
 
