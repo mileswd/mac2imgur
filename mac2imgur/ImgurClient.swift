@@ -249,7 +249,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         }
         
         UserNotificationController.shared.displayNotification(
-            withTitle: "Imgur Upload Successful",
+            withTitle: "Imgur Upload Succeeded",
             informativeText: urlString)
     }
     
@@ -275,9 +275,18 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     }
     
     func imgurSessionUserRefreshed(_ user: IMGAccount!) {
-        if user != nil, let refreshToken = IMGSession.sharedInstance().refreshToken {
-            UserDefaults.standard.set(refreshToken, forKey: refreshTokenKey)
+        guard let username = user.username,
+            let refreshToken = IMGSession.sharedInstance().refreshToken else {
+                return
         }
+        
+        if UserDefaults.standard.string(forKey: refreshTokenKey) == nil {
+            UserNotificationController.shared
+                .displayNotification(withTitle: "Authentication Succeeded",
+                                     informativeText: "Signed in as \(username)")
+        }
+        
+        UserDefaults.standard.set(refreshToken, forKey: refreshTokenKey)
     }
     
     // MARK: External WebView Handler
