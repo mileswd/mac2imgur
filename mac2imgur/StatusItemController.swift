@@ -36,7 +36,7 @@ class StatusItemController: NSObject, NSWindowDelegate, NSDraggingDestination {
         updateStatusItemImage()
         
         // Enable drag and drop upload if OS X >= 10.10
-        if #available(OSX 10.10, *) {
+        if #available(macOS 10.10, *) {
             statusItem.button?.window?.delegate = self
             statusItem.button?.window?
                 .registerForDraggedTypes([NSFilenamesPboardType, NSTIFFPboardType])

@@ -60,7 +60,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     func handleError(_ error: Error?, title: String) {
         if let error = error {
             Crashlytics.sharedInstance().recordError(error)
-            NSLog("\(title): %@", error as NSError)
+            NSLog("%@: %@", title, error as NSError)
         }
         
         let description = error?.localizedDescription ?? "An unknown error occured"
@@ -293,7 +293,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     
     func handleExternalWebViewEvent(withResponseURL url: URL) {
         guard let query = url.query?.components(separatedBy: "&") else {
-            NSLog("Unable to find URL query component")
+            NSLog("Unable to find URL query component: \(url)")
             return
         }
         
