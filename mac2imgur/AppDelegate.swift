@@ -33,9 +33,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         
         // Register initial defaults
-        UserDefaults.standard.register(defaults: [
-            "NSApplicationCrashOnExceptions": true,
-            Preference.copyLinkToClipboard.rawValue: true])
+        var initialDefaults = ["NSApplicationCrashOnExceptions": true]
+        
+        Preference.allValues.forEach {
+            initialDefaults[$0.rawValue] = $0.defaultValue
+        }
+        
+        UserDefaults.standard.register(defaults: initialDefaults)
         
         // Crashlytics integration
         Fabric.with([Crashlytics.self])

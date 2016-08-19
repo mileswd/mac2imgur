@@ -77,4 +77,14 @@ enum Preference: String {
         return UserDefaults.standard.bool(forKey: rawValue)
     }
     
+    /// The initial value for the preference.
+    var defaultValue: Bool {
+        switch self {
+        case .copyLinkToClipboard:
+            return true
+        default:
+            return false
+        }
+    }
+    
 }
