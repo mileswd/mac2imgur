@@ -18,6 +18,7 @@ import Cocoa
 import Fabric
 import Crashlytics
 import LetsMove
+import Sparkle
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -31,6 +32,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: NSApplicationDelegate
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        
+        // Configure Sparkle
+        SUUpdater.shared().automaticallyDownloadsUpdates = true
+        SUUpdater.shared().automaticallyChecksForUpdates = true
+        SUUpdater.shared().checkForUpdatesInBackground()
         
         // Register initial defaults
         var initialDefaults = ["NSApplicationCrashOnExceptions": true]
