@@ -28,6 +28,7 @@
 		02F440B61D293F5D004AD4E9 /* UploadsMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F440B51D293F5D004AD4E9 /* UploadsMenuController.swift */; };
 		02F440B81D2940ED004AD4E9 /* PreferencesMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F440B71D2940ED004AD4E9 /* PreferencesMenuController.swift */; };
 		02F440BA1D294DAF004AD4E9 /* ImgurMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F440B91D294DAF004AD4E9 /* ImgurMenuController.swift */; };
+		085E95E11E2CE7E500784BFE /* anonHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085E95E01E2CE7E500784BFE /* anonHelper.swift */; };
 		2B4B1EC2B4B0DBDE41B1791C /* Pods_mac2imgur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 208AA166C62216E4A19954C9 /* Pods_mac2imgur.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		02F440B51D293F5D004AD4E9 /* UploadsMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadsMenuController.swift; sourceTree = "<group>"; };
 		02F440B71D2940ED004AD4E9 /* PreferencesMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesMenuController.swift; sourceTree = "<group>"; };
 		02F440B91D294DAF004AD4E9 /* ImgurMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurMenuController.swift; sourceTree = "<group>"; };
+		085E95E01E2CE7E500784BFE /* anonHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = anonHelper.swift; sourceTree = "<group>"; };
 		208AA166C62216E4A19954C9 /* Pods_mac2imgur.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mac2imgur.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC0D03566102016C7E13576 /* Pods-mac2imgur.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mac2imgur.debug.xcconfig"; path = "Pods/Target Support Files/Pods-mac2imgur/Pods-mac2imgur.debug.xcconfig"; sourceTree = "<group>"; };
 		A050AE7BB2CE2869B438B41D /* Pods-mac2imgur.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mac2imgur.release.xcconfig"; path = "Pods/Target Support Files/Pods-mac2imgur/Pods-mac2imgur.release.xcconfig"; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				02659D271D2728E6005DAB74 /* ScreenshotMonitor.swift */,
 				022D73B11D30416800408B2B /* UserNotificationController.swift */,
 				021EABDA1D2878C200EFE6C8 /* Preferences.swift */,
+				085E95E01E2CE7E500784BFE /* anonHelper.swift */,
 			);
 			path = mac2imgur;
 			sourceTree = "<group>";
@@ -226,7 +229,7 @@
 				TargetAttributes = {
 					0267FE421D1DB6E9003F601D = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = V3L3V629PN;
+						DevelopmentTeam = WHT8GF2Q94;
 						DevelopmentTeamName = "Miles Dunne";
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
@@ -327,7 +330,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D232A5A8F2759F93BFB104C7 /* [CP] Embed Pods Frameworks */ = {
@@ -368,6 +371,7 @@
 				0267FE471D1DB6E9003F601D /* AppDelegate.swift in Sources */,
 				02F440B81D2940ED004AD4E9 /* PreferencesMenuController.swift in Sources */,
 				0231212D1D31AAC600F14049 /* IMGImage.swift in Sources */,
+				085E95E11E2CE7E500784BFE /* anonHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,6 +483,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = WHT8GF2Q94;
 				INFOPLIST_FILE = mac2imgur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
@@ -496,6 +501,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = WHT8GF2Q94;
 				INFOPLIST_FILE = mac2imgur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
