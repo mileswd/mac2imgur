@@ -23,12 +23,12 @@
 		02CCBEFA1D29A74E00F808ED /* AboutMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CCBEF91D29A74E00F808ED /* AboutMenuController.swift */; };
 		02CCBEFD1D29AB5E00F808ED /* Pods-mac2imgur-acknowledgements.markdown in Resources */ = {isa = PBXBuildFile; fileRef = 02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */; };
 		02CCBF001D29AC9000F808ED /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 02CCBEFE1D29AC9000F808ED /* LICENSE */; };
-		02EC81331D3A957300D27B54 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 02EC81321D3A957300D27B54 /* dsa_pub.pem */; };
 		02F440B31D293F1A004AD4E9 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F440B21D293F1A004AD4E9 /* MenuController.swift */; };
 		02F440B61D293F5D004AD4E9 /* UploadsMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F440B51D293F5D004AD4E9 /* UploadsMenuController.swift */; };
 		02F440B81D2940ED004AD4E9 /* PreferencesMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F440B71D2940ED004AD4E9 /* PreferencesMenuController.swift */; };
 		02F440BA1D294DAF004AD4E9 /* ImgurMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02F440B91D294DAF004AD4E9 /* ImgurMenuController.swift */; };
 		085E95E11E2CE7E500784BFE /* anonHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085E95E01E2CE7E500784BFE /* anonHelper.swift */; };
+		08CF1C5E1E335D2800DCBE3B /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 08CF1C5D1E335D2800DCBE3B /* dsa_pub.pem */; };
 		2B4B1EC2B4B0DBDE41B1791C /* Pods_mac2imgur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 208AA166C62216E4A19954C9 /* Pods_mac2imgur.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,12 +54,12 @@
 		02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = "Pods-mac2imgur-acknowledgements.markdown"; path = "../Pods/Target Support Files/Pods-mac2imgur/Pods-mac2imgur-acknowledgements.markdown"; sourceTree = "<group>"; };
 		02CCBEFE1D29AC9000F808ED /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		02CCBEFF1D29AC9000F808ED /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		02EC81321D3A957300D27B54 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		02F440B21D293F1A004AD4E9 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
 		02F440B51D293F5D004AD4E9 /* UploadsMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadsMenuController.swift; sourceTree = "<group>"; };
 		02F440B71D2940ED004AD4E9 /* PreferencesMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesMenuController.swift; sourceTree = "<group>"; };
 		02F440B91D294DAF004AD4E9 /* ImgurMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurMenuController.swift; sourceTree = "<group>"; };
 		085E95E01E2CE7E500784BFE /* anonHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = anonHelper.swift; sourceTree = "<group>"; };
+		08CF1C5D1E335D2800DCBE3B /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		208AA166C62216E4A19954C9 /* Pods_mac2imgur.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mac2imgur.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC0D03566102016C7E13576 /* Pods-mac2imgur.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mac2imgur.debug.xcconfig"; path = "Pods/Target Support Files/Pods-mac2imgur/Pods-mac2imgur.debug.xcconfig"; sourceTree = "<group>"; };
 		A050AE7BB2CE2869B438B41D /* Pods-mac2imgur.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mac2imgur.release.xcconfig"; path = "Pods/Target Support Files/Pods-mac2imgur/Pods-mac2imgur.release.xcconfig"; sourceTree = "<group>"; };
@@ -81,7 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				02437FA51D51001700CC5E42 /* MainMenu.xib */,
-				02EC81321D3A957300D27B54 /* dsa_pub.pem */,
+				08CF1C5D1E335D2800DCBE3B /* dsa_pub.pem */,
 				0267FE4A1D1DB6E9003F601D /* Assets.xcassets */,
 				0267FE4F1D1DB6E9003F601D /* Info.plist */,
 				02CCBEFB1D29AAB800F808ED /* Pods-mac2imgur-acknowledgements.markdown */,
@@ -264,7 +264,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02EC81331D3A957300D27B54 /* dsa_pub.pem in Resources */,
+				08CF1C5E1E335D2800DCBE3B /* dsa_pub.pem in Resources */,
 				02CCBEFD1D29AB5E00F808ED /* Pods-mac2imgur-acknowledgements.markdown in Resources */,
 				0267FE4B1D1DB6E9003F601D /* Assets.xcassets in Resources */,
 				02CCBF001D29AC9000F808ED /* LICENSE in Resources */,

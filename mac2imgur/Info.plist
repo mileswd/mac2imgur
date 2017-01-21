@@ -47,7 +47,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>220</string>
+	<string>223</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -73,7 +73,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>https://mileswd.com/mac2imgur/update</string>
+	<string>https://raw.githubusercontent.com/Coriou/mac2imgur/master/Resources/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>
