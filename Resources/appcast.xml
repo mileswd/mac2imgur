@@ -14,7 +14,7 @@
             sparkle:shortVersionString="4.1 (build 220)"
             sparkle:version="220"
             type="application/octet-stream"
-            url=""/>
+            url="https://github.com/Coriou/mac2imgur/releases/download/b220/mac2imgur.app.zip"/>
             <sparkle:tags>
                 <sparkle:criticalUpdate/>
             </sparkle:tags>
