@@ -34,6 +34,7 @@ enum Preference: String {
     case resizeScreenshots = "ResizeScreenshots"
     case clearClipboard = "ClearClipboard"
     case copyLinkToClipboard = "CopyLink"
+    case randomName = "RandomName"
     
     // TODO: Better alternative to this?
     static let allValues: [Preference] = [
@@ -42,7 +43,8 @@ enum Preference: String {
         .requiresUploadConfirmation,
         .resizeScreenshots,
         .clearClipboard,
-        .copyLinkToClipboard
+        .copyLinkToClipboard,
+        .randomName
     ]
     
     /// The human readable description of the preference.
@@ -60,12 +62,14 @@ enum Preference: String {
             return "Clear Clipboard"
         case .copyLinkToClipboard:
             return "Copy Link to Clipboard"
+        case .randomName:
+            return "Randomize Name Before Upload"
         }
     }
     
     var category: Category {
         switch self {
-        case .clearClipboard, .copyLinkToClipboard:
+        case .clearClipboard, .copyLinkToClipboard, .randomName:
             return .general
         default:
             return .screenshots

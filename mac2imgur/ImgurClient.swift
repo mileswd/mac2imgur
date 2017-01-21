@@ -186,7 +186,12 @@ class ImgurClient: NSObject, IMGSessionDelegate {
             return
         }
         
-        let imageName = imageURL.lastPathComponent
+        var imageName = imageURL.lastPathComponent
+        
+        // Random name if option is selected
+        if Preference.randomName.value{
+            imageName = AnonHelper().randomString()
+        }
         
         // Screenshot specific preferences
         if isScreenshot {
@@ -224,12 +229,12 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         }
         
         IMGImageRequest.uploadImage(with: imageData,
-                                    title: imageTitle,
-                                    description: nil,
-                                    linkToAlbumWithID: uploadAlbumID,
-                                    success: uploadSuccessHandler,
-                                    progress: nil,
-                                    failure: uploadFailureHandler)
+                                    title: Preference.randomName.value ? AnonHelper().randomString() : imageTitle, // Title can be random if the option is selected
+            description: nil,
+            linkToAlbumWithID: uploadAlbumID,
+            success: uploadSuccessHandler,
+            progress: nil,
+            failure: uploadFailureHandler)
     }
     
     func uploadSuccessHandler(_ image: IMGImage?) {

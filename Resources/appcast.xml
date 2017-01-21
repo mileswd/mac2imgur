@@ -5,16 +5,16 @@
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
         <item>
-            <title>Version 4.0</title>
-            <pubDate>Thu, 25 Aug 2016 12:00:00 +0000</pubDate>
+            <title>Version 4.1</title>
+            <pubDate>Thu, 21 Jan 2017 12:00:00 +0000</pubDate>
             <sparkle:minimumSystemVersion>10.9</sparkle:minimumSystemVersion>
             <enclosure
-                length="5116086"
-                sparkle:dsaSignature="MC4CFQDCPf99inANU0keqQ/hQKJLqRvQ6gIVAJioTn6K83fR6EPNUYHyIQns0Re3"
-                sparkle:shortVersionString="4.0 (build 219)"
-                sparkle:version="219"
-                type="application/octet-stream"
-                url="https://github.com/mileswd/mac2imgur/releases/download/b219/mac2imgur.zip"/>
+            length="5538858"
+            sparkle:dsaSignature="MCwCFDMS1wDMZRj10WSb43rbAt3g8jq9AhQIqT4xc12ZZl/27GMtiZ4qA3ffng=="
+            sparkle:shortVersionString="4.1 (build 225)"
+            sparkle:version="225"
+            type="application/octet-stream"
+            url="https://github.com/Coriou/mac2imgur/releases/download/b220/mac2imgur.app.zip"/>
             <sparkle:tags>
                 <sparkle:criticalUpdate/>
             </sparkle:tags>
