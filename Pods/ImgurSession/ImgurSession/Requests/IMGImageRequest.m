@@ -21,181 +21,160 @@
 
 #pragma mark - Load
 
-+ (void)imageWithID:(NSString *)imageID success:(void (^)(IMGImage *))success failure:(void (^)(NSError *))failure{
-    NSString *path = [self pathWithID:imageID];
++ (void)imageWithID:(NSString *)imageID
+            success:(void (^)(IMGImage *))success
+            failure:(void (^)(NSError *))failure {
     
-    [[IMGSession sharedInstance] GET:path parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    [[IMGSession sharedInstance] GET:[self pathWithID:imageID]
+                          parameters:nil
+                             success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSError *JSONError = nil;
-        IMGImage *image = [[IMGImage alloc] initWithJSONObject:responseObject error:&JSONError];
-        
-        if(!JSONError && image) {
-            if(success)
-                success(image);
-        }
-        else {
-        
-            if(failure)
-                failure(JSONError);
+                                 
+        IMGImage *image = [[IMGImage alloc] initWithJSONObject:responseObject
+                                                         error:&JSONError];
+
+        if(!JSONError && image && success) {
+         
+            success(image);
+         
+        } else if (failure){
+         
+            failure(JSONError);
         }
     } failure:failure];
 }
 
 #pragma mark - Upload one image
 
-+ (void)uploadImageWithGifData:(NSData *)gifData title:(NSString *)title success:(void (^)(IMGImage *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *))failure{
++ (void)uploadImageWithGifData:(NSData *)gifData
+                         title:(NSString *)title
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
     
-    [self uploadImageWithGifData:gifData compression:1.0f title:title description:nil linkToAlbumWithID:nil success:success progress:progress failure:failure];
+    [self uploadImageWithGifData:gifData
+                     compression:1.0f
+                           title:title
+                     description:nil
+               linkToAlbumWithID:nil
+                        progress:progress
+                         success:success
+                         failure:failure];
 }
 
-+ (void)uploadImageWithGifData:(NSData *)gifData compression:(CGFloat)compression title:(NSString *)title description:(NSString *)description linkToAlbumWithID:(NSString *)albumID success:(void (^)(IMGImage *))success  progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *))failure{
-    //upload file from binary data
-    
-    NSMutableDictionary *parameters = [NSMutableDictionary new];
-    parameters[@"type"] = @"file";
-    
-    // Add used parameters
-    if(title)
-        parameters[@"title"] = title;
-    if(description)
-        parameters[@"description"] = description;
-    if(albumID )
-        parameters[@"album"] = albumID;
-    
-    // Create the request with the file appended to the body
++ (void)uploadImageWithGifData:(NSData *)gifData
+                   compression:(CGFloat)compression
+                         title:(NSString *)title
+                   description:(NSString *)description
+             linkToAlbumWithID:(NSString *)albumID
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
+ 
     __block NSError *fileAppendingError = nil;
     
     void (^appendFile)(id<AFMultipartFormData> formData) = ^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:gifData name:@"image" fileName:title mimeType:@"image/gif"];
     };
     
-    // If there's a file appending error, we must abort and return the error
-    if(fileAppendingError){
-        if(failure)
-            failure(fileAppendingError);
-        return;
+    if(fileAppendingError && failure){
+        return failure(nil, fileAppendingError);
     }
     
-    //post
-    [[IMGSession sharedInstance] POST:[self path] parameters:parameters constructingBodyWithBlock:appendFile success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        NSError *JSONError = nil;
-        IMGImage *image = [[IMGImage alloc] initWithJSONObject:responseObject error:&JSONError];
-        
-        if(!JSONError && image) {
-            if(success)
-                success(image);
-        }
-        else {
-            if(failure)
-                failure(JSONError);
-        }
-        
-    } progress:progress failure:failure];
+    [self uploadImageAppendfile:appendFile
+                          title:title
+                    description:description
+              linkToAlbumWithID:albumID
+                       progress:progress
+                        success:success
+                        failure:failure];
 }
 
-+ (void)uploadImageWithData:(NSData*)imageData title:(NSString *)title success:(void (^)(IMGImage *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *))failure{
++ (void)uploadImageWithData:(NSData*)imageData
+                      title:(NSString *)title
+                   progress:(void (^)(NSProgress *))progress
+                    success:(void (^)(IMGImage *))success
+                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
  
-    [self uploadImageWithData:imageData title:title description:nil linkToAlbumWithID:nil success:success progress:progress failure:failure];
+    [self uploadImageWithData:imageData
+                        title:title
+                  description:nil
+            linkToAlbumWithID:nil
+                     progress:progress
+                      success:success
+                      failure:failure];
 }
 
-+ (void)uploadImageWithData:(NSData*)imageData title:(NSString *)title description:(NSString *)description linkToAlbumWithID:(NSString *)albumID success:(void (^)(IMGImage *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *))failure{
-    //upload file from binary data
-    
-    NSMutableDictionary *parameters = [NSMutableDictionary new];
-    parameters[@"type"] = @"file";
-    
-    // Add used parameters
-    if(title)
-        parameters[@"title"] = title;
-    if(description)
-        parameters[@"description"] = description;
-    if(albumID )
-        parameters[@"album"] = albumID;
-    
-    // Create the request with the file appended to the body
++ (void)uploadImageWithData:(NSData*)imageData
+                      title:(NSString *)title
+                description:(NSString *)description
+          linkToAlbumWithID:(NSString *)albumID
+                   progress:(void (^)(NSProgress *))progress
+                    success:(void (^)(IMGImage *))success
+                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
+   
     __block NSError *fileAppendingError = nil;
     
     void (^appendFile)(id<AFMultipartFormData> formData) = ^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:imageData name:@"image" fileName:title mimeType:@"image/jpeg"];
     };
     
-    
-    // If there's a file appending error, we must abort and return the error
-    if(fileAppendingError){
-        if(failure)
-            failure(fileAppendingError);
-        return;
+    if(fileAppendingError && failure){
+        return failure(nil, fileAppendingError);
     }
     
-    //post
-    [[IMGSession sharedInstance] POST:[self path] parameters:parameters constructingBodyWithBlock:appendFile success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        NSError *JSONError = nil;
-        IMGImage *image = [[IMGImage alloc] initWithJSONObject:responseObject error:&JSONError];
-        
-        if(!JSONError && image) {
-            if(success)
-                success(image);
-        }
-        else {
-            if(failure)
-                failure(JSONError);
-        }
-        
-    } progress:progress failure:failure];
+    [self uploadImageAppendfile:appendFile
+                          title:title
+                    description:description
+              linkToAlbumWithID:albumID
+                       progress:progress
+                        success:success
+                        failure:failure];
 }
 
-+ (void)uploadImageWithFileURL:(NSURL *)fileURL success:(void (^)(IMGImage *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *))failure{
++ (void)uploadImageWithFileURL:(NSURL *)fileURL
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
     
-    [self uploadImageWithFileURL:fileURL title:nil description:nil linkToAlbumWithID:nil success:success progress:progress failure:failure];
+    [self uploadImageWithFileURL:fileURL
+                           title:nil
+                     description:nil
+               linkToAlbumWithID:nil
+                        progress:progress
+                         success:success
+                         failure:failure];
 }
 
-+ (void)uploadImageWithFileURL:(NSURL *)fileURL title:(NSString *)title description:(NSString *)description linkToAlbumWithID:(NSString *)albumID success:(void (^)(IMGImage *))success progress:(NSProgress * __autoreleasing *)progress failure:(void (^)(NSError *))failure{
-    //upload file from binary data
-    
-    NSMutableDictionary *parameters = [NSMutableDictionary new];
-    parameters[@"type"] = @"file";
-    
-    // Add used parameters
-    if(title)
-        parameters[@"title"] = title;
-    if(description)
-        parameters[@"description"] = description;
-    if(albumID )
-        parameters[@"album"] = albumID;
-    
-    // Create the request with the file appended to the body
++ (void)uploadImageWithFileURL:(NSURL *)fileURL
+                         title:(NSString *)title
+                   description:(NSString *)description
+             linkToAlbumWithID:(NSString *)albumID
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error)) failure {
+  
     __block NSError *fileAppendingError = nil;
     
     void (^appendFile)(id<AFMultipartFormData> formData) = ^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileURL:fileURL name:@"image" error:&fileAppendingError];
     };
     
-    // If there's a file appending error, we must abort and return the error
-    if(fileAppendingError){
-        if(failure)
-            failure(fileAppendingError);
-        return;
+    if(fileAppendingError && failure){
+        return failure(nil, fileAppendingError);
     }
     
-    //post
-    [[IMGSession sharedInstance] POST:[self path] parameters:parameters constructingBodyWithBlock:appendFile success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        NSError *JSONError = nil;
-        IMGImage *image = [[IMGImage alloc] initWithJSONObject:responseObject error:&JSONError];
-        
-        if(!JSONError && image) {
-            if(success)
-                success(image);
-        }
-        else {
-            if(failure)
-                failure(JSONError);
-        }
-        
-    } progress:progress failure:failure];
+    [self uploadImageAppendfile:appendFile
+                          title:title
+                    description:description
+              linkToAlbumWithID:albumID
+                       progress:progress
+                        success:success
+                        failure:failure];
 }
+
+
 
 + (void)uploadImageWithURL:(NSURL *)url success:(void (^)(IMGImage *))success failure:(void (^)(NSError *))failure{
     return [self uploadImageWithURL:url title:nil description:nil linkToAlbumWithID:nil success:success failure:failure];
@@ -217,29 +196,87 @@
     if(albumID )
         parameters[@"album"] = albumID;
     
-    [[IMGSession sharedInstance] POST:[self path] parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    [[IMGSession sharedInstance] POST:[self path]
+                           parameters:parameters
+                              success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSError *JSONError = nil;
+                                  
         IMGImage *image = [[IMGImage alloc] initWithJSONObject:responseObject error:&JSONError];
         
-        if(!JSONError && image) {
-            if(success)
-                success(image);
-        } else {
-            if(failure)
-                failure(JSONError);
+        if(!JSONError && image && success) {
+          
+           success(image);
+          
+        } else if (failure){
+          
+           failure(JSONError);
         }
     } failure:failure];
 }
 
-#pragma mark - Upload multiple images
-
-+(void)uploadImages:(NSArray*)files success:(void (^)(NSArray *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *))failure{
++ (void)uploadImageAppendfile:(void (^)(id <AFMultipartFormData> formData))appendFile
+                         title:(NSString *)title
+                   description:(NSString *)description
+             linkToAlbumWithID:(NSString *)albumID
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error)) failure {
     
-    [self uploadImages:files toAlbumWithID:nil success:success progress:progress failure:failure];
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
+    
+    parameters[@"type"] = @"file";
+    
+    if(title) {
+        parameters[@"title"] = title;
+    }
+    if(description) {
+        parameters[@"description"] = description;
+    }
+    if(albumID) {
+        parameters[@"album"] = albumID;
+    }
+    
+    [[IMGSession sharedInstance] POST:[self path]
+                           parameters:parameters
+            constructingBodyWithBlock:appendFile
+                             progress:progress
+                              success:^(NSURLSessionDataTask *task, id responseObject) {
+                                  
+      NSError *JSONError = nil;
+                                  
+      IMGImage *image = [[IMGImage alloc] initWithJSONObject:responseObject
+                                                       error:&JSONError];
+      if(!JSONError && image && success) {
+          
+          success(image);
+          
+      } else if (failure){
+          
+          failure(nil, JSONError);
+      }
+  } failure:failure];
 }
 
-+(void)uploadImages:(NSArray*)files toAlbumWithID:(NSString*)albumID success:(void (^)(NSArray *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *))failure{
+#pragma mark - Upload multiple images
+
++(void)uploadImages:(NSArray*)files
+           progress:(void (^)(NSProgress *))progress
+            success:(void (^)(NSArray *))success
+            failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
+    
+    [self uploadImages:files
+         toAlbumWithID:nil
+              progress:progress
+               success:success
+               failure:failure];
+}
+
++(void)uploadImages:(NSArray*)files
+      toAlbumWithID:(NSString*)albumID
+           progress:(void (^)(NSProgress *))progress
+            success:(void (^)(NSArray *))success
+            failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
     
     NSParameterAssert(files);
     
@@ -258,16 +295,21 @@
             NSParameterAssert(file[@"description"]);
             NSParameterAssert(file[@"fileURL"]);
             
-            [self uploadImageWithFileURL:file[@"fileURL"] title:file[@"title"] description:file[@"description"] linkToAlbumWithID:albumID success:^(IMGImage *image) {
-                
-                [images addObject:image];
-                
-                dispatch_semaphore_signal(sema);
-                
-            } progress:progress failure:^(NSError *error) {
-                
-                dispatch_semaphore_signal(sema);
-            }];
+            [self uploadImageWithFileURL:file[@"fileURL"]
+                                   title:file[@"title"]
+                             description:file[@"description"]
+                       linkToAlbumWithID:albumID
+                                progress:progress
+                                 success:^(IMGImage *image) {
+                                     
+                                     [images addObject:image];
+                                     
+                                     dispatch_semaphore_signal(sema);
+                                     
+                                 } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                                     
+                                     dispatch_semaphore_signal(sema);
+                                 }];
         }
         
         //waits until above is completed

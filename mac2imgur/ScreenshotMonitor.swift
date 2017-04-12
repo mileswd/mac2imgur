@@ -20,9 +20,15 @@ class ScreenshotMonitor {
     
     let eventHandler: (URL) -> Void
     var eventStream: FSEventStreamRef?
+    var handledURLs: [URL]
     
     init(eventHandler: @escaping (URL) -> Void) {
         self.eventHandler = eventHandler
+        self.handledURLs = []
+    }
+    
+    deinit {
+        stopMonitoring()
     }
     
     func startMonitoring() {
@@ -56,7 +62,7 @@ class ScreenshotMonitor {
                 .takeUnretainedValue()
             
             eventPaths.forEach {
-                screenshotMonitor.handleEvent(withPath: $0)
+                screenshotMonitor.handleEvent(withURL: URL(fileURLWithPath: $0))
             }
         }
         
@@ -96,13 +102,30 @@ class ScreenshotMonitor {
         }
     }
     
-    func recentScreenshotExists(atPath path: String) -> Bool {
-        guard let attributes = try? FileManager.default.attributesOfItem(atPath: path) else {
-            return false // Failed to get file attributes
+    func handleEvent(withURL url: URL) {
+        if !handledURLs.contains(url) && recentScreenshotExists(at: url) {
+            handledURLs.append(url)
+            eventHandler(url)
+        }
+    }
+    
+    func recentScreenshotExists(at url: URL) -> Bool {
+        
+        if url.lastPathComponent.hasPrefix(".") {
+            return false // File is hidden
         }
         
-        guard let extendedAttributes = attributes[FileAttributeKey(rawValue: "NSFileExtendedAttributes")] as? [String: AnyObject] else {
-            return false // Failed to get extended attributes
+        guard let attributes = try? FileManager.default
+            .attributesOfItem(atPath: url.path) else {
+                return false // Failed to get file attributes
+        }
+        
+        let extendedAttributesKey =
+            FileAttributeKey(rawValue: "NSFileExtendedAttributes")
+        
+        guard let extendedAttributes = attributes[extendedAttributesKey]
+            as? [String: Any] else {
+                return false // Failed to get extended attributes
         }
         
         if !extendedAttributes.keys.contains("com.apple.metadata:kMDItemIsScreenCapture") {
@@ -120,12 +143,6 @@ class ScreenshotMonitor {
         return true
     }
     
-    func handleEvent(withPath path: String) {
-        if recentScreenshotExists(atPath: path) {
-            eventHandler(URL(fileURLWithPath: path))
-        }
-    }
-    
     var screenshotDirectoryURL: URL? {
         // Check for custom screenshot location chosen by user
         if let domain = UserDefaults.standard.persistentDomain(forName: "com.apple.screencapture"),
@@ -137,7 +154,6 @@ class ScreenshotMonitor {
                 return URL(fileURLWithPath: path)
             }
         }
-        
         
         // If a custom location is not defined (or invalid) return the default screenshot location (~/Desktop)
         return FileManager.default.urls(for: .desktopDirectory,
