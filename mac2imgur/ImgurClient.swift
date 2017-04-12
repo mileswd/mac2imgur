@@ -57,16 +57,17 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         }
     }
     
-    func handleError(_ error: Error?, title: String) {
-        if let error = error {
-            Crashlytics.sharedInstance().recordError(error)
-            NSLog("%@: %@", title, error as NSError)
-        }
-        
-        let description = error?.localizedDescription ?? "An unknown error occured"
+    func handle(error: Error?, title: String) {
+        let description = error?.localizedDescription
+            ?? "An unknown error occurred"
         
         UserNotificationController.shared
             .displayNotification(withTitle: title, informativeText: description)
+        
+        if let error = error {
+            NSLog("%@: %@", title, error as NSError)
+            Crashlytics.sharedInstance().recordError(error)
+        }
     }
     
     /// Configures the `IMGSession.sharedInstance()`
@@ -182,7 +183,7 @@ class ImgurClient: NSObject, IMGSessionDelegate {
         do {
             imageData = try Data(contentsOf: imageURL)
         } catch let error {
-            uploadFailureHandler(error)
+            uploadFailureHandler(dataTask: nil, error: error)
             return
         }
         
@@ -227,9 +228,10 @@ class ImgurClient: NSObject, IMGSessionDelegate {
                                     title: imageTitle,
                                     description: nil,
                                     linkToAlbumWithID: uploadAlbumID,
-                                    success: uploadSuccessHandler,
                                     progress: nil,
+                                    success: uploadSuccessHandler,
                                     failure: uploadFailureHandler)
+
     }
     
     func uploadSuccessHandler(_ image: IMGImage?) {
@@ -253,14 +255,14 @@ class ImgurClient: NSObject, IMGSessionDelegate {
             informativeText: urlString)
     }
     
-    func uploadFailureHandler(_ error: Error?) {
-        handleError(error, title: "Imgur Upload Failed")
+    func uploadFailureHandler(dataTask: URLSessionDataTask?, error: Error?) {
+        handle(error: error, title: "Imgur Upload Failed")
     }
     
     // MARK: IMGSessionDelegate
     
     func imgurRequestFailed(_ error: Error!) {
-        handleError(error, title: "Imgur Request Failed")
+        handle(error: error, title: "Imgur Request Failed")
     }
     
     func imgurSessionRateLimitExceeded() {

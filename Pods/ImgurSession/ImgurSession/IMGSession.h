@@ -307,10 +307,12 @@ typedef NS_ENUM(NSInteger, IMGAuthState){
 
 -(NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(NSDictionary *)parameters success:(void (^)(NSURLSessionDataTask * task, id responseObject))success failure:(void (^)( NSError * error))failure;
 
-/**
- Post request with body completion block. Needed to re-implement from AFNetworking implementation without super call because progress is not handled in AFnetworking
- */
--(NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block success:(void (^)(NSURLSessionDataTask *, id))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
+//- (NSURLSessionDataTask *)POST:(NSString *)URLString
+//                    parameters:(id)parameters
+//     constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+//                      progress:(void (^)(NSProgress *))uploadProgress
+//                       success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+//                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
 
 @end

@@ -20,25 +20,60 @@
 /**
  Retrieves image info from imageID
  */
-+ (void)imageWithID:(NSString *)imageID success:(void (^)(IMGImage *image))success failure:(void (^)(NSError *error))failure;
++ (void)imageWithID:(NSString *)imageID
+            success:(void (^)(IMGImage *))success
+            failure:(void (^)(NSError *))failure;
 
 #pragma mark - Upload one image
 
 /**
  Upload a gif with NSData
  */
-+ (void)uploadImageWithGifData:(NSData *)gifData title:(NSString *)title success:(void (^)(IMGImage * image))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
-+ (void)uploadImageWithGifData:(NSData *)gifData compression:(CGFloat)compression title:(NSString *)title description:(NSString *)description linkToAlbumWithID:(NSString *)albumID success:(void (^)(IMGImage * image))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
++ (void)uploadImageWithGifData:(NSData *)gifData
+                         title:(NSString *)title
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+
++ (void)uploadImageWithGifData:(NSData *)gifData
+                   compression:(CGFloat)compression
+                         title:(NSString *)title
+                   description:(NSString *)description
+             linkToAlbumWithID:(NSString *)albumID
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 /**
  Upload an image with NSData
  */
-+ (void)uploadImageWithData:(NSData*)imageData title:(NSString *)title success:(void (^)(IMGImage * image))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
-+ (void)uploadImageWithData:(NSData*)imageData title:(NSString *)title description:(NSString *)description linkToAlbumWithID:(NSString *)albumID success:(void (^)(IMGImage * image))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
++ (void)uploadImageWithData:(NSData*)imageData
+                      title:(NSString *)title
+                   progress:(void (^)(NSProgress *))progress
+                    success:(void (^)(IMGImage *))success
+                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+
++ (void)uploadImageWithData:(NSData*)imageData
+                      title:(NSString *)title
+                description:(NSString *)description
+          linkToAlbumWithID:(NSString *)albumID
+                   progress:(void (^)(NSProgress *))progress
+                    success:(void (^)(IMGImage *))success
+                    failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 /**
  Upload an image with local image URL
  */
-+ (void)uploadImageWithFileURL:(NSURL *)fileURL success:(void (^)(IMGImage *image))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
-+ (void)uploadImageWithFileURL:(NSURL *)fileURL title:(NSString *)title description:(NSString *)description linkToAlbumWithID:(NSString *)albumID success:(void (^)(IMGImage *image))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError *error))failure;
++ (void)uploadImageWithFileURL:(NSURL *)fileURL
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+
++ (void)uploadImageWithFileURL:(NSURL *)fileURL
+                         title:(NSString *)title
+                   description:(NSString *)description
+             linkToAlbumWithID:(NSString *)albumID
+                      progress:(void (^)(NSProgress *))progress
+                       success:(void (^)(IMGImage *))success
+                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
 /**
  Upload an image with an external image URL
@@ -51,8 +86,16 @@
 /**
  Upload multiple images using image file url, title and description in NSDictionary in files and optionally link the images to an album
  */
-+(void)uploadImages:(NSArray*)files toAlbumWithID:(NSString*)albumID success:(void (^)(NSArray *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
-+(void)uploadImages:(NSArray*)files success:(void (^)(NSArray *))success progress:(NSProgress * __autoreleasing *)progress  failure:(void (^)(NSError * error))failure;
++(void)uploadImages:(NSArray*)files
+           progress:(void (^)(NSProgress *))progress
+            success:(void (^)(NSArray *))success
+            failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+
++(void)uploadImages:(NSArray*)files
+      toAlbumWithID:(NSString*)albumID
+           progress:(void (^)(NSProgress *))progress
+            success:(void (^)(NSArray *))success
+            failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
 #pragma mark - Delete
 

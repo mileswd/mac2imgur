@@ -300,7 +300,7 @@ static BOOL useMashape = NO;
     NSDictionary * params = @{[IMGSession strForAuthType:self.authType]:inputCode, @"client_id":_clientID, @"client_secret":_secret, @"grant_type":grantTypeStr};
     
     //use super to bypass authentication checks
-    [self.authSession POST:IMGOAuthEndpoint parameters:params success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self.authSession POST:IMGOAuthEndpoint parameters:params progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         //alert delegate
         [self informClientAuthStateChanged:IMGAuthStateAuthenticated];
@@ -338,7 +338,7 @@ static BOOL useMashape = NO;
     NSDictionary * refreshParams = @{@"refresh_token":_refreshToken, @"client_id":_clientID, @"client_secret":_secret, @"grant_type":@"refresh_token"};
     
     //use super to bypass authentication checks
-    [self.authSession POST:IMGOAuthEndpoint parameters:refreshParams success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self.authSession POST:IMGOAuthEndpoint parameters:refreshParams progress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSDictionary * json = responseObject;
         //set auth header
@@ -687,7 +687,7 @@ static BOOL useMashape = NO;
     }
     
     //set expiracy time, currrently at 3600 seconds after
-    NSInteger expirySeconds = [tokens[@"expires_in"] integerValue];
+    NSInteger expirySeconds = 3600;
     self.accessTokenExpiry = [NSDate dateWithTimeIntervalSinceReferenceDate:([[NSDate date] timeIntervalSinceReferenceDate] + expirySeconds)];
     //call accessToken expired to refresh authentication
     NSTimer * timer = [NSTimer timerWithTimeInterval:expirySeconds target:self selector:@selector(accessTokenExpired) userInfo:nil repeats:NO];
@@ -878,7 +878,7 @@ static BOOL useMashape = NO;
     return [self methodRequest:^{
         
         //actually make the request after ensuring we are authenticated
-        return [super GET:URLString parameters:parameters success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
+        return [super GET:URLString parameters:parameters progress:nil success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
             
             //if the request fails based on status code, check to see if we can recover by authenticating if for some reason our previous check was not the truth
             if([self canRequestFailureBeRecovered:error]){
@@ -887,7 +887,7 @@ static BOOL useMashape = NO;
                 [self refreshAuthentication:^(NSString * accessCode) {
                     
                     //send actual request to super this time and give-up if it still fails
-                    [super GET:URLString parameters:parameters success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    [super GET:URLString parameters:parameters progress:nil success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
                         
                         failure(error);
                     }];
@@ -935,14 +935,14 @@ static BOOL useMashape = NO;
     
     return [self methodRequest:^{
         
-        return [super POST:URLString parameters:parameters success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
+        return [super POST:URLString parameters:parameters progress:nil success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
             
             if([self canRequestFailureBeRecovered:error]){
                 
                 
                 [self refreshAuthentication:^(NSString * accessCode) {
                     
-                    [super POST:URLString parameters:parameters success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
+                    [super POST:URLString parameters:parameters progress:nil success:success failure:^(NSURLSessionDataTask *task, NSError *error) {
                         
                         failure(error);
                     }];
@@ -957,26 +957,20 @@ static BOOL useMashape = NO;
     } failure:failure];
 }
 
--(NSURLSessionDataTask *)POST:(NSString *)URLString parameters:(NSDictionary *)parameters constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block success:(void (^)(NSURLSessionDataTask * task, id responseObject))success progress:(NSProgress * __autoreleasing *)progress failure:(void (^)(NSError * error))failure{
-    
-    NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:block error:nil];
-    
-    __block NSURLSessionDataTask *task = [self uploadTaskWithStreamedRequest:request progress:progress completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
-        if (error) {
-            
-            if(failure)
-                failure(error);
-            
-        } else {
-            if(success)
-                success(task, responseObject);
-        }
-    }];
-    
-    [task resume];
-    
-    return task;
-}
+//- (NSURLSessionDataTask *)POST:(NSString *)URLString
+//                    parameters:(id)parameters
+//     constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+//                      progress:(void (^)(NSProgress *))uploadProgress
+//                       success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+//                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure {
+//    
+//    return [super POST:URLString
+//            parameters:parameters
+//constructingBodyWithBlock:block
+//              progress:uploadProgress
+//               success:success
+//               failure:failure];
+//}
 
 #pragma mark - Model Tracking
 
