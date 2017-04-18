@@ -58,16 +58,37 @@ class ImgurClient: NSObject, IMGSessionDelegate {
     }
     
     func handle(error: Error?, title: String) {
-        let description = error?.localizedDescription
-            ?? "An unknown error occurred"
         
-        UserNotificationController.shared
-            .displayNotification(withTitle: title, informativeText: description)
+        UserNotificationController.shared.displayNotification(
+            withTitle: title,
+            informativeText: description(of: error))
         
         if let error = error {
             NSLog("%@: %@", title, error as NSError)
             Crashlytics.sharedInstance().recordError(error)
         }
+    }
+    
+    func description(of error: Error?) -> String {
+
+        if let error = error as NSError? {
+            
+            let localizedDescription = error.userInfo[NSLocalizedDescriptionKey]
+            
+            if localizedDescription is String {
+                
+                return error.localizedDescription
+                
+            } else if let data = localizedDescription as? [String: Any],
+                let message = data["message"] as? String {
+                
+                return message
+
+            }
+            
+        }
+        
+        return "An unknown error occurred."
     }
     
     /// Configures the `IMGSession.sharedInstance()`
