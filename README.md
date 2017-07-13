@@ -1,5 +1,7 @@
 # mac2imgur
 
+:warning: Warning: This project is not currently actively maintained. :warning:
+
 ![mac2imgur running on macOS Yosemite](https://i.imgur.com/WrMhzbe.png)
 
 A simple Mac application designed to make uploading images and screenshots to [imgur.com](https://imgur.com) quick and effortless.
@@ -85,11 +87,9 @@ If you encounter any problems or have an idea for a new feature, don't hesitate 
 
 On the same note, pull requests to fix bugs, add features or simply to improve the codebase are greatly appreciated.
 
-If you need help or would just like to say hello, I am also contactable via [Twitter](https://twitter.com/_mileswd) and by the email address listed on [my GitHub profile](https://github.com/mileswd).
-
 ## Development
 
-- Written in Swift 3 (Xcode 8 beta 6)
+- Written in Swift 3
 - [CocoaPods](https://cocoapods.org) for dependency management
 
 ## Legal

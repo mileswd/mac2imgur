@@ -687,7 +687,7 @@ static BOOL useMashape = NO;
     }
     
     //set expiracy time, currrently at 3600 seconds after
-    NSInteger expirySeconds = 3600;
+    NSInteger expirySeconds = [tokens[@"expires_in"] integerValue];
     self.accessTokenExpiry = [NSDate dateWithTimeIntervalSinceReferenceDate:([[NSDate date] timeIntervalSinceReferenceDate] + expirySeconds)];
     //call accessToken expired to refresh authentication
     NSTimer * timer = [NSTimer timerWithTimeInterval:expirySeconds target:self selector:@selector(accessTokenExpired) userInfo:nil repeats:NO];

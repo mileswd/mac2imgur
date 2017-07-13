@@ -6,7 +6,7 @@ target 'mac2imgur' do
 
   pod 'EMCLoginItem'
   pod 'LetsMove'
-  pod 'ImgurSession', :git => 'https://github.com/mileswd/ImgurSession.git', :branch => 'patch-access-token-expiry'
+  pod 'ImgurSession', :git => 'https://github.com/mileswd/ImgurSession.git', :branch => 'update-podspec'
   pod 'Sparkle'
   pod 'Fabric'
   pod 'Crashlytics'
