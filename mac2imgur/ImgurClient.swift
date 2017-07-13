@@ -208,7 +208,12 @@ class ImgurClient: NSObject, IMGSessionDelegate {
             return
         }
         
-        let imageName = imageURL.lastPathComponent
+        var imageName = imageURL.lastPathComponent
+        
+        // Random name if option to hide the file name is selected
+        if Preference.hideName.value{
+            imageName = AnonHelper().randomString()
+        }
         
         // Screenshot specific preferences
         if isScreenshot {
@@ -230,9 +235,16 @@ class ImgurClient: NSObject, IMGSessionDelegate {
             }
             
         }
+
+        // No title passed to IMGUR if we want to hide the name
+        var imageTitle: String = "Untitled"
+        if !Preference.hideName.value{
+            imageTitle = NSString(string: imageName).deletingPathExtension
+        }
         
         uploadImage(withData: imageData,
-                    imageTitle: NSString(string: imageName).deletingPathExtension)
+                    imageTitle: imageTitle)
+        
     }
     
     /// Uploads the specified image data
