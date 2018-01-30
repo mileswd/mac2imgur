@@ -100,7 +100,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: ScreenshotMonitor Event Handler
     
     func screenshotEventHandler(url: URL) {
-        ImgurClient.shared.uploadImage(withURL: url, isScreenshot: true)
+        if Preference.editBeforeUpload.value {
+            let status = execCommand(command: "/usr/bin/open", args: [
+                "--new",
+                "--wait-apps",
+                url.absoluteString
+            ])
+            
+            if status {
+                ImgurClient.shared.uploadImage(withURL: url, isScreenshot: true)
+            }
+        } else {
+            ImgurClient.shared.uploadImage(withURL: url, isScreenshot: true)
+        }
     }
     
     // MARK: NSAppleEventManager Event Handler
@@ -116,5 +128,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ImgurClient.shared.handleExternalWebViewEvent(withResponseURL: url)
     }
 
+    func execCommand(command: String, args: [String]) -> Bool {
+        if !command.hasPrefix("/") {
+            let commandFull = execCommandToOutput(command: "/usr/bin/which", args: [command]).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            return execCommand(command: commandFull, args: args)
+        } else {
+            let proc = Process()
+            proc.launchPath = command
+            proc.arguments = args
+            proc.launch()
+            proc.waitUntilExit()
+            
+            if proc.terminationStatus == 0 {
+                return true;
+            }
+            
+            return false
+        }
+    }
+    
+    func execCommandToOutput(command: String, args: [String]) -> String {
+        let proc = Process()
+        proc.launchPath = command
+        proc.arguments = args
+        proc.launch()
+        
+        let pipe = Pipe();
+        
+        proc.standardOutput = pipe
+        
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        
+        return String(data: data, encoding: String.Encoding.utf8)!
+    }
 }
 

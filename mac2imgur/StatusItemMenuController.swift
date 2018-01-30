@@ -63,7 +63,7 @@ class StatusItemMenuController: MenuController {
         panel.allowedFileTypes = [kUTTypeImage as String]
         
         panel.begin { (result) -> Void in
-            if result == NSFileHandlingPanelOKButton {
+            if result == NSModalResponseOK {
                 for url in panel.urls {
                     ImgurClient.shared.uploadImage(withURL: url,
                                                    isScreenshot: false)

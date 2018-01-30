@@ -34,6 +34,7 @@ enum Preference: String {
     case resizeScreenshots = "ResizeScreenshots"
     case clearClipboard = "ClearClipboard"
     case copyLinkToClipboard = "CopyLink"
+    case editBeforeUpload = "EditBeforeUpload"
     
     // TODO: Better alternative to this?
     static let allValues: [Preference] = [
@@ -42,7 +43,8 @@ enum Preference: String {
         .requiresUploadConfirmation,
         .resizeScreenshots,
         .clearClipboard,
-        .copyLinkToClipboard
+        .copyLinkToClipboard,
+        .editBeforeUpload
     ]
     
     /// The human readable description of the preference.
@@ -60,6 +62,8 @@ enum Preference: String {
             return "Clear Clipboard"
         case .copyLinkToClipboard:
             return "Copy Link to Clipboard"
+        case .editBeforeUpload:
+            return "Edit before upload"
         }
     }
     
