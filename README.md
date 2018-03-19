@@ -1,4 +1,4 @@
-# mac2imgur
+# mac2imgur 
 
 :warning: Warning: This project is not currently actively maintained. :warning:
 
