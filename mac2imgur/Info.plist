@@ -73,7 +73,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>https://mileswd.com/mac2imgur/update</string>
+	<string>https://raw.githubusercontent.com/mileswd/mac2imgur/master/Resources/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>
